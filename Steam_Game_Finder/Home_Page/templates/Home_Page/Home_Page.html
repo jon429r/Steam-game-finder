@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <div class="Dropdown">
+        <button class="dropbtn">Dropdown</button>
+        <div class="Dropdown-content">
+            <a href="#">Link 1</a>
+            <br>
+            <a href="#">Link 2</a>
+            <br>
+            <a href="#">Link 3</a>
+
+        </div>
+    </div>
+    <head>        
+        <title>Home Page</title>
+    </head>
+    <body>
+        <h1 align="Center">Steam Game Finder</h1>
+
+        <div>
+            <h2 align="Center">Welcome to Steam Game Finder</h2>
+            <p align="Center">Steam Game Finder is a website that allows you to find 
+                games on Steam that you might.</p>
+        </div>
+        <div>
+            <form align="Center">
+            <h3>Search Bar</h3>
+            <input type="Text" name="Game_Search" id="Game_Search" placeholder="Search For A Game">
+            <button id="SearchButton">Search</button>
+            <script>
+                // Get a reference to the button element by its ID
+                var button = document.getElementById("SearchButton");
+              
+                // Add a click event listener
+                button.addEventListener("click", function() {
+                  // Code to execute when the button is clicked
+                  alert("70,000 Results");
+                });
+              </script>
+            </form>
+
+        </div>
+    </body>
+</html>
