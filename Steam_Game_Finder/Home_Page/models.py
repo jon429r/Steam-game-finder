@@ -1,4 +1,4 @@
-'''yourapp/models.py:
+'''HomePage/models.py:
 This file is used to define the data models for your app. 
 Models define the structure of your database tables and the relationships between tables.'''
 from django.db import models
