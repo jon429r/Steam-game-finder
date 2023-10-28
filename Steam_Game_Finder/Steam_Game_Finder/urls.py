@@ -31,5 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_page_view, name='Home_Page'),
     path('', quiz_page_view, name='Quiz_Page'),
+    path('Steam_Game_Finder/Quiz_Page/templates/Quiz_Page/Quiz_Page.html', quiz_page_view, name='Quiz_Page'),
+    path('Quiz/templates/Quiz_Page/Quiz_Page.html', quiz_page_view, name='Quiz_Page'),
 ]
 
