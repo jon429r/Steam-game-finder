@@ -22,8 +22,14 @@ from django.urls import path
 from Home_Page import views
 from django.contrib import admin
 
+from Home_Page.views import home_page_view
+from Quiz_Page.views import quiz_page_view
+from django.urls import path
+from django.contrib import admin
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home_page_view, name='Home_Page'),
+    path('', home_page_view, name='Home_Page'),
+    path('', quiz_page_view, name='Quiz_Page'),
 ]
 

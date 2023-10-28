@@ -24,7 +24,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Home_Page',  # Add your app here
+    'Home_Page',  
+    'Quiz_Page',
 ]
 
 MIDDLEWARE = [
