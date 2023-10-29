@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'Home_Page',  
     'Quiz_Page',
     'Search_Page',
+    'Steam_Game_Finder',
 ]
 
 MIDDLEWARE = [

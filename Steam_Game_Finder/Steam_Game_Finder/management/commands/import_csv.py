@@ -1,6 +1,7 @@
 import csv
 from django.core.management.base import BaseCommand
-from Home_Page.models import Language, Developer, Publisher, Game
+from Steam_Game_Finder.Home_Page.models import Game, Language, Developer, Publisher
+
 
 class Command(BaseCommand):
     help = 'Import data from a CSV file into the database'
