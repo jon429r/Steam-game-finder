@@ -1,64 +1,120 @@
 <!DOCTYPE html>
 <html>
+<head>
     <style>
-        body{
+        body {
             background-color: #97cfff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #header {
+            background-image: url('https://steamcdn-a.akamaihd.net/steam/apps/570/header.jpg?t=1586176520');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 100%;
+            height: 500px;
+            color: antiquewhite;
+        }
+
+        .spacedList li:not(:last-child) {
+            margin-right: 50px;
+            margin-left: 50px;
+            display: inline;
+        }
+
+        #Game_Search {
+            width: 50%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border-radius: 12px;
+        }
+
+        #SearchButton {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 12px;
+        }
+
+        #Result_Table {
+            display: none;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        .Result_Table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .Result_Table th, .Result_Table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .Result_Table tr:hover {
+            background-color: #ddd;
         }
     </style>
+</head>
+<body>
+    <div id="header">
+        <h1 align="Center">Steam Game Finder</h1>
+        <div id="Links" align="Center">
+            <ul class="spacedList">
+                <li><a href="Home_Page.html" style="color: antiquewhite;"> Home</a></li>
+                <li><a href="/Steam_Game_Finder/Quiz_Page/templates/Quiz_Page/Quiz_Page.html" style="color: antiquewhite;">Quiz</a></li>
+                <li><a href="/Steam_Game_Finder/Search_Page/templates/Search_Page/Search_Page.html" style="color: antiquewhite;">Search</a></li>
+                <li><a href="#" style="color: antiquewhite;">Info</a></li>
+            </ul>
+        </div>
+    </div>
 
-<h1 align="Center">Steam Game Finder</h1>
+    <h2 align="Center">Welcome to Steam Game Finder</h2>
+    <p align="Center">Steam Game Finder is a website that allows you to find games on Steam that you might like.</p>
 
+    <form align="Center">
+        <h3>Search For Any Game On Steam</h3>
+        <input type="text" name="Game_Search" id="Game_Search" placeholder="Search For A Game">
+        <button id="SearchButton">Search</button>
+    </form>
 
-    <div align="Center">
-        <ul class="spacedList">
-            <il><a href="Home_Page.html">Home</a></il>
-            <hspace="50"></hspace>
-            <il><a href="/Steam_Game_Finder/Quiz_Page/templates/Quiz_Page/Quiz_Page.html">Quiz</a></il>
-            <hspace="50"></hspace>
-            <il><a href="/Steam_Game_Finder/Search_Page/templates/Search_Page/Search_Page.html">Search</a></il>
-            <hspace="50"></hspace>
-            <il><a href="#">Info</a></il>
-        </ul>
-        <style>
-            .spacedlist li:not(:last-child){
-            
-                margin-right: 50px;
-                margin-left: 50px;  
-                display: inline;
+    <table class="Result_Table" id="Result_Table">
+        <tr>
+            <th>Image</th>
+            <th>ID</th>
+            <th>Like</th>
+            <th>Dislike</th>
+            <th>Game Title</th>
+            <th>Game Description</th>
+            <th>Developer</th>
+            <th>Publisher</th>
+            <th>Genre</th>
+            <th>Tags</th>
+        </tr>
+        <!-- Add table rows and data here -->
+    </table>
+
+    <script>
+        document.getElementById("SearchButton").addEventListener("click", function () {
+            var table = document.getElementById("Result_Table");
+            if (table.style.display === "none") {
+                table.style.display = "table";
+            } else {
+                table.style.display = "none";
             }
-        </style>
-            
-    </div>
-    
-
-    </div>
-    <head>        
-        <title>Home Page</title>
-    </head>
-    <body>
-
-        <div>
-            <h2 align="Center">Welcome to Steam Game Finder</h2>
-            <p align="Center">Steam Game Finder is a website that allows you to find 
-                games on Steam that you might.</p>
-        </div>
-        <div>
-            <form align="Center">
-            <h3>Search Bar</h3>
-            <input type="Text" name="Game_Search" id="Game_Search" placeholder="Search For A Game">
-            <button id="SearchButton">Search</button>
-            <script>
-                // Get a reference to the button element by its ID
-                var button = document.getElementById("SearchButton");
-              
-                // Add a click event listener
-                button.addEventListener("click", function() {
-                  // Code to execute when the button is clicked
-                  alert("70,000 Results");
-                });
-              </script>
-            </form>
-
-        </div>
-    </body>
+        });
+    </script>
+</body>
 </html>
