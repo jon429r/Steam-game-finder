@@ -24,6 +24,7 @@ from django.contrib import admin
 
 from Home_Page.views import home_page_view
 from Quiz_Page.views import quiz_page_view
+from Search_Page.views import search_page_view
 from django.urls import path
 from django.contrib import admin
 
@@ -31,7 +32,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_page_view, name='Home_Page'),
     path('', quiz_page_view, name='Quiz_Page'),
+    path('', search_page_view, name='Search_Page'),
     path('Steam_Game_Finder/Quiz_Page/templates/Quiz_Page/Quiz_Page.html', quiz_page_view, name='Quiz_Page'),
     path('Quiz/templates/Quiz_Page/Quiz_Page.html', quiz_page_view, name='Quiz_Page'),
+    path('Steam_Game_Finder/Home_Page/templates/Home_Page/Home_Page.html', home_page_view, name='Home_Page'),
+    path('', search_page_view, name='Search_Page'),
+    path('Home_Page.html', home_page_view, name='Home_Page.html'),
+    path('Steam_Game_Finder/Search_Page/templates/Search_Page/Search_Page.html', search_page_view, name='Search_Page'),
 ]
 
