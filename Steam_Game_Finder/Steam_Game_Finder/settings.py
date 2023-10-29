@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Home_Page',  
     'Quiz_Page',
+    'Search_Page',
 ]
 
 MIDDLEWARE = [
