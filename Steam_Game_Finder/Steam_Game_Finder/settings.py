@@ -63,12 +63,14 @@ WSGI_APPLICATION = 'Steam_Game_Finder.wsgi.application'
 # Database
 # Configure your database settings here
 
+
 DATABASES = {
     'default': {
-        'Engine': 'django.db.backends.sqlite3',
-        'Name': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
