@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'Home_Page',  
     'Quiz_Page',
     'Search_Page',
+    'Steam_Game_Finder',
 ]
 
 MIDDLEWARE = [
@@ -61,6 +62,15 @@ WSGI_APPLICATION = 'Steam_Game_Finder.wsgi.application'
 
 # Database
 # Configure your database settings here
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
 
 # Internationalization
 LANGUAGE_CODE = 'en-us'
