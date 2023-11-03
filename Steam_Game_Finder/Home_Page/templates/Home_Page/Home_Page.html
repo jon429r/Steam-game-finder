@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <style>
         body {
@@ -11,21 +12,35 @@
             background-image: url('https://steamcdn-a.akamaihd.net/steam/apps/570/header.jpg?t=1586176520');
             background-size: cover;
             background-repeat: no-repeat;
-            background-position: center;
+            background-position: bottom;
             width: 100%;
             height: 500px;
             color: antiquewhite;
         }
 
-        #DropDown{
+        #DropDown {
             background-color: grey;
             height: 100px;
             width: 100px;
         }
 
+        #toggleIMG{
+            background-color: transparent;
+            height: 50px;
+            width: 50px;
+        }
+        #toggleBUT{
+            background-color: transparent;
+            border: none;
+            height: 55px;
+            width: 55px;
+        }
+
         .spacedList li:not(:last-child) {
             margin-right: 50px;
             margin-left: 50px;
+        }
+        .spacedList li {
             display: inline;
         }
 
@@ -53,7 +68,9 @@
             display: none;
         }
 
-        table, th, td {
+        table,
+        th,
+        td {
             border: 1px solid black;
             border-collapse: collapse;
         }
@@ -63,7 +80,8 @@
             border-collapse: collapse;
         }
 
-        .Result_Table th, .Result_Table td {
+        .Result_Table th,
+        .Result_Table td {
             padding: 8px;
             text-align: left;
             border-bottom: 1px solid #ddd;
@@ -74,41 +92,44 @@
         }
     </style>
 </head>
+
 <body>
 
-    <div>
-        <button id="button" type="button"
-                onclick="alert('Button was clicked!');">My Button</button>
-      
-        <br /><br />
-        <button onclick="toggle();">Toggle hidden</button>
-      
-        <ul id="LinkList">
+    <div id="header">
+
+        <button id="toggleBUT" onclick="toggle();"><img id="toggleIMG" src="https://static.vecteezy.com/system/resources/previews/019/858/503/non_2x/dropdown-flat-color-outline-icon-free-png.png" alt=""></button>
+
+        <ul id="LinkList" hidden>
             <li><a href="Home_Page.html" style="color: antiquewhite;"> Home</a></li>
-            <li><a href="/Steam_Game_Finder/Quiz_Page/templates/Quiz_Page/Quiz_Page.html" style="color: antiquewhite;">Quiz</a></li>
-            <li><a href="/Steam_Game_Finder/Search_Page/templates/Search_Page/Search_Page.html" style="color: antiquewhite;">Search</a></li>
+            <li><a href="/Steam_Game_Finder/Quiz_Page/templates/Quiz_Page/Quiz_Page.html"
+                    style="color: antiquewhite;">Quiz</a></li>
+            <li><a href="/Steam_Game_Finder/Search_Page/templates/Search_Page/Search_Page.html"
+                    style="color: antiquewhite;">Search</a></li>
             <li><a href="#" style="color: antiquewhite;">Info</a></li>
         </ul>
-    
-    </div>
-      
 
-    <div id="header">
+
         <h1 align="Center">Steam Game Finder</h1>
-        <div id="Links" align="Center">
+        <h2 id="Links" align="Center">
             <ul class="spacedList">
                 <li><a href="Home_Page.html" style="color: antiquewhite;"> Home</a></li>
-                <li><a href="/Steam_Game_Finder/Quiz_Page/templates/Quiz_Page/Quiz_Page.html" style="color: antiquewhite;">Quiz</a></li>
-                <li><a href="/Steam_Game_Finder/Search_Page/templates/Search_Page/Search_Page.html" style="color: antiquewhite;">Search</a></li>
+                <li><a href="/Steam_Game_Finder/Quiz_Page/templates/Quiz_Page/Quiz_Page.html"
+                        style="color: antiquewhite;">Quiz</a></li>
+                <li><a href="/Steam_Game_Finder/Search_Page/templates/Search_Page/Search_Page.html"
+                        style="color: antiquewhite;">Search</a></li>
                 <li><a href="#" style="color: antiquewhite;">Info</a></li>
             </ul>
-        </div>
+            </h2>
+        </h1>
     </div>
 
+<div>
     <h2 align="Center">Welcome to Steam Game Finder</h2>
     <p align="Center">Steam Game Finder is a website that allows you to find games on Steam that you might like.</p>
+</div>
 
-    <form align="Center">
+<div>
+    <form align="Center" onsubmit="showResults(); return false;">
         <h3>Search For Any Game On Steam</h3>
         <input type="text" name="Game_Search" id="Game_Search" placeholder="Search For A Game">
         <button id="SearchButton">Search</button>
@@ -117,9 +138,7 @@
     <table class="Result_Table" id="Result_Table">
         <tr>
             <th>Image</th>
-            <th>ID</th>
             <th>Like</th>
-            <th>Dislike</th>
             <th>Game Title</th>
             <th>Game Description</th>
             <th>Developer</th>
@@ -129,31 +148,20 @@
         </tr>
         <!-- Add table rows and data here -->
     </table>
-
+</div>
     <script>
         let toggle = () => {
-      
-          let element = document.getElementById("button");
-          let element2 = document.getElementById("LinkList")
-          let hidden = element.getAttribute("hidden");
-      
-          if (hidden) {
-             element2.removeAttribute("hidden");
-          } else {
-             element2.setAttribute("hidden", "hidden");
-          }
+            let element2 = document.getElementById("LinkList");
+            element2.toggleAttribute("hidden");
         }
-      </script>
+    </script>
 
     <script>
-        document.getElementById("SearchButton").addEventListener("click", function () {
-            var table = document.getElementById("Result_Table");
-            if (table.style.display === "none") {
-                table.style.display = "table";
-            } else {
-                table.style.display = "none";
-            }
-        });
+        function showResults() {
+            let element = document.getElementById("Result_Table");
+            element.style.display = "table";
+        }
     </script>
 </body>
+
 </html>
