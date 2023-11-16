@@ -2,34 +2,84 @@
 <html>
 
 <head>
+    <title>Home Page</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://freeiconshop.com/wp-content/uploads/edd/image-outline-filled.png">
+
     <style>
         body {
             background-color: #97cfff;
             font-family: Arial, Helvetica, sans-serif;
+
+        }
+
+        .Header_List {
+            
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333333;
+            border-bottom: 1px solid black;
+        }
+        il{
+            display: inline;
+        }
+
+        .right_column {
+            float: right;
+            width: 25%;
+            height: auto;
+            border-left: 1px solid black;
+        }
+
+        .left_column{
+            float: left;
+            width: 10%;
+            height: auto;
+            border-right: 1px solid black;
         }
 
         #header {
-            background-image: url('https://steamcdn-a.akamaihd.net/steam/apps/570/header.jpg?t=1586176520');
             background-size: cover;
             background-repeat: no-repeat;
             background-position: bottom;
-            width: 100%;
-            height: 500px;
+            margin-left: 5%;
+            margin-right: 33%;
+            float: left;
+            width: 75%;
             color: antiquewhite;
         }
 
+
+        #Navigation {
+            margin-left: 17%;
+            margin-right: 33%;
+            width: auto;
+            display: block;
+        }
+
+        #Body {
+            background-color: #97cfff;
+            width: 75%;
+            margin-left: 12%;
+            margin-right: 33%;
+        }
+
         #DropDown {
+            float: left;
             background-color: grey;
             height: 100px;
             width: 100px;
         }
 
-        #toggleIMG{
+        #toggleIMG {
             background-color: transparent;
             height: 50px;
             width: 50px;
         }
-        #toggleBUT{
+
+        #toggleBUT {
             background-color: transparent;
             border: none;
             height: 55px;
@@ -40,20 +90,31 @@
             margin-right: 50px;
             margin-left: 50px;
         }
+
         .spacedList li {
             display: inline;
         }
 
         #Game_Search {
-            width: 50%;
+            width: 25%;
             padding: 12px 20px;
-            margin: 8px 0;
+            margin-left: 25%;
+            margin-right: 0%;
             box-sizing: border-box;
             border-radius: 12px;
         }
 
+        #Search_Section {
+            margin-top: 10px;
+            margin-left: 0px;
+            margin-right: 33%;
+            width: auto;
+            display: block;
+        }
+
         #SearchButton {
             background-color: #4CAF50;
+            margin-left: 0%;
             border: none;
             color: white;
             padding: 15px 32px;
@@ -90,6 +151,62 @@
         .Result_Table tr:hover {
             background-color: #ddd;
         }
+
+        /* Style The Dropdown Button */
+        .dropbtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* The container <div> - needed to position the dropdown content */
+        .dropdown {
+            display: inline-block;
+
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: #f1f1f1
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Change the background color of the dropdown button when the dropdown content is shown */
+        .dropdown:hover .dropbtn {
+            background-color: #3e8e41;
+        }
+
+            /* Style for the game icon */
+        .game-icon {
+         max-width: 75px; /* Adjust the maximum width as needed */
+         max-height: 75px; /* Adjust the maximum height as needed */
+        }
+
     </style>
 </head>
 
@@ -97,19 +214,60 @@
 
     <div id="header">
 
-        <button id="toggleBUT" onclick="toggle();"><img id="toggleIMG" src="https://static.vecteezy.com/system/resources/previews/019/858/503/non_2x/dropdown-flat-color-outline-icon-free-png.png" alt=""></button>
+        <ul class="Header_List">
 
-        <ul id="LinkList" hidden>
-            <li><a href="Home_Page.html" style="color: antiquewhite;"> Home</a></li>
-            <li><a href="/Steam_Game_Finder/Quiz_Page/templates/Quiz_Page/Quiz_Page.html"
-                    style="color: antiquewhite;">Quiz</a></li>
-            <li><a href="/Steam_Game_Finder/Search_Page/templates/Search_Page/Search_Page.html"
-                    style="color: antiquewhite;">Search</a></li>
-            <li><a href="#" style="color: antiquewhite;">Info</a></li>
+        <li><div class="left_column">
+            <div class="dropdown">
+                <button class="dropbtn">Dropdown</button>
+                <div class="dropdown-content">
+                  <a href="Home_Page.html">Home Page</a>
+                  <a href="Quiz_Page.html">Quiz Page</a>
+                  <a href="/Steam_Game_Finder/Search_Page/templates/Search_Page/Search_Page.html">Search Page</a>
+                  <a href="#">Link 4</a>
+                </div>
+              </div>
+            </div>
+        </li>
+
+        <li><h1 align="Center">Steam Game Finder</h1>
+        </li>
+
         </ul>
+    </div> 
 
 
-        <h1 align="Center">Steam Game Finder</h1>
+
+    <div class="row">
+        <div class="right_column">
+            <h2>Most Popular Games</h2>
+            <p>Here is a table of the most popular games</p>
+
+            <div class="Popular_Games_Table">
+                <table id="Popular_Games">
+                    <thread>
+                    <tr>
+                        <th>Image</th>
+                        <th>Game Title</th>
+                        <th>Like</th>
+                        <th>Dislike</th>
+                    </tr>
+                </thread>
+                    <tr>
+                        <td><img class="game-icon" src="https://cdn.akamai.steamstatic.com/steam/apps/72850/header.jpg?t=1647357402" alt="Game Icon"></td>
+                        <td>The Elder Scrolls V: Skyrim</td>
+                        <td>Like</td>
+                        <td>Dislike</td>
+                    </tr>
+
+
+                
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="Navigation">
+
         <h2 id="Links" align="Center">
             <ul class="spacedList">
                 <li><a href="Home_Page.html" style="color: antiquewhite;"> Home</a></li>
@@ -119,36 +277,39 @@
                         style="color: antiquewhite;">Search</a></li>
                 <li><a href="#" style="color: antiquewhite;">Info</a></li>
             </ul>
-            </h2>
+        </h2>
         </h1>
+
     </div>
 
-<div>
-    <h2 align="Center">Welcome to Steam Game Finder</h2>
-    <p align="Center">Steam Game Finder is a website that allows you to find games on Steam that you might like.</p>
-</div>
 
-<div>
-    <form align="Center" onsubmit="showResults(); return false;">
-        <h3>Search For Any Game On Steam</h3>
-        <input type="text" name="Game_Search" id="Game_Search" placeholder="Search For A Game">
-        <button id="SearchButton">Search</button>
-    </form>
+    <div id="Body">
+        <h2 align="Center">Welcome to Steam Game Finder</h2>
+        <p align="Center">Steam Game Finder is a website that allows you to find games on Steam that you might like.</p>
+    </div>
 
-    <table class="Result_Table" id="Result_Table">
-        <tr>
-            <th>Image</th>
-            <th>Like</th>
-            <th>Game Title</th>
-            <th>Game Description</th>
-            <th>Developer</th>
-            <th>Publisher</th>
-            <th>Genre</th>
-            <th>Tags</th>
-        </tr>
-        <!-- Add table rows and data here -->
-    </table>
-</div>
+    <div id="Search_Section>
+        <form align="Center" onsubmit="showResults(); return false;">
+            <input type="text" name="Game_Search" id="Game_Search" placeholder="Search For A Game">
+            <button id="SearchButton">Search</button>
+        </form>
+
+        <table class="Result_Table" id="Result_Table">
+            <tr>
+                <th>Image</th>
+                <th>Like</th>
+                <th>Game Title</th>
+                <th>Game Description</th>
+                <th>Developer</th>
+                <th>Publisher</th>
+                <th>Genre</th>
+                <th>Tags</th>
+            </tr>
+            <!-- Add table rows and data here -->
+        </table>
+    </div>
+
+
     <script>
         let toggle = () => {
             let element2 = document.getElementById("LinkList");

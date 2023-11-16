@@ -23,8 +23,8 @@ from Home_Page import views
 from django.contrib import admin
 
 from Home_Page.views import home_page_view
-from Quiz_Page.views import quiz_page_view
-from Search_Page.views import search_page_view
+from Home_Page.views import quiz_page_view
+from Home_Page.views import search_page_view
 from django.urls import path
 from django.contrib import admin
 
