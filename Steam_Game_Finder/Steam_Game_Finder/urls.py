@@ -19,25 +19,19 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from Home_Page import views
 from django.contrib import admin
 
-from Home_Page.views import home_page_view
-from Home_Page.views import quiz_page_view
-from Home_Page.views import search_page_view
+from frontend.views import home_page_view, quiz_page_view, search_page_view
 from django.urls import path
 from django.contrib import admin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home_page_view, name='Home_Page'),
-    path('', quiz_page_view, name='Quiz_Page'),
-    path('', search_page_view, name='Search_Page'),
-    path('Steam_Game_Finder/Quiz_Page/templates/Quiz_Page/Quiz_Page.html', quiz_page_view, name='Quiz_Page'),
-    path('Quiz/templates/Quiz_Page/Quiz_Page.html', quiz_page_view, name='Quiz_Page'),
-    path('Steam_Game_Finder/Home_Page/templates/Home_Page/Home_Page.html', home_page_view, name='Home_Page'),
-    path('', search_page_view, name='Search_Page'),
-    path('Home_Page.html', home_page_view, name='Home_Page.html'),
-    path('Steam_Game_Finder/Search_Page/templates/Search_Page/Search_Page.html', search_page_view, name='Search_Page'),
-]
-
+    path('Home_Page/', home_page_view, name='Home_Page.html'),
+    path('Quiz_Page/', quiz_page_view, name='Quiz_Page.html'),
+    path('Search_Page/', search_page_view, name='Search_Page.html'),
+    path('Steam_Game_Finder/Home_Page/templates/Home_Page/Home_Page.html', home_page_view, name='Home_Page.html'),
+    path('Steam_Game_Finder/Quiz_Page/templates/Quiz_Page/Quiz_Page.html', quiz_page_view, name='Quiz_Page.html'),
+    path('Steam_Game_Finder/Search_Page/templates/Search_Page/Search_Page.html', search_page_view, name='Search_Page.html'),
+    
+    ]
