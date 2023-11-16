@@ -24,10 +24,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Home_Page',  
-    'Quiz_Page',
-    'Search_Page',
     'Steam_Game_Finder',
+    'frontend',
+
 ]
 
 MIDDLEWARE = [
