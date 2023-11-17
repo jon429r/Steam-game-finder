@@ -1,0 +1,223 @@
+:root {
+    --main-color: rgb(180, 175, 175);
+    --secondary-color: rgb(69, 68, 68);
+}
+
+#foo {
+    color: var(--main-color);
+    background-color: var(--secondary-color);
+}
+
+body {
+    background-color: var(--main-color);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.hidden {
+    display: none;
+}
+
+.Header_List {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--secondary-color);
+    border-bottom: 1px solid black;
+}
+
+li {
+    display: inline;
+}
+
+.right_column {
+    background-color: var(--main-color);
+    float: right;
+    width: 25%;
+    height: 750px;
+    border-left: 1px solid black;
+}
+
+.left_column {
+    background-color: var(--main-color);
+    float: left;
+    width: 10%;
+    height: 750px;
+    border-right: 1px solid black;
+}
+
+#header {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    margin-left: 0;
+    margin-right: 0;
+    float: left;
+    width: 100%;
+    color: antiquewhite;
+}
+
+#Navigation {
+    margin-left: 17%;
+    margin-right: 33%;
+    width: auto;
+    display: block;
+}
+
+#Body {
+    background-color: var(--main-color);
+    width: 75%;
+    margin-left: 12%;
+    margin-right: 0;
+}
+
+#DropDown {
+    float: left;
+    height: 100px;
+    width: 100px;
+}
+
+#toggleIMG {
+    background-color: transparent;
+    height: 50px;
+    width: 50px;
+}
+
+#toggleBUT {
+    background-color: transparent;
+    border: none;
+    height: 55px;
+    width: 55px;
+}
+
+.spacedList li:not(:last-child) {
+    margin-right: 50px;
+    margin-left: 50px;
+}
+
+.spacedList li {
+    display: inline;
+}
+
+#Game_Search {
+    width: 25%;
+    padding: 12px 20px;
+    margin-left: 25%;
+    margin-right: 0;
+    box-sizing: border-box;
+    border-radius: 12px;
+}
+
+#Search_Section {
+    margin-top: 10px;
+    margin-left: 0;
+    margin-right: 33%;
+    width: auto;
+    display: block;
+}
+
+#SearchButton {
+    background-color: var(--secondary-color);
+    margin-left: 0;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 25%;
+}
+
+#Result_Table {
+    display: none;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.Result_Table {
+
+    border-collapse: collapse;
+    width: 75%;
+    margin-top: 3%;
+    margin-left: 30%;
+}
+
+.Result_Table th,
+.Result_Table td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.Result_Table tr:hover {
+    background-color: #ddd;
+}
+
+/* Style The Dropdown Button */
+.dropbtn {
+    background-color: #000000;
+    color: rgb(107, 106, 106);
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #b8b6b6;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+    background-color: var(--secondary-color);
+}
+
+/* Style for the game icon */
+.game-icon {
+    max-width: 75px; 
+    max-height: 75px; 
+}
+
+#Footer {
+    background-color: var(--secondary-color);
+    width: auto;
+    margin-top: 500px; 
+    margin-left: auto;
+    margin-right: 0;
+    padding-top: 45px;
+}
