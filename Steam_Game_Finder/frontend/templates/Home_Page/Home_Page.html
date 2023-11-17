@@ -1,5 +1,6 @@
 {% load static %}
 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="{% static 'css/Home_Style.css' %}">
-    <script src="{% static 'js/Home_JS.js' %}"></script>
+    <script src="{% static 'js/Home_JS.js' %}" defer></script>
 
     <title>Home Page</title>
     <link rel="icon" type="image/x-icon" href="https://freeiconshop.com/wp-content/uploads/edd/image-outline-filled.png">
@@ -35,31 +36,33 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="right_column">
-            <h2>Most Popular Games</h2>
-            <p>Here is a table of the most popular games</p>
-
-            <div class="Popular_Games_Table">
-                <table id="Popular_Games">
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Game Title</th>
-                            <th>Like</th>
-                            <th>Dislike</th>
-                        </tr>
-                    </thead>
+    <div class="right_column">
+        <h2>{{ section1 }}</h2>
+        <p>Here is a table of the {{ section1|lower }}</p>
+    
+        <div class="Popular_Games_Table">
+            <table id="Popular_Games">
+                <thead>
                     <tr>
-                        <td><img class="game-icon"
-                                src="https://cdn.akamai.steamstatic.com/steam/apps/72850/header.jpg?t=1647357402"
-                                alt="Game Icon"></td>
-                        <td>The Elder Scrolls V: Skyrim</td>
+                        <th>Image</th>
+                        <th>Game Title</th>
+                        <th>Like</th>
+                        <th>Dislike</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for game in popular_games %}
+                    <tr>
+                        <td>
+                            <img class="game-icon" src="{{ game.IMG }}" alt="Game Icon">
+                        </td>                       
+                        <td>{{ game.Title }}</td>
                         <td>Like</td>
                         <td>Dislike</td>
                     </tr>
-                </table>
-            </div>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -84,26 +87,37 @@
             <input type="text" name="Game_Search" id="Game_Search" placeholder="Search For A Game">
             <button id="SearchButton">Search</button>
         </form>
+        <h2>{{ section2 }}</h2>
+        <p>Here is a table of the {{ section2|lower }}</p>
 
+    
         <table class="Result_Table" id="Result_Table">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Price</th>
+                    <th>Image</th>
+                    <th>Game Title</th>
+                    <th>Like</th>
+                    <th>Dislike</th>
                 </tr>
             </thead>
             <tbody>
                 {% for game in games %}
-                <tr>
-                    <td>{{ game.ID }}</td>
-                    <td>{{ game.Title }}</td>
-                    <td>${{ game.Price }}</td>
-                </tr>
+                    <!-- Table rows for regular games... -->
+                    <tr>
+                        <td>
+                            <img class="game-icon" src="{{ game.IMG }}" alt="Game Icon">
+                        </td>
+                        <td>{{ game.Title }}</td>
+                        <td>Like</td>
+                        <td>Dislike</td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 
     <div id="Footer">
-        <h2 align="center
+        <h2 align="center">Footer Text</h2>
+    </div>
+</body>
+</html>
