@@ -22,7 +22,8 @@ from django.urls import path
 from django.contrib import admin
 from django.urls import include
 
-from frontend.views import home_page_view, quiz_page_view, search_page_view
+
+from frontend.views import home_page_view, quiz_page_view, search_page_view, display_games, display_popular_games
 from django.urls import path
 from django.contrib import admin
 from frontend.views import display_games
@@ -36,5 +37,13 @@ urlpatterns = [
     path('Steam_Game_Finder/Home_Page/templates/Home_Page/Home_Page.html', home_page_view, name='Home_Page.html'),
     path('Steam_Game_Finder/Quiz_Page/templates/Quiz_Page/Quiz_Page.html', quiz_page_view, name='Quiz_Page.html'),
     path('Steam_Game_Finder/Search_Page/templates/Search_Page/Search_Page.html', search_page_view, name='Search_Page.html'),
+    path('Steam_Game_Finder/frontend/templates/frontend/Home_Page.html', display_games, name='Home_Page.html'),
+    path('Steam_Game_Finder/frontend/templates/frontend/Quiz_Page.html', display_games, name='Quiz_Page.html'),
+    path('Steam_Game_Finder/frontend/templates/frontend/Search_Page.html', display_games, name='Search_Page.html'),
+    path('Steam_Game_Finder/frontend/templates/frontend/Home_Page.html', display_games, name='Home_Page.html'),
+    path('Steam_Game_Finder/frontend/templates/frontend/Quiz_Page.html', display_games, name='Quiz_Page.html'),
+    path('Steam_Game_Finder/frontend/templates/frontend/Search_Page.html', display_games, name='Search_Page.html'),
     
+    path('display_games/', display_games, name='display_games'),
+    path('display_popular_games/', display_popular_games, name='display_popular_games'),
     ]
