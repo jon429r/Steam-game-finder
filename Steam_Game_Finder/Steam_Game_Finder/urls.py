@@ -20,13 +20,16 @@ Including another URLconf
 """
 from django.urls import path
 from django.contrib import admin
+from django.urls import include
 
 from frontend.views import home_page_view, quiz_page_view, search_page_view
 from django.urls import path
 from django.contrib import admin
+from frontend.views import display_games
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
     path('Home_Page/', home_page_view, name='Home_Page.html'),
     path('Quiz_Page/', quiz_page_view, name='Quiz_Page.html'),
     path('Search_Page/', search_page_view, name='Search_Page.html'),
