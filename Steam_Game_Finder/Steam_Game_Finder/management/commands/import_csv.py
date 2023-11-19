@@ -8,7 +8,7 @@ con = sqlite3.connect("db.sqlite3")
 cur = con.cursor()
 
 games_table_description = """CREATE TABLE IF NOT EXISTS Game(
-        AppID INTEGER,
+        AppID INTEGER PRIMARY KEY,
         Name TEXT,
         Release_date TEXT,
         Required_age INTEGER,
@@ -18,44 +18,44 @@ games_table_description = """CREATE TABLE IF NOT EXISTS Game(
         Positive INTEGER,
         Negative INTEGER,
         Header_image TEXT
-    )"""
+    );"""
 
 genre_table_description = """CREATE TABLE IF NOT EXISTS GameGenre(
         AppID INTEGER,
         genre TEXT
-    )"""
+    );"""
 
 tag_table_description = """CREATE TABLE IF NOT EXISTS GameTag(
         AppID INTEGER,
         tag TEXT
-    )"""
+    );"""
 
 cat_table_description = """CREATE TABLE IF NOT EXISTS GameCategory(
         AppID INTEGER,
         category TEXT
-    )"""
+    );"""
 
 dev_table_description = """CREATE TABLE IF NOT EXISTS GameDeveloper(
         AppID INTEGER,
         developer TEXT
-    )"""
+    );"""
 
 pub_table_description = """CREATE TABLE IF NOT EXISTS GamePublisher(
         AppID INTEGER,
         Publisher TEXT
-    )"""
+    );"""
 
 lang_table_description = """CREATE TABLE IF NOT EXISTS GameLanguages(
         AppID INTEGER,
         language TEXT
-    )"""
+    );"""
 
 plat_table_description = """CREATE TABLE IF NOT EXISTS GamePlatform(
         AppID INTEGER,
         Windows INTEGER,
         MAC INTEGER,
         Linux INTEGER
-    )"""
+    );"""
 
 table_descriptors = [
     games_table_description,
@@ -169,7 +169,7 @@ def read_csv(
             tags = process_string_list(row[36])
             developers = process_string_list(row[32])
             publishers = process_string_list(row[33])
-            supported_langs = list(row[9])
+            supported_langs = process_langs(row[9])
             platforms = (row[16], row[17], row[18])  # windows, mac, linux bools
 
             dic_tuples_game[app_id] = (
@@ -214,6 +214,10 @@ def process_realse_date(release_date) -> str:
 
 def process_string_list(genre_string):
     return genre_string.split(",")
+
+
+def process_langs(genre_string):
+    return genre_string[2:-2].split("', '")
 
 
 if __name__ == "__main__":
