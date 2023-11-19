@@ -1,0 +1,34 @@
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="{% static 'JS/Home_JS.js' %}" defer></script>
+    <link rel="stylesheet" href="{% static 'CSS/Main_Style.css' %}">
+    <link rel="stylesheet" href="{% static 'CSS/Home_Style.css' %}">
+</head>
+
+<table class="Result_Table" id="Result_Table">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Game Title</th>
+            <th>Like</th>
+            <th>Dislike</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for game in games %}
+            <!-- Table rows for regular games... -->
+            <tr>
+                <td>
+                    <img class="game-icon" src="{{ game.IMG }}" alt="Game Icon">
+                </td>
+                <td>{{ game.Title }}</td>
+                <td>Like</td>
+                <td>Dislike</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

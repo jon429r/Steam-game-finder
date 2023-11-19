@@ -7,7 +7,13 @@ def quiz_page_view(request):
     return render(request, 'Quiz_Page/Quiz_Page.html')
 
 def search_page_view(request):
-    return render(request, 'Search_Page/Search_Page.html', {})
+    return render(request, 'Search_Page/Search_Page.html')
+
+def base_temp_view(request):
+    return render(request, 'Base_Temp/Base.html')
+
+def results_table_view(request):
+    return render(request, 'Extra/Results_Table.html')
 
 def display_resulting_games(request):
     games = [
@@ -15,7 +21,7 @@ def display_resulting_games(request):
         {'ID': 2, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Game 2', 'Price': 29.99},
         # Add more game data as needed
     ]
-    return render(request, 'Home_Page/Home_Page.html', {'games': games, 'section1': 'Games'})
+    return render(request, 'Extras/Results_Table', {'games': games, 'section2': 'Games'})
 
 
 def display_popular_games(request):
@@ -25,7 +31,7 @@ def display_popular_games(request):
         # Add more popular game data as needed
     ]
 
-    return render(request, 'Home_Page/Home_Page.html', {'popular_games': popular_games, 'section2': 'Popular Games'})
+    return render(request, 'Base_Temp/Base.html', {'popular_games': popular_games, 'section2': 'Popular Games'})
 
 def display_games(request):
     games = [
@@ -40,4 +46,4 @@ def display_games(request):
         # Add more popular game data as needed
     ]
 
-    return render(request, 'Home_Page/Home_Page.html', {'games': games, 'popular_games': popular_games, 'section1': 'Popular Games', 'section2': 'Results'})
+    return render(request, 'Base_Temp/Base.html', {'games': games, 'popular_games': popular_games, 'section1': 'Popular Games', 'section2': 'Results'})
