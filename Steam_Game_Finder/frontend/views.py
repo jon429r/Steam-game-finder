@@ -12,8 +12,24 @@ def search_page_view(request):
 def base_temp_view(request):
     return render(request, 'Base_Temp/Base.html')
 
-def results_table_view(request):
-    return render(request, 'Extra/Results_Table.html')
+def results_page_view(request):
+    resulting_games = [
+        {'ID': 3, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 1', 'Price': 39.99},
+        {'ID': 4, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
+        # Add more popular game data as needed
+    ]
+    print(resulting_games)
+    return render(request, 'Extras/Popular_Table.html', {'resulting_games': resulting_games, 'section1': 'Resulting Games'})
+
+def popular_page_view(request):
+    popular_games = [
+        {'ID': 3, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 1', 'Price': 39.99},
+        {'ID': 4, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
+        # Add more popular game data as needed
+    ]
+    print(popular_games)
+    return render(request, 'Extras/Popular_Table.html', {'popular_games': popular_games, 'section1': 'Popular Games'})
+
 
 def display_resulting_games(request):
     games = [
@@ -21,8 +37,8 @@ def display_resulting_games(request):
         {'ID': 2, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Game 2', 'Price': 29.99},
         # Add more game data as needed
     ]
-    return render(request, 'Extras/Results_Table', {'games': games, 'section2': 'Games'})
-
+    print(games)
+    return render(request, 'Extras/Result_Table.html', {'games': games, 'section2': 'Games'})
 
 def display_popular_games(request):
     popular_games = [
@@ -30,20 +46,5 @@ def display_popular_games(request):
         {'ID': 4, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
         # Add more popular game data as needed
     ]
-
-    return render(request, 'Base_Temp/Base.html', {'popular_games': popular_games, 'section2': 'Popular Games'})
-
-def display_games(request):
-    games = [
-        {'ID': 1, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Game 1', 'Price': 19.99},
-        {'ID': 2, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Game 2', 'Price': 29.99},
-        # Add more game data as needed
-    ]
-
-    popular_games = [
-        {'ID': 3, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 1', 'Price': 39.99},
-        {'ID': 4, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
-        # Add more popular game data as needed
-    ]
-
-    return render(request, 'Base_Temp/Base.html', {'games': games, 'popular_games': popular_games, 'section1': 'Popular Games', 'section2': 'Results'})
+    print(popular_games)
+    return render(request, 'Extras/Popular_Table.html', {'popular_games': popular_games, 'section1': 'Popular Games'})

@@ -1,22 +1,21 @@
 {% extends 'Base_Temp/Base.html' %}
+{% load static %}
+
 {% block title %}Home Page{% endblock %}
 
-{% block content %}
-    <div id="Body">
-      
-      \  <h2 align="center">Welcome to Steam Game Finder</h2>
-        <p align="center">Steam Game Finder is a website that allows you to find games on Steam that you might like.</p>
-    </div>
+{% block main %}
+<div id="Body">
+    <h2 align="center">Welcome to Steam Game Finder</h2>
+    <p align="center">Steam Game Finder is a website that allows you to find games on Steam that you might like.</p>
 
     <div id="Search_Section">
         <form align="center" onsubmit="showResults(); return false;">
             <input type="text" name="Game_Search" id="Game_Search" placeholder="Search For A Game">
             <button id="SearchButton">Search</button>
         </form>
-        <h2>{{ section2 }}</h2>
-        <p>Here is a table of the {{ section2|lower }}</p>
 
-        {% include 'Extras/Result_Table.html' %} <!-- Include the results table here -->
+        {% include 'Extras/Result_Table.html' %}
 
     </div>
+</div>
 {% endblock %}

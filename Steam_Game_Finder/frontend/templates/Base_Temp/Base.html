@@ -16,12 +16,11 @@
     <!-- Include common scripts -->
     {% block scripts %}
     <script src="{% static 'JS/Home_JS.js' %}" defer></script>
+    {% endblock %}
 </head>
-{% endblock %}
-
-{% block header %}
 
 <body>
+    {% block header %}
     <header>
         <ul class="Header_List">
             <div id="header">
@@ -30,92 +29,56 @@
                 </li>
             </div>
         </ul>
-        {% endblock %}
-{% block navigation %}
-        <nav>
-            <div id="Navigation">
-                <h2 id="Links" align="center">
-                    <ul class="Header_List">
-                        <li><a href="{% url 'Home_Page.html' %}" style="color: antiquewhite;">Home</a></li>
-                        <li><a href="{% url 'Quiz_Page.html' %}" style="color: antiquewhite;">Quiz</a></li>
-                        <li><a href="{% url 'Search_Page.html' %}" style="color: antiquewhite;">Search</a></li>
-                        <li><a href="#" style="color: antiquewhite;">Info</a></li>
-                    </ul>
-                </h2>
-            </div>
-        </nav>
     </header>
-
     {% endblock %}
 
+    {% block navigation %}
+    <nav>
+        <div id="Navigation">
+            <h2 id="Links" align="center">
+                <ul class="Header_List">
+                    <li><a href="{% url 'Home_Page.html' %}" style="color: antiquewhite;">Home</a></li>
+                    <li><a href="{% url 'Quiz_Page.html' %}" style="color: antiquewhite;">Quiz</a></li>
+                    <li><a href="{% url 'Search_Page.html' %}" style="color: antiquewhite;">Search</a></li>
+                    <li><a href="#" style="color: antiquewhite;">Info</a></li>
+                </ul>
+            </h2>
+        </div>
+    </nav>
+    {% endblock %}
 
     {% block left_column %}
-    <div class="container">
-        <div class="left_column">
-            <div class="dropdown">
-                <button class="dropbtn">Dropdown</button>
-                <div class="dropdown-content">
-                    <a href="../Home_Page/Home_Page.html">Home Page</a>
-                    <a href="../Quiz_Page/Quiz_Page.html">Quiz Page</a>
-                    <a href="../Search_Page/Search_Page.html">Search Page</a>
-                    <a href="#">Link 4</a>
-                </div>
+    <aside class="left_column">
+        <div class="dropdown">
+            <button class="dropbtn">Dropdown</button>
+            <div class="dropdown-content">
+                <a href="{% url 'Home_Page.html' %}">Home Page</a>
+                <a href="{% url 'Quiz_Page.html' %}">Quiz Page</a>
+                <a href="{% url 'Search_Page.html' %}">Search Page</a>
+                <a href="#">Link 4</a>
             </div>
         </div>
-        {% endblock %}
+    </aside>
+    {% endblock %}
 
-        {% block main %}
-        <body id="Body">
-        {% endblock %}
-        </body>
-
-        {% block right_column %}
-        <aside class="right_column">
-            <div class="Popular_Games_Table">
-                <table id="Popular_Games">
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Game Title</th>
-                            <th>Like</th>
-                            <th>Dislike</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for game in popular_games %}
-                        <tr>
-                            <td>
-                                <img class="game-icon" src="{{ game.IMG }}" alt="Game Icon">
-                            </td>
-                            <td>{{ game.Title }}</td>
-                            <td>Like</td>
-                            <td>Dislike</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-        </aside>
-
-
-
+    {% block right_column %}
+    <div class="right_column">
+        {% include 'Extras/Popular_Table.html' with popular_games=popular_games section1=section1 %}
+            {% endblock %}
+    </div>
+    {% block main %}
+    <div id="Body">
+        {# Content of the main block goes here #}
     </div>
     {% endblock %}
 
     {% block footer %}
-    <Footer id="Footer">
+    <footer id="Footer">
         <!-- Your common footer content goes here -->
         <p>&copy; 2023 My Website</p>
-    </Footer id="Footer">
-
+    </footer>
+    {% endblock %}
 
 </body>
-
-
-{% endblock %}
-
-
-
 
 </html>

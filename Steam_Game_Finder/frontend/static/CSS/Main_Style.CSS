@@ -22,9 +22,11 @@
 
 #Body {
     background-color: var(--main-color);
-    width: 100%;
-    margin-left: 0%;
-    margin-right: 0;
+    width: 75%;
+    margin-bottom: 750px;
+    margin-left: auto;
+    margin-right: auto;
+
 }
 
 .Header_List {

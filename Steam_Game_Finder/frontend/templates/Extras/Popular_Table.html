@@ -1,28 +1,20 @@
-{% load static %}
+{% block title %}Popular Games{% endblock %}
 
+{% block content %}
+    <h2>{{ section1 }}</h2>
+    <p>Here is a table of the {{ section1|lower }}</p>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% Popular_Table %}Popular Table{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/Home_Style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/Main_Style.css' %}">
-</head>
-<body>
-    <div class="Popular_Games_Table">
-        <table id="Popular_Games">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Game Title</th>
-                    <th>Like</th>
-                    <th>Dislike</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for game in popular_games %}
+    <table class="Popular_Table" id="Popular_Table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Game Title</th>
+                <th>Like</th>
+                <th>Dislike</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game in popular_games %}
                 <tr>
                     <td>
                         <img class="game-icon" src="{{ game.IMG }}" alt="Game Icon">
@@ -31,9 +23,7 @@
                     <td>Like</td>
                     <td>Dislike</td>
                 </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</body>
-</html>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
