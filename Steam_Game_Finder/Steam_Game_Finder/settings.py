@@ -1,5 +1,7 @@
 # settings.py
-
+import pymysql
+pymysql.version_info = (2, 0, 0, "final", 0)
+pymysql.install_as_MySQLdb()
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -70,8 +72,12 @@ WSGI_APPLICATION = 'Steam_Game_Finder.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE'  : 'django.db.backends.mysql', 
+        'NAME'    : 'DatabaseFinder',                 
+        'USER'    : 'root',                     
+        'PASSWORD': 'Database-final1234',              
+        'HOST'    : 'localhost',               
+        'PORT'    : '3306',
     }
 }
 

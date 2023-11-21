@@ -1,0 +1,29 @@
+{% block title %}Popular Games{% endblock %}
+
+{% block content %}
+    <h2>{{ section1 }}</h2>
+    <p>Here is a table of the {{ section1|lower }}</p>
+
+    <table class="Popular_Table" id="Popular_Table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Game Title</th>
+                <th>Like</th>
+                <th>Dislike</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game in popular_games %}
+                <tr>
+                    <td>
+                        <img class="game-icon" src="{{ game.IMG }}" alt="Game Icon">
+                    </td>.loc p0jb 
+                    <td>{{ game.Title }}</td>
+                    <td>Like</td>
+                    <td>Dislike</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
