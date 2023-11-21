@@ -23,27 +23,36 @@ from django.contrib import admin
 from django.urls import include
 
 
-from frontend.views import home_page_view, quiz_page_view, search_page_view, display_games, display_popular_games
+from frontend.views import home_page_view, quiz_page_view, search_page_view, display_resulting_games, display_popular_games, base_temp_view, results_page_view, popular_page_view
 from django.urls import path
 from django.contrib import admin
-from frontend.views import display_games
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('Home_Page/', home_page_view, name='Home_Page.html'),
-    path('Quiz_Page/', quiz_page_view, name='Quiz_Page.html'),
-    path('Search_Page/', search_page_view, name='Search_Page.html'),
-    path('Steam_Game_Finder/Home_Page/templates/Home_Page/Home_Page.html', home_page_view, name='Home_Page.html'),
-    path('Steam_Game_Finder/Quiz_Page/templates/Quiz_Page/Quiz_Page.html', quiz_page_view, name='Quiz_Page.html'),
-    path('Steam_Game_Finder/Search_Page/templates/Search_Page/Search_Page.html', search_page_view, name='Search_Page.html'),
-    path('Steam_Game_Finder/frontend/templates/frontend/Home_Page.html', display_games, name='Home_Page.html'),
-    path('Steam_Game_Finder/frontend/templates/frontend/Quiz_Page.html', display_games, name='Quiz_Page.html'),
-    path('Steam_Game_Finder/frontend/templates/frontend/Search_Page.html', display_games, name='Search_Page.html'),
-    path('Steam_Game_Finder/frontend/templates/frontend/Home_Page.html', display_games, name='Home_Page.html'),
-    path('Steam_Game_Finder/frontend/templates/frontend/Quiz_Page.html', display_games, name='Quiz_Page.html'),
-    path('Steam_Game_Finder/frontend/templates/frontend/Search_Page.html', display_games, name='Search_Page.html'),
+    path('Base.html', base_temp_view, name='Base.html'),
+    path('Base_Temp/Base.html', base_temp_view, name='Base.html'),
+
+    ##Page that opens by default when the server is started
+    path('', home_page_view, name='Home_Page.html'),
     
-    path('display_games/', display_games, name='display_games'),
+    path('Home_Page.html', home_page_view, name='Home_Page.html'),
+    path('Quiz_Page.html', quiz_page_view, name='Quiz_Page.html'),
+    path('Search_Page.html', search_page_view, name='Search_Page.html'),
+    
+    path('Home_Page/Home_Page.html', home_page_view, name='Home_Page.html'),
+    path('Quiz_Page/Quiz_Page.html', quiz_page_view, name='Quiz_Page.html'),
+    path('Search_Page/Search_Page.html', search_page_view, name='Search_Page.html'),
+    
+    ##path('Extras/', display_popular_games, name='Popular_Table.html'),
+    path('Extras/Popular_Table.html', popular_page_view, name='Popular_Table.html'),
+
+    ##path('Extras/', display_resulting_games, name='Result_Table.html'),
+    path('Extras/Result_Table.html', results_page_view, name='Result_Table.html'),
+
     path('display_popular_games/', display_popular_games, name='display_popular_games'),
+    path('display_resulting_games/', display_resulting_games, name='display_resulting_games'),
+
+    path('popular/', popular_page_view, name='popular_games'),
+
     ]

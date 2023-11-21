@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 from .models import Game, Language, Developer, Publisher
 
 class GameModelTests(TestCase):
@@ -178,3 +179,16 @@ class TestTemplates(TestCase):
 
         # Check that the correct template was used
         self.assertTemplateUsed(response, 'display_popular_games.html')
+
+class Table_Tests(TestCase):
+    def test_display_resulting_games(self):
+        response = self.client.get(reverse('display_resulting_games'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'The Elder Scrolls V: Skyrim')
+        self.assertContains(response, 'Game 2')
+
+    def test_display_popular_games(self):
+        response = self.client.get(reverse('display_popular_games'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Popular Game 1')
+        self.assertContains(response, 'Popular Game 2')
