@@ -11,8 +11,6 @@ Windows, Mac, Linux, Metacritic Score, Positive,
 Negative, Devolopers, Publishers, Categories, Genres, Tags
 """
 
-def __str__(self):
-    return self.name
 
 class Game(models.Model):
     app_id = models.AutoField(primary_key=True)
@@ -33,14 +31,27 @@ class Game(models.Model):
     genres = models.TextField(default=None, blank=True, null=True)
     tags = models.TextField(default=None, blank=True, null=True)
 
+    def __str__(self):
+        return self.name
+
 class Language(models.Model):
     app_id = models.CharField(max_length=255, default=None, blank=True, null=True)
     language = models.CharField(max_length=200, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return self.language
 
 class Developer(models.Model):
     app_id = models.CharField(max_length=255, default=None, blank=True, null=True)
     developer = models.CharField(max_length=200, default=None, blank=True, null=True)
 
+    def __str__(self):
+        return self.developer
+
 class Publisher(models.Model):
     app_id = models.CharField(max_length=255, default=None, blank=True, null=True)
     publisher = models.CharField(max_length=200, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return self.publisher
+
