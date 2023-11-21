@@ -9,6 +9,7 @@
             <tr>
                 <th>Image</th>
                 <th>Game Title</th>
+                <th>Price</th>
                 <th>Like</th>
                 <th>Dislike</th>
             </tr>
@@ -17,11 +18,10 @@
             {% for game in popular_games %}
                 <tr>
                     <td>
-                        <img class="game-icon" src="{{ game.IMG }}" alt="Game Icon">
+                        <img class="game-icon" src="{{ game.IMG }}" alt="{{ Game.Title }}">
                     </td>
                     <td>{{ game.Title }}</td>
-                    <td>Like</td>
-                    <td>Dislike</td>
+                    <td>${{ game.Price }}</td>
                 </tr>
             {% endfor %}
         </tbody>

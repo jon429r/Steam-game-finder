@@ -1,16 +1,49 @@
 from django.shortcuts import render
 
 def home_page_view(request):
-    return render(request, 'Home_Page/Home_Page.html')
+
+    resulting_games = [
+    {'ID': 3, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 1', 'Price': 39.99},
+    {'ID': 4, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
+    # Add more popular game data as needed
+    ]
+
+    popular_games = [
+    {'ID': 3, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 1', 'Price': 39.99},
+    {'ID': 4, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
+    # Add more popular game data as needed
+    ]
+
+    print(resulting_games)
+    return render(request, 'Home_Page/Home_Page.html', {'resulting_games': resulting_games, 'popular_games': popular_games, 'section1': 'Resulting Games', 'section2': 'Popular Games'})
+
 
 def quiz_page_view(request):
-    return render(request, 'Quiz_Page/Quiz_Page.html')
+    popular_games = [
+        {'ID': 3, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 1', 'Price': 39.99},
+        {'ID': 4, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
+        # Add more popular game data as needed
+    ]
+    return render(request, 'Quiz_Page/Quiz_Page.html', {'popular_games': popular_games, 'section1': 'Popular Games'})
 
 def search_page_view(request):
-    return render(request, 'Search_Page/Search_Page.html')
+    popular_games = [
+        {'ID': 3, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 1', 'Price': 39.99},
+        {'ID': 4, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
+        # Add more popular game data as needed
+    ]
+    return render(request, 'Search_Page/Search_Page.html', {'popular_games': popular_games, 'section1': 'Popular Games'})
 
 def base_temp_view(request):
-    return render(request, 'Base_Temp/Base.html')
+    popular_games = [
+        {'ID': 3, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 1', 'Price': 39.99},
+        {'ID': 4, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
+        # Add more popular game data as needed
+    ]
+    return render(request, 'Base_Temp/Base.html', {'popular_games': popular_games, 'section1': 'Popular Games'})
+
+
+######################May not need these functions######################
 
 def results_page_view(request):
     resulting_games = [
@@ -19,7 +52,7 @@ def results_page_view(request):
         # Add more popular game data as needed
     ]
     print(resulting_games)
-    return render(request, 'Extras/Popular_Table.html', {'resulting_games': resulting_games, 'section1': 'Resulting Games'})
+    return render(request, 'Home_Page/Home_Page.html', {'resulting_games': resulting_games, 'section1': 'Resulting Games'})
 
 def popular_page_view(request):
     popular_games = [
@@ -27,8 +60,7 @@ def popular_page_view(request):
         {'ID': 4, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
         # Add more popular game data as needed
     ]
-    print(popular_games)
-    return render(request, 'Extras/Popular_Table.html', {'popular_games': popular_games, 'section1': 'Popular Games'})
+    return render(request, 'Base_Temp/Base.html', {'popular_games': popular_games, 'section1': 'Popular Games'})
 
 
 def display_resulting_games(request):
@@ -38,7 +70,7 @@ def display_resulting_games(request):
         # Add more game data as needed
     ]
     print(games)
-    return render(request, 'Extras/Result_Table.html', {'games': games, 'section2': 'Games'})
+    return render(request, 'Home_Page/Home_Page.html', {'games': games, 'section2': 'Games'})
 
 def display_popular_games(request):
     popular_games = [
@@ -47,4 +79,4 @@ def display_popular_games(request):
         # Add more popular game data as needed
     ]
     print(popular_games)
-    return render(request, 'Extras/Popular_Table.html', {'popular_games': popular_games, 'section1': 'Popular Games'})
+    return render(request, 'Base_Temp/Base.html', {'popular_games': popular_games, 'section1': 'Popular Games'})

@@ -45,11 +45,14 @@ urlpatterns = [
     path('Search_Page/Search_Page.html', search_page_view, name='Search_Page.html'),
     
     ##path('Extras/', display_popular_games, name='Popular_Table.html'),
-    path('Extras/Popular_Table.html', display_popular_games, name='Popular_Table.html'),
+    path('Extras/Popular_Table.html', popular_page_view, name='Popular_Table.html'),
 
     ##path('Extras/', display_resulting_games, name='Result_Table.html'),
-    path('Extras/Result_Table.html', display_resulting_games, name='Result_Table.html'),
+    path('Extras/Result_Table.html', results_page_view, name='Result_Table.html'),
 
     path('display_popular_games/', display_popular_games, name='display_popular_games'),
     path('display_resulting_games/', display_resulting_games, name='display_resulting_games'),
+
+    path('popular/', popular_page_view, name='popular_games'),
+
     ]
