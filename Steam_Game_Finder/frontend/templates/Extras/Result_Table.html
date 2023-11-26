@@ -21,8 +21,8 @@
                         <img class="game-icon" src="{{ game.IMG }}" alt="Game Icon">
                     </td>
                     <td>{{ game.Title }}</td>
-                    <td>Like</td>
-                    <td>Dislike</td>
+                    <td> {% include 'Extras/Like_Button.html' %} </td>
+                    <td> {% include 'Extras/Dislike_Button.html' %} </td>
                 </tr>
             {% endfor %}
         </tbody>

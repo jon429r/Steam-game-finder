@@ -11,6 +11,16 @@ Windows, Mac, Linux, Metacritic Score, Positive,
 Negative, Devolopers, Publishers, Categories, Genres, Tags
 """
 
+class Liked_Disliked(models.Model):
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255, default=None, blank=True, null=True)
+    action = models.CharField(max_length=200, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        unique_together = (('title', 'action'),)
 
 class Game(models.Model):
     app_id = models.AutoField(primary_key=True)

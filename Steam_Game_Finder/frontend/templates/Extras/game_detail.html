@@ -1,0 +1,14 @@
+<!-- Extras/game-detail.html -->
+{% load static %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<div>
+  <button onclick="likeGame({ game.id })"><i class="fa fa-thumbs-up"></i></button>
+  <span id="likes_{{ game.id }}">{{ likes }}</span>
+</div>
+<div>
+  <button onclick="dislikeGame({ game.id })"><i class="fa fa-thumbs-up"></button>
+  <span id="dislikes_{{ game.id }}">{{ dislikes }}</span>
+</div>

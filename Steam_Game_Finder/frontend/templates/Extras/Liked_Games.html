@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Liked</title>
+</head>
+<body>
+
+    <h1>Game Liked!</h1>
+
+    {% if game_title %}
+        <p>You liked the game: {{ game_title }}</p>
+    {% else %}
+        <p>No game title provided.</p>
+    {% endif %}
+
+    <a href="{% url 'home_page' %}">Back to Home</a>
+
+</body>
+</html>
