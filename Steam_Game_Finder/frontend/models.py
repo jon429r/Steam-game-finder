@@ -12,8 +12,9 @@ Negative, Devolopers, Publishers, Categories, Genres, Tags
 """
 
 class Liked_Disliked(models.Model):
-    id = models.AutoField(primary_key=True)
+    app_id = models.AutoField(primary_key=True, default=None)
     title = models.CharField(max_length=255, default=None, blank=True, null=True)
+    header_image = models.URLField(default=None, blank=True, null=True)
     action = models.CharField(max_length=200, default=None, blank=True, null=True)
 
     def __str__(self):
@@ -23,8 +24,8 @@ class Liked_Disliked(models.Model):
         unique_together = (('title', 'action'),)
 
 class Game(models.Model):
-    app_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=200, default=None, blank=True, null=True)
+    app_id = models.AutoField(primary_key=True, default=None)
+    name = models.CharField(max_length=210, default=None, blank=True, null=True)
     release_date = models.CharField(max_length=200, default=None, blank=True, null=True)
     required_age = models.IntegerField(default=0, null=True, blank=True)
     price = models.FloatField(default=0.0, null=True, blank=True)
@@ -45,21 +46,21 @@ class Game(models.Model):
         return self.name
 
 class Language(models.Model):
-    app_id = models.CharField(max_length=255, default=None, blank=True, null=True)
+    app_id = models.CharField(max_length=260, default=None, blank=True, null=True)
     language = models.CharField(max_length=200, default=None, blank=True, null=True)
 
     def __str__(self):
         return self.language
 
 class Developer(models.Model):
-    app_id = models.CharField(max_length=255, default=None, blank=True, null=True)
+    app_id = models.CharField(max_length=260, default=None, blank=True, null=True)
     developer = models.CharField(max_length=200, default=None, blank=True, null=True)
 
     def __str__(self):
         return self.developer
 
 class Publisher(models.Model):
-    app_id = models.CharField(max_length=255, default=None, blank=True, null=True)
+    app_id = models.CharField(max_length=260, default=None, blank=True, null=True)
     publisher = models.CharField(max_length=200, default=None, blank=True, null=True)
 
     def __str__(self):

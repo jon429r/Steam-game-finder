@@ -2,8 +2,8 @@
 {% block title %}Results{% endblock %}
 
 {% block content %}
-    <h2>{{ section2 }}</h2>
-    <p>Here is a table of the {{ section2|lower }}</p>
+    <h2>{{ section1 }}</h2>
+    <p>Here is a table of the {{ section1|lower }}</p>
     <table class="Result_Table" id="Result_Table">
         <thead>
             <tr>
@@ -14,13 +14,13 @@
             </tr>
         </thead>
         <tbody>
-            {% for game in resulting_games %}
+            {% for game in liked_disliked_records %}
                 <!-- Table rows for regular games... -->
                 <tr>
                     <td>
                         <img class="game-icon" src="{{ game.IMG }}" alt="Game Icon">
                     </td>
-                    <td>{{ game.Title }}</td>
+                    <td>{{ game.title }}</td>
                     <td> {% include 'Extras/Like_Button.html' %} </td>
                     <td> {% include 'Extras/Dislike_Button.html' %} </td>
                 </tr>

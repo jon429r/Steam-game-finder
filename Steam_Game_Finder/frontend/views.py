@@ -3,10 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from .models import Game
 from .models import Game, Liked_Disliked
 
-
-def home_page_view(request):
-
-    resulting_games = [
+resulting_games = [
         {'ID': 1, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 1', 'Price': 39.99},
         {'ID': 2, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
         {'ID': 3, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 3', 'Price': 29.99},
@@ -16,7 +13,7 @@ def home_page_view(request):
         {'ID': 7, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 7', 'Price': 29.99},
     ]    
 
-    popular_games = [
+popular_games = [
         {'ID': 1, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 1', 'Price': 39.99},
         {'ID': 2, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
         {'ID': 3, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 3', 'Price': 29.99},
@@ -30,47 +27,73 @@ def home_page_view(request):
         {'ID': 11, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 11', 'Price': 29.99},
     ]
 
-    return render(request, 'Home_Page/Home_Page.html', {'resulting_games': resulting_games, 'popular_games': popular_games, 'section1': 'Resulting Games', 'section2': 'Popular Games'})
+liked_disliked_records = []
 
+def fill_liked_disliked(request):
+    global liked_disliked_records
+
+    # Your logic to fetch data from the database and fill liked_disliked_records
+    liked_disliked_records = Liked_Disliked.objects.values('app_id', 'title', 'header_image', 'action').all()
+
+    print(liked_disliked_records)
+
+
+# Function to populate resulting_games with data from Liked_Disliked table
+def populate_resulting_games():
+    global resulting_games  # Declare that you're using the global variable
+
+    # Check if there are any records in the Liked_Disliked table
+def populate_resulting_games():
+    # Your logic to fetch data from the database and populate resulting_games
+    resulting_games = Game.objects.values('app_id', 'name', 'header_image', 'price')[:7]
+
+    return [
+        {
+            'ID': game['app_id'],
+            'IMG': game['header_image'],
+            'Title': game['name'],
+            'Price': game['price'],
+        }
+        for game in resulting_games
+    ]
+# Call the function to populate resulting_games
+
+# Now you can use the resulting_games variable globally in your application
+print(liked_disliked_records)
+
+
+def home_page_view(request):
+    template_name = 'Home_Page/Home_Page.html'
+
+    # Access liked_disliked_records globally
+    global liked_disliked_records
+
+    # Fill liked_disliked_records when home_page_view is called
+    fill_liked_disliked(request)
+
+    # Access liked_disliked_records and resulting_games
+    return render(request, template_name, {'liked_disliked_records': liked_disliked_records, 'popular_games': popular_games, 'section1': 'Resulting Games', 'section2': 'Popular Games'})
 
 def quiz_page_view(request):
-    popular_games = [
-        {'ID': 3, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 1', 'Price': 39.99},
-        {'ID': 4, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
-        # Add more popular game data as needed
-    ]
     return render(request, 'Quiz_Page/Quiz_Page.html', {'popular_games': popular_games, 'section1': 'Popular Games'})
 
 def search_page_view(request):
-    popular_games = [
-        {'ID': 3, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 1', 'Price': 39.99},
-        {'ID': 4, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
-        # Add more popular game data as needed
-    ]
     return render(request, 'Search_Page/Search_Page.html', {'popular_games': popular_games, 'section1': 'Popular Games'})
 
 def base_temp_view(request):
-    popular_games = [
-        {'ID': 3, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 1', 'Price': 39.99},
-        {'ID': 4, 'IMG': 'https://cdn.akamai.steamstatic.com/steam/apps/655370/header.jpg?t=1617500526', 'Title': 'Popular Game 2', 'Price': 49.99},
-        # Add more popular game data as needed
-    ]
     return render(request, 'Base_Temp/Base.html', {'popular_games': popular_games, 'section1': 'Popular Games'})
 
 def error_page_view(request):
     return render(request, 'Extras/Error_Page.html')
 
-def liked_game_view(request):
-    return render(request, 'Extras/Liked_Games.html')
 
-"""def liked_disliked_popup_view(request):
-    # Access the value from the URL parameter 'request'
+def liked_disliked_popup_view(request):
+    ## Access the value from the URL parameter 'request'
     disliked_value = request.GET.get('request', '')
 
-    # You can now use the 'disliked_value' in your view logic
-    # For example, you might pass it to the template
+    ## For example, you might pass it to the template
     context = {'disliked_value': disliked_value}
-    return render(request, 'LikedDisliked_popup.html', context)"""
+    return render(request, 'LikedDisliked_popup.html', context)
 
 from django.shortcuts import get_object_or_404, render
 from django.http import JsonResponse
