@@ -25,8 +25,6 @@ from frontend.views import (
     base_temp_view,
     liked_game_view, error_page_view,
     like_game, dislike_game,
-
-
 )
 
 urlpatterns = [

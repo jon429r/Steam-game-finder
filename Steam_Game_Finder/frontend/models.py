@@ -10,6 +10,24 @@ About the game, Supported Languages, Header Image,
 Windows, Mac, Linux, Metacritic Score, Positive, 
 Negative, Devolopers, Publishers, Categories, Genres, Tags
 """
+class Popular_Games(models.Model):
+    app_id = models.AutoField(primary_key=True, default=None)
+    title = models.CharField(max_length=255, default=None, blank=True, null=True)
+    header_image = models.URLField(default=None, blank=True, null=True)
+    action = models.CharField(max_length=200, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+    
+class Resulting_Games(models.Model):
+    app_id = models.AutoField(primary_key=True, default=None)
+    title = models.CharField(max_length=255, default=None, blank=True, null=True)
+    header_image = models.URLField(default=None, blank=True, null=True)
+    action = models.CharField(max_length=200, default=None, blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+
 
 class Liked_Disliked(models.Model):
     app_id = models.AutoField(primary_key=True, default=None)
@@ -20,9 +38,6 @@ class Liked_Disliked(models.Model):
     def __str__(self):
         return self.title
     
-    class Meta:
-        unique_together = (('title', 'action'),)
-
 class Game(models.Model):
     app_id = models.AutoField(primary_key=True, default=None)
     name = models.CharField(max_length=210, default=None, blank=True, null=True)
