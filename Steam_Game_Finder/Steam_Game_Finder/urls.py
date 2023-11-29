@@ -46,7 +46,6 @@ urlpatterns = [
     ##path('Extras/LikedDisliked_popup.html', liked_disliked_popup_view, name='liked_disliked_popup_view'),
 
     path('Info_Page.html', info_page_view, name='info_page_view'),
-    path('Info_Page/Info_Page.html', info_page_view, name='info_page_view'),
 
     path('like/<int:game_id>/', like_game, name='like_game'),
     path('dislike/<int:game_id>/', dislike_game, name='dislike_game'),

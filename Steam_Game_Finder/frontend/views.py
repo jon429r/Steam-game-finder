@@ -59,6 +59,8 @@ def fill_liked_disliked(request):
     liked_disliked_records = Liked_Disliked.objects.values('app_id', 'title', 'header_image', 'action').all()
 
 def info_page_view(request):
+    global popular_games_records
+    
     return render(request, 'Info_Page/Info_Page.html', {'popular_games': popular_games_records, 'section1': 'Popular Games'})
 
 def home_page_view(request):
