@@ -58,6 +58,8 @@ def fill_liked_disliked(request):
     # Your logic to fetch data from the database and fill liked_disliked_records
     liked_disliked_records = Liked_Disliked.objects.values('app_id', 'title', 'header_image', 'action').all()
 
+def info_page_view(request):
+    return render(request, 'Info_Page/Info_Page.html', {'popular_games': popular_games_records, 'section1': 'Popular Games'})
 
 def home_page_view(request):
     template_name = 'Home_Page/Home_Page.html'

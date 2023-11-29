@@ -2,7 +2,8 @@
 
 <!-- FILEPATH: /Users/jonathanday/Documents/GitHub/database-final/Steam_Game_Finder/frontend/templates/Extras/Quiz_Table.html -->
 {% block content %}
-
+<table id="Quiz-setup">
+<td>
 <table id="Game_Quiz_Table">
     <tr>
         <th>Games</th>
@@ -25,7 +26,8 @@
         <td> {% include 'Extras/Dislike_Button.html' %} </td>    
     </tr>
 </table>
-
+</td>
+<td>
 <table id="Genre_Quiz_Table">
     <tr>
         <th>Genres</th>
@@ -48,7 +50,10 @@
         <td> {% include 'Extras/Dislike_Button.html' %} </td>    
     </tr>
 </table>
-
+</td>
+</table>
+<table id="Quiz-setup">
+<td>
 <table id="Publisher_Quiz_Table">
     <tr>
         <th>Publishers</th>
@@ -71,7 +76,8 @@
         <td> {% include 'Extras/Dislike_Button.html' %} </td>    
     </tr>
 </table>
-
+</td>
+<td>
 <table id="Tag_Quiz_Table">
     <tr>
         <th>Tags</th>
@@ -93,7 +99,9 @@
         <td> {% include 'Extras/Like_Button.html' %} </td>
         <td> {% include 'Extras/Dislike_Button.html' %} </td>
         </tr>
-
+</table>
+</td>
+</table>
 <button id="submit">Submit</button>
 
 {% endblock %}
