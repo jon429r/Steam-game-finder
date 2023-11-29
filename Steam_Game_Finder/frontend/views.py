@@ -1,13 +1,43 @@
 from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Game
+from .models import Game, Resulting_Games
 from .models import Game, Liked_Disliked, Resulting_Games, Popular_Games
+from .forms import SearchForm
+from django.db import connection
 
 resulting_games_records = []    
 
 popular_games_records = []
 
 liked_disliked_records = []
+
+
+def results(request):
+    search_form = SearchForm(request.GET)
+    games = []
+
+    if search_form.is_valid():
+        search_term = search_form.cleaned_data.get('search_term')
+        field_choice = search_form.cleaned_data.get('field_choice')
+        print(f"Search Term: {search_term}, Field Choice: {field_choice}")
+
+        if search_term and field_choice:
+            allowed_choices = ['Game', 'Genre', 'Developer', 'Tag']
+            if field_choice in allowed_choices:
+                query = f"""
+                    SELECT app_id, title
+                    FROM {field_choice}
+                    WHERE title LIKE %s
+                    ORDER BY title
+                """
+                with connection.cursor() as cursor:
+                    cursor.execute(query, [f'%{search_term}%'])
+                    games = cursor.fetchall()
+                    print(f"SQL Query: {cursor.query}")
+
+    print(f"Games: {games}")
+    return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': search_form})
+
 
 def fill_popular_games(request):
     global popular_games_records

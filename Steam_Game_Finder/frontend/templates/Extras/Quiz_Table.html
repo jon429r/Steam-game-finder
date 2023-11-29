@@ -1,0 +1,99 @@
+{% block title %}Quiz{% endblock %}
+
+<!-- FILEPATH: /Users/jonathanday/Documents/GitHub/database-final/Steam_Game_Finder/frontend/templates/Extras/Quiz_Table.html -->
+{% block content %}
+
+<table id="Game_Quiz_Table">
+    <tr>
+        <th>Games</th>
+        <th>Like</th>
+        <th>Dislike</th>
+    </tr>
+    <tr>
+        <td>Game 1</td>
+        <td> {% include 'Extras/Like_Button.html' %} </td>
+        <td> {% include 'Extras/Dislike_Button.html' %} </td>    
+    </tr>
+    <tr>
+        <td>Game 2</td>
+        <td> {% include 'Extras/Like_Button.html' %} </td>
+        <td> {% include 'Extras/Dislike_Button.html' %} </td>   
+    </tr>
+    <tr>
+        <td>Game 3</td>
+        <td> {% include 'Extras/Like_Button.html' %} </td>
+        <td> {% include 'Extras/Dislike_Button.html' %} </td>    
+    </tr>
+</table>
+
+<table id="Genre_Quiz_Table">
+    <tr>
+        <th>Genres</th>
+        <th>Like</th>
+        <th>Dislike</th>
+    </tr>
+    <tr>
+        <td>Genre 1</td>
+        <td> {% include 'Extras/Like_Button.html' %} </td>
+        <td> {% include 'Extras/Dislike_Button.html' %} </td>    
+    </tr>
+    <tr>
+        <td>Genre 2</td>
+        <td> {% include 'Extras/Like_Button.html' %} </td>
+        <td> {% include 'Extras/Dislike_Button.html' %} </td>    
+    </tr>
+    <tr>
+        <td>Genre 3</td>
+        <td> {% include 'Extras/Like_Button.html' %} </td>
+        <td> {% include 'Extras/Dislike_Button.html' %} </td>    
+    </tr>
+</table>
+
+<table id="Publisher_Quiz_Table">
+    <tr>
+        <th>Publishers</th>
+        <th>Like</th>
+        <th>Dislike</th>
+    </tr>
+    <tr>
+        <td>Publisher 1</td>
+        <td> {% include 'Extras/Like_Button.html' %} </td>
+        <td> {% include 'Extras/Dislike_Button.html' %} </td>    
+    </tr>
+    <tr>
+        <td>Publisher 2</td>
+        <td> {% include 'Extras/Like_Button.html' %} </td>
+        <td> {% include 'Extras/Dislike_Button.html' %} </td>   
+    </tr>
+    <tr>
+        <td>Publisher 3</td>
+        <td> {% include 'Extras/Like_Button.html' %} </td>
+        <td> {% include 'Extras/Dislike_Button.html' %} </td>    
+    </tr>
+</table>
+
+<table id="Tag_Quiz_Table">
+    <tr>
+        <th>Tags</th>
+        <th>Like</th>
+        <th>Dislike</th>
+    </tr>
+    <tr>
+        <td>Tag 1</td>
+        <td> {% include 'Extras/Like_Button.html' %} </td>
+        <td> {% include 'Extras/Dislike_Button.html' %} </td>    
+    </tr>
+    <tr>
+        <td>Tag 2</td>
+        <td> {% include 'Extras/Like_Button.html' %} </td>
+        <td> {% include 'Extras/Dislike_Button.html' %} </td>    
+    </tr>
+    <tr>
+        <td>Tag 3</td>
+        <td> {% include 'Extras/Like_Button.html' %} </td>
+        <td> {% include 'Extras/Dislike_Button.html' %} </td>
+        </tr>
+
+<button id="submit">Submit</button>
+
+{% endblock %}

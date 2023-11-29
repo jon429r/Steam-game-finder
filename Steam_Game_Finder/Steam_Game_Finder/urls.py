@@ -24,7 +24,7 @@ from frontend.views import (
     home_page_view, quiz_page_view, search_page_view,
     base_temp_view,
     liked_game_view, error_page_view,
-    like_game, dislike_game,
+    like_game, dislike_game, results
 )
 
 urlpatterns = [
@@ -37,8 +37,10 @@ urlpatterns = [
 
     path('Quiz_Page.html', quiz_page_view, name='Quiz_Page.html'),
     path('Search_Page.html', search_page_view, name='Search_Page.html'),
-
+    path('results/', results, name='results'),
     path('Extras/Liked_Games.html', liked_game_view, name='update_like_dislike'),
+
+    path('Extras/Quiz_Table.html', quiz_page_view, name='quiz_page_view'),
 
     path('Extras/Error_Page.html', error_page_view, name='error_page_view'),
     ##path('Extras/LikedDisliked_popup.html', liked_disliked_popup_view, name='liked_disliked_popup_view'),
