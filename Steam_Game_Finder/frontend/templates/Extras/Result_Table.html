@@ -1,0 +1,30 @@
+
+{% block title %}Results{% endblock %}
+
+{% block content %}
+    <h2>{{ section1 }}</h2>
+    <p>Here is a table of the {{ section1|lower }}</p>
+    <table class="Result_Table" id="Result_Table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Game Title</th>
+                <th>Like</th>
+                <th>Dislike</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game in resulting_games %}
+                <!-- Table rows for regular games... -->
+                <tr>
+                    <td>
+                        <img class="game-icon" src="{{ game.IMG }}" alt="Game Icon">
+                    </td>
+                    <td>{{ game.title }}</td>
+                    <td> {% include 'Extras/Like_Button.html' %} </td>
+                    <td> {% include 'Extras/Dislike_Button.html' %} </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

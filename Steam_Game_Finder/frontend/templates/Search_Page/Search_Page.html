@@ -1,54 +1,13 @@
-<!DOCTYPE html>
-<html>
-    <style>
-        body{
-            background-color: #97cfff;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-    </style>
+{% extends 'Base_Temp/Base.html' %}
 
-<div>
-    <form align="right">
-    <h3>Search Bar</h3>
-    <input type="Text" name="Game_Search" id="Game_Search" placeholder="Search For A Game">
-    <button id="SearchButton">Search</button>
-    <script>
-        // Get a reference to the button element by its ID
-        var button = document.getElementById("SearchButton");
-      
-        // Add a click event listener
-        button.addEventListener("click", function() {
-          // Code to execute when the button is clicked
-          alert("70,000 Results");
-        });
-      </script>
-    </form>
+{% block title %} Search Page {% endblock %}
 
+{% block content %}
+
+{% block main %}
+<div id="Body">
+    {% include 'Extras/Search_Bar.html' with form=form %}
 </div>
+{% endblock %}
 
-<body align="Center">
-    <h1>Search Page</h1>
-</body>
-
-    <div align="Center">
-        <ul class="spacedlist">
-            <il>
-                <a href="/Steam_Game_Finder/Home_Page/templates/Home_Page/Home_Page.html">Home</a></il>
-                <hspace="50"></hspace>
-            </il>
-            <il>
-                <a href="/Steam_Game_Finder/Quiz_Page/templates/Quiz_Page/Quiz_Page.html">Quiz</a></il>
-                <hspace="50"></hspace>
-            </il>
-            <il><a href="Search_Page.html">Search</a></il>
-            <hspace="50"></hspace>
-            <il><a href="#">Info</a></il>
-        </ul>
-    </div>
-
-    <head>
-        <title>Quiz Page</title>
-    </head>
-
-</html>
-
+{% endblock %}
