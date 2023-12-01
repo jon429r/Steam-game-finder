@@ -40,7 +40,8 @@
                     <li><a href="{% url 'Home_Page.html' %}" style="color: antiquewhite;">Home</a></li>
                     <li><a href="{% url 'Quiz_Page.html' %}" style="color: antiquewhite;">Quiz</a></li>
                     <li><a href="{% url 'Search_Page.html' %}" style="color: antiquewhite;">Search</a></li>
-                    <li><a href="#" style="color: antiquewhite;">Info</a></li>
+                    <li><a href="{% url 'info_page_view' %}" style="color: antiquewhite;">Info</a></li>
+
                 </ul>
             </h2>
         </div>
@@ -55,7 +56,7 @@
                 <a href="{% url 'Home_Page.html' %}">Home Page</a>
                 <a href="{% url 'Quiz_Page.html' %}">Quiz Page</a>
                 <a href="{% url 'Search_Page.html' %}">Search Page</a>
-                <a href="#">Link 4</a>
+                <li><a href="{% url 'info_page_view' %}">Info Page</a></li>
             </div>
         </div>
     </aside>
@@ -63,7 +64,7 @@
 
     {% block right_column %}
     <div class="right_column">
-        {% include 'Extras/Popular_Table.html' with popular_games=popular_games section1=section1 %}
+        {% include 'Extras/Popular_Table.html' with popular_games=popular_games section2=section2 %}
             {% endblock %}
     </div>
     {% block main %}

@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+
+.like-button {
+    background-color: none;
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+</style>
+
+<form method="POST" action="{% url 'update_like_dislike' %}">
+    {% csrf_token %}
+    <input type="hidden" name="game_title" value="{{ game.Title }}">
+    {{ form.as_p }}
+    <button type="submit" onclick="openPopup()" class="like-button">
+        <i class="fa fa-thumbs-up" style="font-size:24px"></i> 
+    </button>
+</form>

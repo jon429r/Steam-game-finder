@@ -192,3 +192,11 @@ class Table_Tests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Popular Game 1')
         self.assertContains(response, 'Popular Game 2')
+
+class Test_Liked_Disliked_Popup(TestCase):
+    def test_liked_disliked_popup(self):
+        response = self.client.get(reverse('liked_disliked_popup'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Liked Games')
+        self.assertContains(response, 'Disliked Games')
+

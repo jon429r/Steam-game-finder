@@ -1,7 +1,13 @@
 {% extends 'Base_Temp/Base.html' %}
 
-{% block title%} Search Page {% endblock %}
+{% block title %} Search Page {% endblock %}
 
 {% block content %}
+
+{% block main %}
+<div id="Body">
+    {% include 'Extras/Search_Bar.html' with form=form %}
+</div>
+{% endblock %}
 
 {% endblock %}
