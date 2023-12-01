@@ -1,10 +1,16 @@
 import csv
-import sqlite3
-
+import json
+import os
 from datetime import datetime
 
-# Connect to the database
-con = sqlite3.connect("db.sqlite3")
+import pymysql
+import pymysql.cursors
+
+config_file = "connectorConfig.json"
+with open(config_file, 'r', encoding="utf-8") as f:
+    config = json.load(f)
+
+con = pymysql.connect(**config["MySQL"])
 cur = con.cursor()
 
 games_table_description = """CREATE TABLE IF NOT EXISTS Game(
@@ -170,7 +176,7 @@ def read_csv(
             developers = process_string_list(row[32])
             publishers = process_string_list(row[33])
             supported_langs = process_langs(row[9])
-            platforms = (row[16], row[17], row[18])  # windows, mac, linux bools
+            platforms = (1 if s == "TRUE" else 0 for s in (row[16], row[17], row[18]))  # windows, mac, linux bools
 
             dic_tuples_game[app_id] = (
                 app_id,
