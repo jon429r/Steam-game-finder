@@ -73,9 +73,9 @@ WSGI_APPLICATION = 'Steam_Game_Finder.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE'  : 'django.db.backends.mysql', 
-        'NAME'    : 'DatabaseFinder',                 
+        'NAME'    : 'databasefinder',                 
         'USER'    : 'root',                     
-        'PASSWORD': 'Database-final1234',              
+        'PASSWORD': '83249962',              
         'HOST'    : 'localhost',               
         'PORT'    : '3306',
     }
