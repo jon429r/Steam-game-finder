@@ -4,6 +4,8 @@ from .models import Game, Resulting_Games
 from .models import Game, Liked_Disliked, Resulting_Games, Popular_Games
 from .forms import SearchForm
 from django.db import connection
+# Procedure functionalities
+from Backend import search_procedures
 
 resulting_games_records = []    
 
@@ -27,7 +29,7 @@ def results(request):
                 query = f"""
                     SELECT app_id, title
                     FROM {field_choice}
-                    WHERE title LIKE %s
+                    WHERE title LIKE %{search_term}%
                     ORDER BY title
                 """
                 with connection.cursor() as cursor:
