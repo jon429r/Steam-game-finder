@@ -4,8 +4,6 @@ from .models import Game, Resulting_Games
 from .models import Game, Liked_Disliked, Resulting_Games, Popular_Games
 from .forms import SearchForm
 from django.db import connection
-# Procedure functionalities
-from Backend import search_procedures
 
 resulting_games_records = []    
 
@@ -13,6 +11,13 @@ popular_games_records = []
 
 liked_disliked_records = []
 
+def dictfetchall(cursor):
+    "Returns all rows from a cursor as a dict"
+    desc = cursor.description
+    return [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
 
 def results(request):
     search_form = SearchForm(request.GET)
@@ -27,21 +32,22 @@ def results(request):
             allowed_choices = ['Game', 'Genre', 'Developer', 'Tag']
             if field_choice in allowed_choices:
                 query = f"""
-                    SELECT app_id, title
+                    SELECT AppID, Name
                     FROM {field_choice}
-                    WHERE title LIKE %{search_term}%
-                    ORDER BY title
+                    WHERE Name LIKE %s
+                    ORDER BY Name;
                 """
                 with connection.cursor() as cursor:
-                    cursor.execute(query, [f'%{search_term}%'])
-                    games = cursor.fetchall()
-                    print(f"SQL Query: {cursor.query}")
+                    cursor.execute(query, ['\'%' + search_term + '%\''])
+                    games = dictfetchall(cursor)
+                    print(games)
+                    print(f"SQL Query: {query}")
 
     print(f"Games: {games}")
     return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': search_form})
 
 
-def fill_popular_games(request):
+def fill_popular_games(request):      
     global popular_games_records
 
     popular_games_records = Popular_Games.objects.values('app_id', 'title', 'header_image', 'action').all()

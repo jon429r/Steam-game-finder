@@ -6,9 +6,10 @@ class LikeDislikeForm(forms.Form):
     action = forms.CharField()
 
 class SearchForm(forms.Form):
-    search = forms.CharField(required=True, max_length=100)
+    search_term = forms.CharField(required=True)
+    field_choice = forms.CharField(required=True) 
     filter = [
-        ('title', 'Title'),
+        ('name', 'Name'),
         ('genre', 'Genre'),
         ('developer', 'Developer'),
         ('publisher', 'Publisher'),

@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from Backend.search_procedures.search_procedure_initialization import LoadSearchFunctions
+from Backend.search_procedures.search_procedure_initialization import LoadSearchProcedures
 
 class Command(BaseCommand):
     help = 'Initialize stored procedures'
