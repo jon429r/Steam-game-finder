@@ -13,5 +13,7 @@ class SearchForm(forms.Form):
         ('genre', 'Genre'),
         ('developer', 'Developer'),
         ('publisher', 'Publisher'),
+        ('recommendation', 'Recommendation'),
+        ('devoloper_by_reception', 'Developer_by_Reception'),
     ]
 

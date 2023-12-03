@@ -30,7 +30,6 @@ from frontend.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', home_page_view, name='home_page'),
-    path('Base.html', base_temp_view, name='Base.html'),
 
     path('', home_page_view, name='Home_Page.html'),
     path('Templates/Home_Page/Home_Page.html', home_page_view, name='Home_Page.html'),

@@ -21,20 +21,21 @@ def dictfetchall(cursor):
     ]
 
 def results(request):
+    print("entering results function")
     search_form = SearchForm(request.GET)
     games = {}
 
-    if search_form.is_valid():
+    if search_form.is_valid() and request.method == "GET":
+        print("form is valid")
         search_term = search_form.cleaned_data.get('search_term')
         field_choice = search_form.cleaned_data.get('field_choice')
         print(f"Search Term: {search_term}, Field Choice: {field_choice}")
 
         if search_term and field_choice:
-            allowed_choices = ['Game', 'Genre', 'Developer', 'Tag']
+            allowed_choices = ['Game', 'Genre', 'Developer', 'Publisher', 'Tag','Devoloper_By_Reception', 'Recommendation']
             if field_choice in allowed_choices:
                 games = CallProcedures.call_procedure(field_choice, search_term)
-    print(games)
-
+    print("exiting function")
     return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': search_form})
 
 
