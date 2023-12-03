@@ -1,3 +1,4 @@
+"""Functions for creating procedures, triggers, and facilitating queries."""
 import json
 from django.db import connection
 
@@ -9,6 +10,7 @@ class LoadSearchProcedures:
 
     @staticmethod
     def create_game_title_search_procedure():
+        """creates a procedure for searching by game title."""
         procedure_query = """
             DROP PROCEDURE IF EXISTS game_title_search;
             CREATE PROCEDURE game_title_search(IN Title varchar(30))
@@ -27,6 +29,7 @@ class LoadSearchProcedures:
 
     @staticmethod
     def create_language_search_procedure():
+        """creates a procedure for searching by supported language."""
         procedure_query = """
             DROP PROCEDURE IF EXISTS language_search
             CREATE PROCEDURE language_search(IN Language varchar(30))
@@ -45,6 +48,7 @@ class LoadSearchProcedures:
 
     @staticmethod
     def create_devoloper_search_procedure():
+        """creates a procedure for searching by game developer."""
         procedure_query = """
             DROP PROCEDURE IF EXISTS games_by_developer_search;
             CREATE PROCEDURE games_by_devoloper_search(IN Devoloper varchar(30))
@@ -63,6 +67,7 @@ class LoadSearchProcedures:
 
     @staticmethod
     def create_publisher_search_procedure():
+        """creates a procedure for searching by game publisher."""
         procedure_query = """
             DROP PROCEDURE IF EXISTS games_by_publisher_search;
             CREATE PROCEDURE games_by_publisher_search(IN Publisher varchar(30))
@@ -81,6 +86,7 @@ class LoadSearchProcedures:
 
     @staticmethod
     def create_reception_search_procedure():
+        """creates a procedure for searching by game reception."""
         procedure_query = """
             DROP PROCEDURE IF EXISTS reception_search;
             CREATE PROCEDURE reception_search(IN User_Rating REAL)
@@ -98,6 +104,7 @@ class LoadSearchProcedures:
 
     @staticmethod
     def create_age_rating_search_procedure():
+        """creates a procedues for searching by game age rating."""
         procedure_query = """
             DROP PROCEDURE IF EXISTS age_rating_search;
             CREATE PROCEDURE age_rating_search(IN User_Age REAL)
@@ -115,6 +122,8 @@ class LoadSearchProcedures:
 
     @staticmethod
     def create_devolopers_by_reception_search_procedure():
+        """creates a procedues for getting developers ordered by the reception
+        of their games."""
         procedure_query = """
             DROP PROCEDURE IF EXISTS developers_by_reception;
             CREATE PROCEDURE devolopers_by_reception()
@@ -143,6 +152,8 @@ class LoadSearchProcedures:
         
     @staticmethod
     def create_delete_trigger():
+        """creates a trigger to remove entries from junction tables when their
+        associated game is deleted."""
         trigger_query = """
             DELIMITER //
             DROP TRIGGER IF EXISTS del_game;
@@ -164,8 +175,10 @@ class LoadSearchProcedures:
 
     @staticmethod
     def genre_search(genres_string):
+        """query by genre"""
+        #tuples are broken up if singletons or empty
         genres = genres_string.strip().split(" ")
-        undesired = tuple([s[1:] for s in genres if s.startswith('-')]) #TODO: fix for singletons
+        undesired = tuple([s[1:] for s in genres if s.startswith('-')])
         if len(undesired) == 1: undesired = f"('{undesired[0]}')"
         elif len(undesired) == 0: undesired = "('')"
         desired = tuple([s for s in genres if not s.startswith('-')])
@@ -192,6 +205,8 @@ class LoadSearchProcedures:
 
     @staticmethod    
     def tag_search(tags_string):
+        """query by tag"""
+        #tuples are broken up if singletons or empty
         tags = tags_string.strip().split(" ")
         undesired = tuple([s[1:] for s in tags if s.startswith('-')]) #TODO: fix for singletons
         if len(undesired) == 1: undesired = f"('{undesired[0]}')"
@@ -217,6 +232,8 @@ class LoadSearchProcedures:
 
     @staticmethod  
     def category_search(cats_string):
+        """query by cetegory"""
+        #tuples are broken up if singletons or empty
         cats = cats_string.strip().split(" ")
         undesired = tuple([s[1:] for s in cats if s.startswith('-')]) #TODO: fix for singletons
         if len(undesired) == 1: undesired = f"('{undesired[0]}')"
@@ -242,6 +259,7 @@ class LoadSearchProcedures:
 
     @staticmethod
     def recomendation_search(req_string):
+        """aggregate search across tag, genre, and category."""
         reqs = tuple(req_string.strip().split(" "))
         query = f"""SELECT G.AppID, G.Name, G.Developer, G.Publisher, G.Price, (G.Positive - G.Negative) as Reception
             FROM (SELECT GT.AppID, GT.tag
@@ -302,6 +320,19 @@ class LoadSearchProcedures:
         query = """CALL devolopers_by_reception();"""
         LoadSearchProcedures.cursor.execute(query)
         return dictfetchall(LoadSearchProcedures.cursor)
+
+    @staticmethod
+    def delete_game(AppID):
+        """deletes a game from the database"""
+        query = f"""
+            START TRANSACTION;
+            SET SQL_SAFE_UPDATES = 0;
+            delete from game where AppID = {AppID}; 
+            SET SQL_SAFE_UPDATES = 1;
+            COMMIT;
+        """
+        #TODO: confirm this rolls back when needed
+        LoadSearchProcedures.cursor.execute(query)
 
 
 def dictfetchall(cursor):
