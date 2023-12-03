@@ -4,6 +4,7 @@ from .models import Game, Resulting_Games
 from .models import Game, Liked_Disliked, Resulting_Games, Popular_Games
 from .forms import SearchForm
 from django.db import connection
+import Backend.search_procedures.search_procedure_calls as CallProcedures
 
 resulting_games_records = []    
 
@@ -21,7 +22,7 @@ def dictfetchall(cursor):
 
 def results(request):
     search_form = SearchForm(request.GET)
-    games = []
+    games = {}
 
     if search_form.is_valid():
         search_term = search_form.cleaned_data.get('search_term')
@@ -31,19 +32,8 @@ def results(request):
         if search_term and field_choice:
             allowed_choices = ['Game', 'Genre', 'Developer', 'Tag']
             if field_choice in allowed_choices:
-                query = f"""
-                    SELECT AppID, Name
-                    FROM {field_choice}
-                    WHERE Name LIKE %s
-                    ORDER BY Name;
-                """
-                with connection.cursor() as cursor:
-                    cursor.execute(query, ['\'%' + search_term + '%\''])
-                    games = dictfetchall(cursor)
-                    print(games)
-                    print(f"SQL Query: {query}")
+                games = CallProcedures.call_procedure(field_choice, search_term)
 
-    print(f"Games: {games}")
     return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': search_form})
 
 

@@ -134,23 +134,27 @@ class LoadSearchProcedures:
         LoadSearchProcedures.cursor.execute(procedure_query)
         print("Developer by reception search created")
         
+    @staticmethod
     def genre_search(genres_string):
-        genres = genres_string.strip.split(" ")
-        undesired_genres = (s[1:] for s in genres if s.startswith('-'))
-        desired_genres = (s for s in genres if not s.startswith('-'))
+        genres = genres_string.strip().split(" ")
+        undesired_genres = tuple([s[1:] for s in genres if s.startswith('-')]) #TODO: fix for singletons
+        desired_genres = tuple([s for s in genres if not s.startswith('-')])
+        print(desired_genres)
+        print(undesired_genres)
         query = f"""
             SELECT g.AppID, Name, (Positive * 1.0)/(Positive + Negative) as Reception
-            FROM (SELECT AppID, genre
+            FROM (SELECT AppID
                 FROM Gamegenre
                 WHERE genre IN {desired_genres}  -- desired genres
                 AND AppID NOT IN (
-                SELECT AppID, genre
+                SELECT AppID
                 FROM GameGenre
                 WHERE genre IN {undesired_genres})   -- excluded genres
                 ) Gen INNER JOIN Game g on Gen.AppID = g.AppID
             GROUP BY g.AppID
-            HAVING count(g.AppID) > {int(genres.len() * .2)}  -- limit to more relevant titles
+            HAVING count(g.AppID) > {int(len(genres) * .2)}
             ORDER BY count(g.AppID) DESC, Reception DESC"""
+        print(query)
         LoadSearchProcedures.cursor.execute(query)
         return dictfetchall(LoadSearchProcedures.cursor)
         
@@ -160,11 +164,11 @@ class LoadSearchProcedures:
         desired_tags = (s for s in tags if not s.startswith('-'))
         query = f"""
             SELECT g.AppID, Name, (Positive * 1.0)/(Positive + Negative) as Reception
-            FROM (SELECT AppID, tag
+            FROM (SELECT AppID
                 FROM Gametag
                 WHERE tag IN {desired_tags}  -- desired tags
                 AND AppID NOT IN (
-                SELECT AppID, tag
+                SELECT AppID
                 FROM Gametag
                 WHERE tag IN {undesired_tags})   -- excluded tags
                 ) Gen INNER JOIN Game g on Gen.AppID = g.AppID
@@ -214,36 +218,43 @@ class LoadSearchProcedures:
         LoadSearchProcedures.cursor.execute(query)
         return dictfetchall(LoadSearchProcedures.cursor)
     
+    @staticmethod
     def game_title_search(title):
         query = """CALL game_title_search(%s);"""
-        LoadSearchProcedures.cursor.execute(query, params=title)
+        LoadSearchProcedures.cursor.execute(query, (title,))
         return dictfetchall(LoadSearchProcedures.cursor)
 
+    @staticmethod
     def language_search(lang):
         query = """CALL language_search(%s);"""
         LoadSearchProcedures.cursor.execute(query, params=lang)
         return dictfetchall(LoadSearchProcedures.cursor)
 
+    @staticmethod
     def games_by_developer_search(dev):
         query = """CALL  games_by_devoloper_search(%s);"""
         LoadSearchProcedures.cursor.execute(query, params=dev)
         return dictfetchall(LoadSearchProcedures.cursor)
 
+    @staticmethod
     def games_by_publisher_search(pub):
         query = """CALL games_by_publisher_search(%s);"""
         LoadSearchProcedures.cursor.execute(query, params=pub)
         return dictfetchall(LoadSearchProcedures.cursor)
 
+    @staticmethod
     def reception_search(recep):
         query = """CALL reception_search(%s);"""
         LoadSearchProcedures.cursor.execute(query, params=recep)
         return dictfetchall(LoadSearchProcedures.cursor)
 
+    @staticmethod
     def age_rating_search(age):
         query = """CALL  age_rating_search(%s);"""
         LoadSearchProcedures.cursor.execute(query, params=age)
         return dictfetchall(LoadSearchProcedures.cursor)
 
+    @staticmethod
     def devolopers_by_reception_search(search_parameter):
         query = """CALL devolopers_by_reception();"""
         LoadSearchProcedures.cursor.execute(query)
@@ -258,12 +269,3 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
-
-# Load all the procedures
-LoadSearchProcedures.create_game_title_search_procedure()
-LoadSearchProcedures.create_language_search_procedure()
-LoadSearchProcedures.create_devoloper_search_procedure()
-LoadSearchProcedures.create_publisher_search_procedure()
-LoadSearchProcedures.create_reception_search_procedure()
-LoadSearchProcedures.create_age_rating_search_procedure()
-LoadSearchProcedures.create_devolopers_by_reception_search_procedure()
