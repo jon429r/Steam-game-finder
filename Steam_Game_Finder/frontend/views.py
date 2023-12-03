@@ -33,6 +33,7 @@ def results(request):
             allowed_choices = ['Game', 'Genre', 'Developer', 'Tag']
             if field_choice in allowed_choices:
                 games = CallProcedures.call_procedure(field_choice, search_term)
+    print(games)
 
     return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': search_form})
 

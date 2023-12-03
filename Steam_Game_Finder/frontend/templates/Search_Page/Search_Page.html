@@ -14,21 +14,25 @@
         <table>
             <thead>
                 <tr>
-                    <th>AppID</th>
                     <th>Name</th>
+                    <th>Devoloper</th>
+                    <th>Publisher</th>
+                    <th>Price</th>
                 </tr>
             </thead>
             <tbody>
                 {% for game in games %}
                     <tr>
-                        <td>{{ game.AppID }}</td>
-                        <td>{{ game.Name }}</td>
+                        <td><a href = "https://store.steampowered.com/app/{{ game.AppID }}" target="_blank">{{ game.Name }}</a>
+                        <td>{{ game.developer }}</td>
+                        <td>{{ game.publisher }}</td> 
+                        <td>{{ game.Price }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% else %}
-        <p>No matching games found.</p>
+        <p>No matching games found. Please try different criteria.</p>
     {% endif %}
 </div>
 {% endblock %}
