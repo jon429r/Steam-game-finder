@@ -10,12 +10,13 @@ class LoadSearchProcedures:
     @staticmethod
     def create_game_title_search_procedure():
         procedure_query = """
+            DROP PROCEDURE IF EXISTS game_title_search;
             CREATE PROCEDURE game_title_search(IN Title varchar(30))
             READS SQL DATA
             BEGIN
                 -- SQLite
                 -- Basic fuzzy title search
-                SELECT AppID, Name
+                SELECT AppID, Name Developer, Publisher, Price
                 FROM Game 
                 WHERE Name LIKE CONCAT('%', Title, '%')
                 ORDER BY Name;
@@ -27,12 +28,13 @@ class LoadSearchProcedures:
     @staticmethod
     def create_language_search_procedure():
         procedure_query = """
+            DROP PROCEDURE IF EXISTS language_search
             CREATE PROCEDURE language_search(IN Language varchar(30))
             READS SQL DATA
             BEGIN
                 -- SQLite
                 -- find games with support for given language
-                SELECT g.AppID, Name, (Positive * 1.0)/(Positive + Negative) as Reception
+                SELECT g.AppID, Name, Developer, Publisher, Price, (Positive * 1.0)/(Positive + Negative) as Reception
                 FROM Game g INNER JOIN GameLanguages l ON g.AppID = l.AppID
                 WHERE l.language = Language
                 ORDER BY Reception DESC;
@@ -44,12 +46,13 @@ class LoadSearchProcedures:
     @staticmethod
     def create_devoloper_search_procedure():
         procedure_query = """
+            DROP PROCEDURE IF EXISTS games_by_developer_search;
             CREATE PROCEDURE games_by_devoloper_search(IN Devoloper varchar(30))
             READS SQL DATA
             BEGIN
                 -- SQLite
                 -- find games by given developer
-                SELECT g.AppID, Name, Release_date
+                SELECT g.AppID, Name, Developer, Publisher, Price, Release_date
                 FROM Game g INNER JOIN GameDeveloper d ON g.AppID = d.AppID
                 WHERE d.developer LIKE CONCAT('%', Devoloper, '%')
                 ORDER BY Release_date DESC;
@@ -61,12 +64,13 @@ class LoadSearchProcedures:
     @staticmethod
     def create_publisher_search_procedure():
         procedure_query = """
+            DROP PROCEDURE IF EXISTS games_by_publisher_search;
             CREATE PROCEDURE games_by_publisher_search(IN Publisher varchar(30))
             READS SQL DATA
             BEGIN
                 -- SQLite
                 -- find games from given publisher
-                SELECT g.AppID, Name, Release_date
+                SELECT g.AppID, Name, Developer, Publisher, Price, Release_date
                 FROM Game g INNER JOIN GamePublisher p ON g.AppID = p.AppID
                 WHERE p.publisher LIKE CONCAT('%', Publisher, '%')
                 ORDER BY Release_date DESC;
@@ -78,12 +82,13 @@ class LoadSearchProcedures:
     @staticmethod
     def create_reception_search_procedure():
         procedure_query = """
+            DROP PROCEDURE IF EXISTS reception_search;
             CREATE PROCEDURE reception_search(IN User_Rating REAL)
             READS SQL DATA
             BEGIN
                 -- SQLite
                 -- find games above a given user rating
-                SELECT AppID, Name, (Positive * 1.0)/(Positive + Negative) as Reception
+                SELECT AppID, Name, Developer, Publisher, Price, (Positive * 1.0)/(Positive + Negative) as Reception
                 FROM Game
                 WHERE Reception > User_Rating and Reception < 1;
             END;
@@ -94,6 +99,7 @@ class LoadSearchProcedures:
     @staticmethod
     def create_age_rating_search_procedure():
         procedure_query = """
+            DROP PROCEDURE IF EXISTS age_rating_search;
             CREATE PROCEDURE age_rating_search(IN User_Age REAL)
             READS SQL DATA
             BEGIN
@@ -110,12 +116,13 @@ class LoadSearchProcedures:
     @staticmethod
     def create_devolopers_by_reception_search_procedure():
         procedure_query = """
+            DROP PROCEDURE IF EXISTS developers_by_reception;
             CREATE PROCEDURE devolopers_by_reception()
             READS SQL DATA
             BEGIN
                 -- SQLite
                 -- list developers ranked by the average reception of their games
-                SELECT Developer, round(avg(Reception), 4) as Dev_Reception, count(*) as Num_Games
+                SELECT Developer, Developer, Publisher, Price, round(avg(Reception), 4) as Dev_Reception, count(*) as Num_Games
                 FROM GameDeveloper d INNER JOIN (
                 SELECT AppID, (Positive * 1.0)/(Positive + Negative) as Reception
                 FROM Game
@@ -135,6 +142,27 @@ class LoadSearchProcedures:
         print("Developer by reception search created")
         
     @staticmethod
+    def create_delete_trigger():
+        trigger_query = """
+            DELIMITER //
+            DROP TRIGGER IF EXISTS del_game;
+            CREATE TRIGGER del_game BEFORE DELETE ON Game
+            FOR EACH ROW
+            BEGIN
+                DELETE FROM Gamecategory where AppID = OLD.AppID;
+                DELETE FROM Gamedeveloper where AppID = OLD.AppID;
+                DELETE FROM Gamegenre where AppID = OLD.AppID;
+                DELETE FROM Gamelanguages where AppID = OLD.AppID;
+                DELETE FROM Gameplatform where AppID = OLD.AppID;
+                DELETE FROM Gamepublisher where AppID = OLD.AppID;
+                DELETE FROM Gametag where AppID = OLD.AppID;
+            END;//
+            DELIMITER ;"""
+        LoadSearchProcedures.cursor.execute(trigger_query)
+        print("Developer by reception search created")
+
+
+    @staticmethod
     def genre_search(genres_string):
         genres = genres_string.strip().split(" ")
         undesired = tuple([s[1:] for s in genres if s.startswith('-')]) #TODO: fix for singletons
@@ -146,7 +174,7 @@ class LoadSearchProcedures:
         print(desired)
         print(undesired)
         query = f"""
-            SELECT g.AppID, Name, (Positive * 1.0)/(Positive + Negative) as Reception
+            SELECT g.AppID, Name, Developer, Publisher, Price, (Positive * 1.0)/(Positive + Negative) as Reception
             FROM (SELECT AppID
                 FROM Gamegenre
                 WHERE genre IN {desired}  -- desired genres
@@ -172,7 +200,7 @@ class LoadSearchProcedures:
         if len(desired) == 1: desired = f"('{desired[0]}')"
         elif len(desired) == 0: desired = "('')"
         query = f"""
-            SELECT g.AppID, Name, (Positive * 1.0)/(Positive + Negative) as Reception
+            SELECT g.AppID, Name, Developer, Publisher, Price, (Positive * 1.0)/(Positive + Negative) as Reception
             FROM (SELECT AppID
                 FROM Gametag
                 WHERE tag IN {desired}  -- desired tags
@@ -197,7 +225,7 @@ class LoadSearchProcedures:
         if len(desired) == 1: desired = f"('{desired[0]}')"
         elif len(desired) == 0: desired = "('')"
         query = f"""
-            SELECT g.AppID, Name, (Positive * 1.0)/(Positive + Negative) as Reception
+            SELECT g.AppID, Name, Developer, Publisher, Price, (Positive * 1.0)/(Positive + Negative) as Reception
             FROM (SELECT AppID
                 FROM Gamecategory
                 WHERE category IN {desired}  -- desired categorys
@@ -215,7 +243,7 @@ class LoadSearchProcedures:
     @staticmethod
     def recomendation_search(req_string):
         reqs = tuple(req_string.strip().split(" "))
-        query = f"""SELECT G.AppID, G.Name, G.About_the_game, (G.Positive - G.Negative) as Reception
+        query = f"""SELECT G.AppID, G.Name, G.Developer, G.Publisher, G.Price, (G.Positive - G.Negative) as Reception
             FROM (SELECT GT.AppID, GT.tag
                 FROM GameTag GT
                 WHERE GT.tag IN   -- desired tags
