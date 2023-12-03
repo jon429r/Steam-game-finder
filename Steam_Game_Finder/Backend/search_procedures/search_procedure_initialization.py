@@ -137,19 +137,23 @@ class LoadSearchProcedures:
     @staticmethod
     def genre_search(genres_string):
         genres = genres_string.strip().split(" ")
-        undesired_genres = tuple([s[1:] for s in genres if s.startswith('-')]) #TODO: fix for singletons
-        desired_genres = tuple([s for s in genres if not s.startswith('-')])
-        print(desired_genres)
-        print(undesired_genres)
+        undesired = tuple([s[1:] for s in genres if s.startswith('-')]) #TODO: fix for singletons
+        if len(undesired) == 1: undesired = f"('{undesired[0]}')"
+        elif len(undesired) == 0: undesired = "('')"
+        desired = tuple([s for s in genres if not s.startswith('-')])
+        if len(desired) == 1: desired = f"('{desired[0]}')"
+        elif len(desired) == 0: desired = "('')"
+        print(desired)
+        print(undesired)
         query = f"""
             SELECT g.AppID, Name, (Positive * 1.0)/(Positive + Negative) as Reception
             FROM (SELECT AppID
                 FROM Gamegenre
-                WHERE genre IN {desired_genres}  -- desired genres
+                WHERE genre IN {desired}  -- desired genres
                 AND AppID NOT IN (
                 SELECT AppID
                 FROM GameGenre
-                WHERE genre IN {undesired_genres})   -- excluded genres
+                WHERE genre IN {undesired})   -- excluded genres
                 ) Gen INNER JOIN Game g on Gen.AppID = g.AppID
             GROUP BY g.AppID
             HAVING count(g.AppID) > {int(len(genres) * .2)}
@@ -157,40 +161,50 @@ class LoadSearchProcedures:
         print(query)
         LoadSearchProcedures.cursor.execute(query)
         return dictfetchall(LoadSearchProcedures.cursor)
-        
+
+    @staticmethod    
     def tag_search(tags_string):
-        tags = tags_string.strip.split(" ")
-        undesired_tags = (s[1:] for s in tags if s.startswith('-'))
-        desired_tags = (s for s in tags if not s.startswith('-'))
+        tags = tags_string.strip().split(" ")
+        undesired = tuple([s[1:] for s in tags if s.startswith('-')]) #TODO: fix for singletons
+        if len(undesired) == 1: undesired = f"('{undesired[0]}')"
+        elif len(undesired) == 0: undesired = "('')"
+        desired = tuple([s for s in tags if not s.startswith('-')])
+        if len(desired) == 1: desired = f"('{desired[0]}')"
+        elif len(desired) == 0: desired = "('')"
         query = f"""
             SELECT g.AppID, Name, (Positive * 1.0)/(Positive + Negative) as Reception
             FROM (SELECT AppID
                 FROM Gametag
-                WHERE tag IN {desired_tags}  -- desired tags
+                WHERE tag IN {desired}  -- desired tags
                 AND AppID NOT IN (
                 SELECT AppID
                 FROM Gametag
-                WHERE tag IN {undesired_tags})   -- excluded tags
+                WHERE tag IN {undesired})   -- excluded tags
                 ) Gen INNER JOIN Game g on Gen.AppID = g.AppID
             GROUP BY g.AppID
-            HAVING count(g.AppID) > {int(tags.len() * .2)}  -- limit to more relevant titles
+            HAVING count(g.AppID) > {int(len(tags) * .2)}  -- limit to more relevant titles
             ORDER BY count(g.AppID) DESC, Reception DESC"""
         LoadSearchProcedures.cursor.execute(query)
         return dictfetchall(LoadSearchProcedures.cursor)
-        
+
+    @staticmethod  
     def category_search(cats_string):
-        cats = cats_string.strip.split(" ")
-        undesired_cats = (s[1:] for s in cats if s.startswith('-'))
-        desired_cats = (s for s in cats if not s.startswith('-'))
+        cats = cats_string.strip().split(" ")
+        undesired = tuple([s[1:] for s in cats if s.startswith('-')]) #TODO: fix for singletons
+        if len(undesired) == 1: undesired = f"('{undesired[0]}')"
+        elif len(undesired) == 0: undesired = "('')"
+        desired = tuple([s for s in cats if not s.startswith('-')])
+        if len(desired) == 1: desired = f"('{desired[0]}')"
+        elif len(desired) == 0: desired = "('')"
         query = f"""
             SELECT g.AppID, Name, (Positive * 1.0)/(Positive + Negative) as Reception
             FROM (SELECT AppID
                 FROM Gamecategory
-                WHERE category IN {desired_cats}  -- desired categorys
+                WHERE category IN {desired}  -- desired categorys
                 AND AppID NOT IN (
                 SELECT AppID
                 FROM Gamecategory
-                WHERE category IN {undesired_cats})   -- excluded categorys
+                WHERE category IN {undesired})   -- excluded categorys
                 ) Gen INNER JOIN Game g on Gen.AppID = g.AppID
             GROUP BY g.AppID
             HAVING count(g.AppID) > 2  -- limit to more relevant titles
@@ -198,8 +212,9 @@ class LoadSearchProcedures:
         LoadSearchProcedures.cursor.execute(query)
         return dictfetchall(LoadSearchProcedures.cursor)
 
+    @staticmethod
     def recomendation_search(req_string):
-        reqs = tuple(req_string.strip.split(" "))
+        reqs = tuple(req_string.strip().split(" "))
         query = f"""SELECT G.AppID, G.Name, G.About_the_game, (G.Positive - G.Negative) as Reception
             FROM (SELECT GT.AppID, GT.tag
                 FROM GameTag GT

@@ -24,7 +24,7 @@ def call_procedure(procedure_name, parameters):
         results = search_functions.devolopers_by_reception_search(parameters)
     elif procedure_name == "Genre":
         results = search_functions.genre_search(parameters)
-    elif procedure_name == "tag_search":
+    elif procedure_name == "Tag":
         results = search_functions.tag_search(parameters)
     elif procedure_name == "category_search":
         results = search_functions.category_search(parameters)
