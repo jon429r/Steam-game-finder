@@ -1,17 +1,19 @@
 import csv
-import json
-import os
 from datetime import datetime
 
-import pymysql
-import pymysql.cursors
+from django.core.management.base import BaseCommand
+from django.db import connection
+from tqdm import tqdm
 
-config_file = "connectorConfig.json"
-with open(config_file, 'r', encoding="utf-8") as f:
-    config = json.load(f)
 
-con = pymysql.connect(**config["MySQL"])
-cur = con.cursor()
+class Command(BaseCommand):
+    def handle(self, *args, **options):
+        help = ""
+        self.stdout.write(self.style.SUCCESS('Importing CSV...'))
+        main()
+        self.stdout.write(self.style.SUCCESS('CSV imported.'))
+
+cur = connection.cursor()
 
 games_table_description = """CREATE TABLE IF NOT EXISTS Game(
         AppID INTEGER PRIMARY KEY,
@@ -78,7 +80,7 @@ table_descriptors = [
 def main():
     create_tables(*table_descriptors)
     insert_table("games.csv")
-    con.commit()
+    # con.commit()
     cur.close()
 
 
@@ -118,28 +120,37 @@ def insert_table(file_path):
         dic_tuples_platform,
     )
 
-    for game_id in dic_tuples_game:
-        cur.execute(f"INSERT INTO Game VALUES {dic_tuples_game[game_id]}")
 
-        for genre_tuple in dic_tuples_genres[game_id]:
-            cur.execute(f"INSERT INTO GameGenre VALUES {genre_tuple}")
+    cur.executemany(f"INSERT INTO Game VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    tqdm(dic_tuples_game.values(), "Inserting Games"))
 
-        for tag_tuple in dic_tuples_tags[game_id]:
-            cur.execute(f"INSERT INTO GameTag VALUES {tag_tuple}")
+    cur.executemany(f"INSERT INTO GameGenre VALUES (%s, %s)",
+                    tqdm([entry for sublist in dic_tuples_genres.values() for entry in sublist],
+                         "Inserting Genres"))
 
-        for cat_tuple in dic_tuples_cats[game_id]:
-            cur.execute(f"INSERT INTO GameCategory VALUES {cat_tuple}")
+    cur.executemany(f"INSERT INTO GameTag VALUES (%s, %s)",
+                    tqdm([entry for sublist in dic_tuples_tags.values() for entry in sublist],
+                         "Inserting Tags"))
 
-        for dev_tuple in dic_tuples_devs[game_id]:
-            cur.execute(f"INSERT INTO GameDeveloper VALUES {dev_tuple}")
+    cur.executemany(f"INSERT INTO GameCategory VALUES (%s, %s)",
+                    tqdm([entry for sublist in dic_tuples_cats.values() for entry in sublist],
+                         "Inserting Categories"))
 
-        for pub_tuple in dic_tuples_pubs[game_id]:
-            cur.execute(f"INSERT INTO GamePublisher VALUES {pub_tuple}")
+    cur.executemany(f"INSERT INTO GameDeveloper VALUES (%s, %s)",
+                    tqdm([entry for sublist in dic_tuples_devs.values() for entry in sublist],
+                         "Inserting Developers"))
 
-        for lang_tuple in dic_tuples_langs[game_id]:
-            cur.execute(f"INSERT INTO GameLanguages VALUES {lang_tuple}")
+    cur.executemany(f"INSERT INTO GamePublisher VALUES (%s, %s)",
+                    tqdm([entry for sublist in dic_tuples_pubs.values() for entry in sublist],
+                         "Inserting Publishers"))
 
-        cur.execute(f"INSERT INTO GamePlatform VALUES {dic_tuples_platform[game_id]}")
+    cur.executemany(f"INSERT INTO GameLanguages VALUES (%s, %s)",
+                    tqdm([entry for sublist in dic_tuples_langs.values() for entry in sublist],
+                         "Inserting Languages"))
+
+    cur.executemany(f"INSERT INTO GamePlatform VALUES (%s, %s, %s, %s)",
+                    tqdm(dic_tuples_platform.values(),
+                         "Inserting Platforms"))
 
 
 def read_csv(
@@ -157,7 +168,8 @@ def read_csv(
         csv_reader = csv.reader(csv_file, delimiter=",", quotechar='"')
         next(csv_reader)
 
-        for row in csv_reader:
+        print("Rading CSV...")
+        for row in tqdm(csv_reader):
             app_id = row[0]
             name = row[1]
             # convert dates to ISO8601 strings
