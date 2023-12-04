@@ -47,11 +47,11 @@ class LoadSearchProcedures:
         print("Language Procedure created.")
 
     @staticmethod
-    def create_devoloper_search_procedure():
+    def create_developer_search_procedure():
         """creates a procedure for searching by game developer."""
         procedure_query = """
             DROP PROCEDURE IF EXISTS games_by_developer_search;
-            CREATE PROCEDURE games_by_devoloper_search(IN Devoloper varchar(30))
+            CREATE PROCEDURE games_by_developer_search(IN Devoloper varchar(30))
             READS SQL DATA
             BEGIN
                 -- SQLite
@@ -121,12 +121,12 @@ class LoadSearchProcedures:
         print("Age Rating Procedure Created")
 
     @staticmethod
-    def create_devolopers_by_reception_search_procedure():
+    def create_developers_by_reception_search_procedure():
         """creates a procedues for getting developers ordered by the reception
         of their games."""
         procedure_query = """
             DROP PROCEDURE IF EXISTS developers_by_reception;
-            CREATE PROCEDURE devolopers_by_reception()
+            CREATE PROCEDURE developers_by_reception()
             READS SQL DATA
             BEGIN
                 -- SQLite
@@ -281,44 +281,37 @@ class LoadSearchProcedures:
     
     @staticmethod
     def game_title_search(title):
-        query = """CALL game_title_search(%s);"""
-        LoadSearchProcedures.cursor.execute(query, (title,))
+        LoadSearchProcedures.cursor.callproc("game_title_search", [title])
         return dictfetchall(LoadSearchProcedures.cursor)
 
     @staticmethod
     def language_search(lang):
-        query = """CALL language_search(%s);"""
-        LoadSearchProcedures.cursor.execute(query, params=lang)
+        LoadSearchProcedures.cursor.callproc("language_search", [lang])
         return dictfetchall(LoadSearchProcedures.cursor)
 
     @staticmethod
     def games_by_developer_search(dev):
-        query = """CALL  games_by_devoloper_search(%s);"""
-        LoadSearchProcedures.cursor.execute(query, params=dev)
+        LoadSearchProcedures.cursor.callproc("games_by_developer_search", [dev])
         return dictfetchall(LoadSearchProcedures.cursor)
 
     @staticmethod
     def games_by_publisher_search(pub):
-        query = """CALL games_by_publisher_search(%s);"""
-        LoadSearchProcedures.cursor.execute(query, params=pub)
+        LoadSearchProcedures.cursor.callproc("games_by_publisher_search", [pub])
         return dictfetchall(LoadSearchProcedures.cursor)
 
     @staticmethod
     def reception_search(recep):
-        query = """CALL reception_search(%s);"""
-        LoadSearchProcedures.cursor.execute(query, params=recep)
+        LoadSearchProcedures.cursor.callproc("reception_search", [recep])
         return dictfetchall(LoadSearchProcedures.cursor)
 
     @staticmethod
     def age_rating_search(age):
-        query = """CALL  age_rating_search(%s);"""
-        LoadSearchProcedures.cursor.execute(query, params=age)
+        LoadSearchProcedures.cursor.callproc("age_rating_search", [age])
         return dictfetchall(LoadSearchProcedures.cursor)
 
     @staticmethod
-    def devolopers_by_reception_search(search_parameter):
-        query = """CALL devolopers_by_reception();"""
-        LoadSearchProcedures.cursor.execute(query)
+    def developers_by_reception_search(search_parameter):
+        LoadSearchProcedures.cursor.callproc("developers_by_reception")
         return dictfetchall(LoadSearchProcedures.cursor)
 
     @staticmethod
