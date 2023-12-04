@@ -78,6 +78,7 @@ DATABASES = {
         'PASSWORD': 'Database-Final1234',              
         'HOST'    : 'localhost',               
         'PORT'    : '3306',
+        'OPTIONS' : {'charset': 'utf8mb4'},
     }
 }
 
