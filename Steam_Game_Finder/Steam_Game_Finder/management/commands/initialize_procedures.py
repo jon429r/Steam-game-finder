@@ -13,10 +13,11 @@ class Command(BaseCommand):
         # Initialize all procedures
         search_functions.create_game_title_search_procedure()
         search_functions.create_language_search_procedure()
-        search_functions.create_devoloper_search_procedure()
+        search_functions.create_developer_search_procedure()
         search_functions.create_publisher_search_procedure()
         search_functions.create_reception_search_procedure()
         search_functions.create_age_rating_search_procedure()
-        search_functions.create_devolopers_by_reception_search_procedure()
+        search_functions.create_developers_by_reception_search_procedure()
+        search_functions.create_delete_trigger()
 
         self.stdout.write(self.style.SUCCESS('Stored procedures initialized successfully.'))
