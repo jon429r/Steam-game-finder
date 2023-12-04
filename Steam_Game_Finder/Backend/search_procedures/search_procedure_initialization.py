@@ -11,112 +11,136 @@ class LoadSearchProcedures:
     @staticmethod
     def create_game_title_search_procedure():
         """creates a procedure for searching by game title."""
+        drop_procedure = """DROP PROCEDURE IF EXISTS game_title_search;"""
         procedure_query = """
-            DROP PROCEDURE IF EXISTS game_title_search;
             CREATE PROCEDURE game_title_search(IN Title varchar(30))
             READS SQL DATA
             BEGIN
-                -- SQLite
                 -- Basic fuzzy title search
-                SELECT AppID, Name Developer, Publisher, Price
-                FROM Game 
-                WHERE Name LIKE CONCAT('%', Title, '%')
-                ORDER BY Name;
+            	SELECT Game.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
+                        GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price
+            	FROM Game 
+            		JOIN Gamedeveloper d on d.AppID = Game.AppID
+            		JOIN Gamepublisher p on p.AppID = Game.AppID
+            	WHERE Name LIKE CONCAT('%', Title, '%')
+                GROUP BY AppID
+            	ORDER BY Name;
             END;
         """
+        LoadSearchProcedures.cursor.execute(drop_procedure)
         LoadSearchProcedures.cursor.execute(procedure_query)
         print("Title Procedure created.")
 
     @staticmethod
     def create_language_search_procedure():
         """creates a procedure for searching by supported language."""
+        drop_procedure = """DROP PROCEDURE IF EXISTS language_search;"""
         procedure_query = """
-            DROP PROCEDURE IF EXISTS language_search
             CREATE PROCEDURE language_search(IN Language varchar(30))
             READS SQL DATA
             BEGIN
-                -- SQLite
                 -- find games with support for given language
-                SELECT g.AppID, Name, Developer, Publisher, Price, (Positive * 1.0)/(Positive + Negative) as Reception
-                FROM Game g INNER JOIN GameLanguages l ON g.AppID = l.AppID
-                WHERE l.language = Language
+                SELECT Game.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
+                        GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price,
+                        (Positive * 1.0)/(Positive + Negative) as Reception
+                FROM Game INNER JOIN GameLanguages l ON Game.AppID = l.AppID
+                    JOIN Gamedeveloper d on d.AppID = Game.AppID
+            		JOIN Gamepublisher p on p.AppID = Game.AppID
+                WHERE l.language LIKE CONCAT('%', Language, '%')
+                GROUP BY AppID
                 ORDER BY Reception DESC;
             END;
             """
+        LoadSearchProcedures.cursor.execute(drop_procedure)
         LoadSearchProcedures.cursor.execute(procedure_query)
         print("Language Procedure created.")
 
     @staticmethod
     def create_developer_search_procedure():
         """creates a procedure for searching by game developer."""
+        drop_procedure = """DROP PROCEDURE IF EXISTS games_by_developer_search;"""
         procedure_query = """
-            DROP PROCEDURE IF EXISTS games_by_developer_search;
             CREATE PROCEDURE games_by_developer_search(IN Devoloper varchar(30))
             READS SQL DATA
             BEGIN
-                -- SQLite
                 -- find games by given developer
-                SELECT g.AppID, Name, Developer, Publisher, Price, Release_date
-                FROM Game g INNER JOIN GameDeveloper d ON g.AppID = d.AppID
+                SELECT Game.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
+                        GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price, Release_date
+                FROM Game INNER JOIN GameDeveloper d ON Game.AppID = d.AppID
+            		JOIN Gamepublisher p on p.AppID = Game.AppID
                 WHERE d.developer LIKE CONCAT('%', Devoloper, '%')
+                GROUP BY AppID
                 ORDER BY Release_date DESC;
             END;
             """
+        LoadSearchProcedures.cursor.execute(drop_procedure)
         LoadSearchProcedures.cursor.execute(procedure_query)
         print("Developer Procedure created")
 
     @staticmethod
     def create_publisher_search_procedure():
         """creates a procedure for searching by game publisher."""
+        drop_procedure = """DROP PROCEDURE IF EXISTS games_by_publisher_search;"""
         procedure_query = """
-            DROP PROCEDURE IF EXISTS games_by_publisher_search;
             CREATE PROCEDURE games_by_publisher_search(IN Publisher varchar(30))
             READS SQL DATA
             BEGIN
-                -- SQLite
                 -- find games from given publisher
-                SELECT g.AppID, Name, Developer, Publisher, Price, Release_date
-                FROM Game g INNER JOIN GamePublisher p ON g.AppID = p.AppID
+                SELECT Game.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
+                        GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price, Release_date
+                FROM Game INNER JOIN GamePublisher p ON Game.AppID = p.AppID
+                    JOIN Gamedeveloper d on d.AppID = Game.AppID
                 WHERE p.publisher LIKE CONCAT('%', Publisher, '%')
+                GROUP BY AppID
                 ORDER BY Release_date DESC;
             END;
-            """
+            """ #TODO: publisher column is null for some reason??
+        LoadSearchProcedures.cursor.execute(drop_procedure)
         LoadSearchProcedures.cursor.execute(procedure_query)
         print("Publisher Procedure created")
 
     @staticmethod
     def create_reception_search_procedure():
         """creates a procedure for searching by game reception."""
+        drop_procedure = """DROP PROCEDURE IF EXISTS reception_search;"""
         procedure_query = """
-            DROP PROCEDURE IF EXISTS reception_search;
             CREATE PROCEDURE reception_search(IN User_Rating REAL)
             READS SQL DATA
             BEGIN
-                -- SQLite
                 -- find games above a given user rating
-                SELECT AppID, Name, Developer, Publisher, Price, (Positive * 1.0)/(Positive + Negative) as Reception
-                FROM Game
-                WHERE Reception > User_Rating and Reception < 1;
+                SELECT G.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
+			            GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price, Reception
+                FROM (SELECT AppID, Name, Price, (Positive * 1.0)/(Positive + Negative) as Reception
+                    FROM Game) G
+                    JOIN Gamedeveloper d on d.AppID = G.AppID
+                    JOIN Gamepublisher p on p.AppID = G.AppID
+                WHERE Reception > User_Rating and Reception < 1
+                GROUP BY AppID;
             END;
             """
+        LoadSearchProcedures.cursor.execute(drop_procedure)
         LoadSearchProcedures.cursor.execute(procedure_query)
         print("Reception Procedure created")
 
     @staticmethod
     def create_age_rating_search_procedure():
         """creates a procedues for searching by game age rating."""
+        drop_procedure = """DROP PROCEDURE IF EXISTS age_rating_search;"""
         procedure_query = """
-            DROP PROCEDURE IF EXISTS age_rating_search;
             CREATE PROCEDURE age_rating_search(IN User_Age REAL)
             READS SQL DATA
             BEGIN
-                -- SQLite
                 -- select games within an age rating
-                SELECT *
+                SELECT Game.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
+                        GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price
                 FROM Game
-                WHERE Required_age >= 0 AND Required_age < User_Age;
+                    JOIN Gamedeveloper d on d.AppID = Game.AppID
+            		JOIN Gamepublisher p on p.AppID = Game.AppID
+                WHERE Required_age > 0 AND Required_age < User_Age
+                GROUP BY AppID;
             END;
             """
+        LoadSearchProcedures.cursor.execute(drop_procedure)
         LoadSearchProcedures.cursor.execute(procedure_query)
         print("Age Rating Procedure Created")
 
@@ -124,14 +148,14 @@ class LoadSearchProcedures:
     def create_developers_by_reception_search_procedure():
         """creates a procedues for getting developers ordered by the reception
         of their games."""
+        drop_procedure = """DROP PROCEDURE IF EXISTS developers_by_reception;"""
         procedure_query = """
-            DROP PROCEDURE IF EXISTS developers_by_reception;
             CREATE PROCEDURE developers_by_reception()
             READS SQL DATA
             BEGIN
-                -- SQLite
                 -- list developers ranked by the average reception of their games
-                SELECT Developer, Developer, Publisher, Price, round(avg(Reception), 4) as Dev_Reception, count(*) as Num_Games
+                SELECT Developer, round(avg(Reception), 4) as Dev_Reception,
+                        count(*) as Num_Games
                 FROM GameDeveloper d INNER JOIN (
                 SELECT AppID, (Positive * 1.0)/(Positive + Negative) as Reception
                 FROM Game
@@ -147,6 +171,7 @@ class LoadSearchProcedures:
                 ORDER BY Dev_Reception DESC, Num_Games DESC;
             END;
             """
+        LoadSearchProcedures.cursor.execute(drop_procedure)
         LoadSearchProcedures.cursor.execute(procedure_query)
         print("Developer by reception search created")
         
@@ -154,9 +179,8 @@ class LoadSearchProcedures:
     def create_delete_trigger():
         """creates a trigger to remove entries from junction tables when their
         associated game is deleted."""
+        drop_trigger = """DROP TRIGGER IF EXISTS del_game;"""
         trigger_query = """
-            DELIMITER //
-            DROP TRIGGER IF EXISTS del_game;
             CREATE TRIGGER del_game BEFORE DELETE ON Game
             FOR EACH ROW
             BEGIN
@@ -167,8 +191,8 @@ class LoadSearchProcedures:
                 DELETE FROM Gameplatform where AppID = OLD.AppID;
                 DELETE FROM Gamepublisher where AppID = OLD.AppID;
                 DELETE FROM Gametag where AppID = OLD.AppID;
-            END;//
-            DELIMITER ;"""
+            END;"""
+        LoadSearchProcedures.cursor.execute(drop_trigger)
         LoadSearchProcedures.cursor.execute(trigger_query)
         print("Developer by reception search created")
 
@@ -224,6 +248,8 @@ class LoadSearchProcedures:
                 FROM Gametag
                 WHERE tag IN {undesired})   -- excluded tags
                 ) Gen INNER JOIN Game g on Gen.AppID = g.AppID
+                INNER JOIN gamepublisher p on g.AppID = p.AppID
+                INNER JOIN Gamedeveloper d on p.AppID = .AppID
             GROUP BY g.AppID
             HAVING count(g.AppID) > {int(len(tags) * .2)}  -- limit to more relevant titles
             ORDER BY count(g.AppID) DESC, Reception DESC"""
