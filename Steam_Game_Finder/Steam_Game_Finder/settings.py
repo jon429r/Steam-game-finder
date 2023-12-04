@@ -75,7 +75,7 @@ DATABASES = {
         'ENGINE'  : 'django.db.backends.mysql', 
         'NAME'    : 'databasefinder',                 
         'USER'    : 'root',                     
-        'PASSWORD': 'Database-Final1234',              
+        'PASSWORD': '83249962',              
         'HOST'    : 'localhost',               
         'PORT'    : '3306',
         'OPTIONS' : {'charset': 'utf8mb4'},

@@ -57,6 +57,7 @@ class LoadSearchProcedures:
 
     @staticmethod
     def create_developer_search_procedure():
+    def create_developer_search_procedure():
         """creates a procedure for searching by game developer."""
         drop_procedure = """DROP PROCEDURE IF EXISTS games_by_developer_search;"""
         procedure_query = """
@@ -194,13 +195,12 @@ class LoadSearchProcedures:
             END;"""
         LoadSearchProcedures.cursor.execute(drop_trigger)
         LoadSearchProcedures.cursor.execute(trigger_query)
-        print("Developer by reception search created")
 
 
     @staticmethod
     def genre_search(genres_string):
         """query by genre"""
-        #tuples are broken up if singletons or empty
+        # Tuples are broken up if singletons or empty
         genres = genres_string.strip().split(" ")
         undesired = tuple([s[1:] for s in genres if s.startswith('-')])
         if len(undesired) == 1: undesired = f"('{undesired[0]}')"
@@ -211,18 +211,20 @@ class LoadSearchProcedures:
         print(desired)
         print(undesired)
         query = f"""
-            SELECT g.AppID, Name, Developer, Publisher, Price, (Positive * 1.0)/(Positive + Negative) as Reception
+            SELECT G.AppID, G.Name, GD.developer, GP.publisher, G.Price, (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
             FROM (SELECT AppID
-                FROM Gamegenre
+                FROM GameGenre
                 WHERE genre IN {desired}  -- desired genres
                 AND AppID NOT IN (
                 SELECT AppID
                 FROM GameGenre
                 WHERE genre IN {undesired})   -- excluded genres
-                ) Gen INNER JOIN Game g on Gen.AppID = g.AppID
-            GROUP BY g.AppID
-            HAVING count(g.AppID) > {int(len(genres) * .2)}
-            ORDER BY count(g.AppID) DESC, Reception DESC"""
+                ) Gen INNER JOIN Game as G on Gen.AppID = g.AppID
+            JOIN GameDeveloper as GD on G.AppID = GD.AppID
+            JOIN GamePublisher as GP on GD.AppID = GP.AppID 
+            GROUP BY G.AppID, GD.developer, GP.publisher
+            HAVING count(G.AppID) > {int(len(genres) * .2)}
+            ORDER BY count(G.AppID) DESC, Reception DESC"""
         print(query)
         LoadSearchProcedures.cursor.execute(query)
         return dictfetchall(LoadSearchProcedures.cursor)
@@ -239,7 +241,7 @@ class LoadSearchProcedures:
         if len(desired) == 1: desired = f"('{desired[0]}')"
         elif len(desired) == 0: desired = "('')"
         query = f"""
-            SELECT g.AppID, Name, Developer, Publisher, Price, (Positive * 1.0)/(Positive + Negative) as Reception
+            SELECT G.AppID, G.Name, GD.developer, GP.publisher, G.Price, (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
             FROM (SELECT AppID
                 FROM Gametag
                 WHERE tag IN {desired}  -- desired tags
@@ -268,7 +270,7 @@ class LoadSearchProcedures:
         if len(desired) == 1: desired = f"('{desired[0]}')"
         elif len(desired) == 0: desired = "('')"
         query = f"""
-            SELECT g.AppID, Name, Developer, Publisher, Price, (Positive * 1.0)/(Positive + Negative) as Reception
+            SELECT G.AppID, G.Name, GD.developer, GP.publisher, G.Price, (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
             FROM (SELECT AppID
                 FROM Gamecategory
                 WHERE category IN {desired}  -- desired categorys
@@ -276,10 +278,12 @@ class LoadSearchProcedures:
                 SELECT AppID
                 FROM Gamecategory
                 WHERE category IN {undesired})   -- excluded categorys
-                ) Gen INNER JOIN Game g on Gen.AppID = g.AppID
-            GROUP BY g.AppID
-            HAVING count(g.AppID) > 2  -- limit to more relevant titles
-            ORDER BY count(g.AppID) DESC, Reception DESC;"""
+                ) Gen INNER JOIN Game as G on Gen.AppID = G.AppID
+            JOIN GameDeveloper as GD on G.AppID = GD.AppID
+            JOIN GamePublisher as GP on GD.AppID = GP.AppID
+            GROUP BY G.AppID
+            HAVING count(G.AppID) > 2  -- limit to more relevant titles
+            ORDER BY count(G.AppID) DESC, Reception DESC;"""
         LoadSearchProcedures.cursor.execute(query)
         return dictfetchall(LoadSearchProcedures.cursor)
 
@@ -287,7 +291,7 @@ class LoadSearchProcedures:
     def recomendation_search(req_string):
         """aggregate search across tag, genre, and category."""
         reqs = tuple(req_string.strip().split(" "))
-        query = f"""SELECT G.AppID, G.Name, G.Developer, G.Publisher, G.Price, (G.Positive - G.Negative) as Reception
+        query = f"""SELECT G.AppID, G.Name, GD.developer, GP.publisher, G.Price, (G.Positive - G.Negative) as Reception
             FROM (SELECT GT.AppID, GT.tag
                 FROM GameTag GT
                 WHERE GT.tag IN   -- desired tags
@@ -299,6 +303,8 @@ class LoadSearchProcedures:
                 WHERE GC.category IN {reqs}  -- desired categories
             ) AS Gen ON Gen.AppID = GG.AppID
             NATURAL JOIN Game as G
+            JOIN GameDeveloper as GD on G.AppID = GD.AppID
+            JOIN GamePublisher as GP on GD.AppID = GP.AppID
             GROUP BY G.AppID
             HAVING COUNT(G.AppID) > 3
             ORDER BY COUNT(G.AppID) DESC, Reception DESC;"""

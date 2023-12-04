@@ -15,7 +15,7 @@
             <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Devoloper</th>
+                    <th>Developer</th>
                     <th>Publisher</th>
                     <th>Price</th>
                 </tr>
@@ -31,7 +31,10 @@
                 {% endfor %}
             </tbody>
         </table>
-    {% else %}
+    {% endif %}
+    
+    {% if form.is_bound and not form.errors and games is not None and games|length == 0  %}
+        {# Displayed only if there was a non succesful search)#}
         <p>No matching games found. Please try different criteria.</p>
     {% endif %}
 </div>
