@@ -57,7 +57,6 @@ class LoadSearchProcedures:
 
     @staticmethod
     def create_developer_search_procedure():
-    def create_developer_search_procedure():
         """creates a procedure for searching by game developer."""
         drop_procedure = """DROP PROCEDURE IF EXISTS games_by_developer_search;"""
         procedure_query = """
