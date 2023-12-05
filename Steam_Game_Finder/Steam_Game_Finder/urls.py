@@ -21,11 +21,11 @@ Including another URLconf
 from django.urls import path, include
 from django.contrib import admin
 from frontend.views import (
-    home_page_view, quiz_page_view, search_page_view,
-    base_temp_view,
-    liked_game_view, error_page_view,
-    like_game, dislike_game, results, info_page_view
+    home_page_view, quiz_page_view, search_page_view, like_view, dislike_view,
+    base_temp_view,  error_page_view, results, info_page_view
 )
+app_name = 'frontend'
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,19 +37,15 @@ urlpatterns = [
     path('Quiz_Page.html', quiz_page_view, name='Quiz_Page.html'),
     path('Search_Page.html', search_page_view, name='Search_Page.html'),
     path('results/', results, name='results'),
-    path('Extras/Liked_Games.html', liked_game_view, name='update_like_dislike'),
 
     path('Extras/Quiz_Table.html', quiz_page_view, name='quiz_page_view'),
 
     path('Extras/Error_Page.html', error_page_view, name='error_page_view'),
-    ##path('Extras/LikedDisliked_popup.html', liked_disliked_popup_view, name='liked_disliked_popup_view'),
 
     path('Info_Page.html', info_page_view, name='info_page_view'),
 
-    path('like/<int:game_id>/', like_game, name='like_game'),
-    path('dislike/<int:game_id>/', dislike_game, name='dislike_game'),
+    path('like_game/', like_view, name='like_game'),
+    path('dislike_game/', dislike_view, name='dislike_game'),
 
-    path('Extras/game_detail.html', like_game, name='like_game'),
-    path('Extras/game_detail.html', dislike_game, name='dislike_game'),
-
+    path('results', results, name='results'),
 ]

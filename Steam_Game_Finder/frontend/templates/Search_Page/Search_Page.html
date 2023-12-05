@@ -18,6 +18,8 @@
                     <th>Developer</th>
                     <th>Publisher</th>
                     <th>Price</th>
+                    <th>Like</th>
+                    <th>Dislike</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,6 +29,8 @@
                         <td>{{ game.Developer }}</td>
                         <td>{{ game.Publisher }}</td> 
                         <td>{{ game.Price }}</td>
+                        <td> {% include 'Extras/Like_Button.html' with game_id=game.AppID %} </td>
+                        <td> {% include 'Extras/Dislike_Button.html' with game_id=game.AppID %} </td> 
                     </tr>
                 {% endfor %}
             </tbody>
@@ -34,7 +38,7 @@
     {% endif %}
     
     {% if form.is_bound and not form.errors and games is not None and games|length == 0  %}
-        {# Displayed only if there was a non succesful search)#}
+        {# Displayed only if there was a non succesful search #}
         <p>No matching games found. Please try different criteria.</p>
     {% endif %}
 </div>
