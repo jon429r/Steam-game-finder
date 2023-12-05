@@ -210,7 +210,9 @@ class LoadSearchProcedures:
         print(desired)
         print(undesired)
         query = f"""
-            SELECT G.AppID, G.Name, GD.developer, GP.publisher, G.Price, (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
+            SELECT G.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
+			            GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price,
+                        (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
             FROM (SELECT AppID
                 FROM GameGenre
                 WHERE genre IN {desired}  -- desired genres
@@ -221,7 +223,7 @@ class LoadSearchProcedures:
                 ) Gen INNER JOIN Game as G on Gen.AppID = g.AppID
             JOIN GameDeveloper as GD on G.AppID = GD.AppID
             JOIN GamePublisher as GP on GD.AppID = GP.AppID 
-            GROUP BY G.AppID, GD.developer, GP.publisher
+            GROUP BY G.AppID
             HAVING count(G.AppID) > {int(len(genres) * .2)}
             ORDER BY count(G.AppID) DESC, Reception DESC"""
         print(query)
@@ -240,7 +242,9 @@ class LoadSearchProcedures:
         if len(desired) == 1: desired = f"('{desired[0]}')"
         elif len(desired) == 0: desired = "('')"
         query = f"""
-            SELECT G.AppID, G.Name, GD.developer, GP.publisher, G.Price, (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
+            SELECT G.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
+			            GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price,
+                        (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
             FROM (SELECT AppID
                 FROM Gametag
                 WHERE tag IN {desired}  -- desired tags
@@ -248,10 +252,10 @@ class LoadSearchProcedures:
                 SELECT AppID
                 FROM Gametag
                 WHERE tag IN {undesired})   -- excluded tags
-                ) Gen INNER JOIN Game g on Gen.AppID = g.AppID
+                ) Gen INNER JOIN Game G on Gen.AppID = g.AppID
                 INNER JOIN gamepublisher p on g.AppID = p.AppID
-                INNER JOIN Gamedeveloper d on p.AppID = .AppID
-            GROUP BY g.AppID
+                INNER JOIN Gamedeveloper d on p.AppID = d.AppID
+            GROUP BY G.AppID
             HAVING count(g.AppID) > {int(len(tags) * .2)}  -- limit to more relevant titles
             ORDER BY count(g.AppID) DESC, Reception DESC"""
         LoadSearchProcedures.cursor.execute(query)
@@ -269,7 +273,9 @@ class LoadSearchProcedures:
         if len(desired) == 1: desired = f"('{desired[0]}')"
         elif len(desired) == 0: desired = "('')"
         query = f"""
-            SELECT G.AppID, G.Name, GD.developer, GP.publisher, G.Price, (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
+            SELECT G.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
+			            GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price,
+                        (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
             FROM (SELECT AppID
                 FROM Gamecategory
                 WHERE category IN {desired}  -- desired categorys
@@ -290,7 +296,10 @@ class LoadSearchProcedures:
     def recomendation_search(req_string):
         """aggregate search across tag, genre, and category."""
         reqs = tuple(req_string.strip().split(" "))
-        query = f"""SELECT G.AppID, G.Name, GD.developer, GP.publisher, G.Price, (G.Positive - G.Negative) as Reception
+        query = f"""
+            SELECT G.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
+			            GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price,
+                        (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
             FROM (SELECT GT.AppID, GT.tag
                 FROM GameTag GT
                 WHERE GT.tag IN   -- desired tags
