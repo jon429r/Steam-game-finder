@@ -66,6 +66,8 @@ class LoadSearchProcedures:
                 -- find games by given developer
                 SELECT Game.AppID, Name, GROUP_CONCAT(DISTINCT d.developer SEPARATOR ", ") as Developer,
                         GROUP_CONCAT(DISTINCT p.publisher SEPARATOR ", ") as Publisher, Price, Release_date
+                SELECT Game.AppID, Name, GROUP_CONCAT(DISTINCT d.developer SEPARATOR ", ") as Developer,
+                        GROUP_CONCAT(DISTINCT p.publisher SEPARATOR ", ") as Publisher, Price, Release_date
                 FROM Game INNER JOIN GameDeveloper d ON Game.AppID = d.AppID
             		JOIN Gamepublisher p on p.AppID = Game.AppID
                 WHERE d.Developer LIKE CONCAT('%', developer, '%')
@@ -83,9 +85,12 @@ class LoadSearchProcedures:
         drop_procedure = """DROP PROCEDURE IF EXISTS games_by_publisher_search;"""
         procedure_query = """
             CREATE PROCEDURE games_by_publisher_search(IN publisher varchar(30))
+            CREATE PROCEDURE games_by_publisher_search(IN publisher varchar(30))
             READS SQL DATA
             BEGIN
                 -- find games from given publisher
+                SELECT Game.AppID, Name, GROUP_CONCAT(DISTINCT d.developer SEPARATOR ", ") as Developer,
+                        GROUP_CONCAT(DISTINCT p.publisher SEPARATOR ", ") as Publisher, Price, Release_date
                 SELECT Game.AppID, Name, GROUP_CONCAT(DISTINCT d.developer SEPARATOR ", ") as Developer,
                         GROUP_CONCAT(DISTINCT p.publisher SEPARATOR ", ") as Publisher, Price, Release_date
                 FROM Game INNER JOIN GamePublisher p ON Game.AppID = p.AppID
