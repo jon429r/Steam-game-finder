@@ -1,8 +1,8 @@
 {% block title %}Popular Games{% endblock %}
 
 {% block content %}
-    <h2>{{ section2 }}</h2>
-    <p>Here is a table of the {{ section2|lower }}</p>
+    <h2>{{ section1 }}</h2>
+    <p>Here is a table of the {{ section1|lower }}</p>
 
     <table class="Popular_Table" id="Popular_Table">
         <thead>
@@ -14,16 +14,18 @@
             </tr>
         </thead>
         <tbody>
-            {% for game in popular_games %}
+            {% for game in liked_games %}
                 <tr>
                     <td>
-                        <img class="game-icon" src="{{ game.IMG }}" alt="Game Icon">
-                    </td>
-                    <td>{{ game.Title }}</td>
+                        <img class="game-icon" src="{{ game.3 }}" alt="Game Icon">
+                    </td> 
+                    <td>{{ game.1 }}</td>
                     <td> {% include 'Extras/Like_Button.html' %} </td>
                     <td> {% include 'Extras/Dislike_Button.html' %} </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    
 {% endblock %}

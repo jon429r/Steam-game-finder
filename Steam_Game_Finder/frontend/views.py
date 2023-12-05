@@ -2,15 +2,17 @@ from django.shortcuts import render, redirect
 from django.core.exceptions import ObjectDoesNotExist
 from .models import Game, Resulting_Games
 from .models import Game, Liked_Disliked, Resulting_Games, Popular_Games
-from .forms import SearchForm
+from .forms import SearchForm, LikeDislikeForm
 from django.db import connection
 import Backend.search_procedures.search_procedure_calls as CallProcedures
 
-resulting_games_records = []    
 
+liked_disliked_games = []
+liked_games = []
+disliked_games = []
 popular_games_records = []
-
 liked_disliked_records = []
+search_games_result = {}
 
 def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"
@@ -21,8 +23,14 @@ def dictfetchall(cursor):
     ]
 
 def results(request):
+    global search_games_result, liked_games
+    current_path = request.get_full_path
+    current_path = str(current_path)
+    print("entering results function")
     search_form = SearchForm(request.GET)
-    games = {}
+    Liked_Disliked_Form = Liked_Disliked(request.GET)
+
+    search_games_result = {}
 
     if search_form.is_valid() and request.method == "GET":
         search_term = search_form.cleaned_data.get('search_term')
@@ -35,100 +43,134 @@ def results(request):
                                'Developer by Reception Search', 'Recommendation Search',
                                'Language Search', 'Age Rating Search', 'Category Search']
             if field_choice in allowed_choices:
-                games = CallProcedures.call_procedure(field_choice, search_term)
-    # print(games)
-    return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': search_form})
-
-
-def fill_popular_games(request):      
-    global popular_games_records
-
-    popular_games_records = Popular_Games.objects.values('app_id', 'title', 'header_image', 'action').all()
-
-    print(popular_games_records)
-
-def fill_resulting_games(request):
-    global resulting_games_records
-
-    resulting_games_records = Resulting_Games.objects.values('app_id', 'title', 'header_image', 'action').all()
-
-
-def fill_liked_disliked(request):
-    global liked_disliked_records
-
-    # Your logic to fetch data from the database and fill liked_disliked_records
-    liked_disliked_records = Liked_Disliked.objects.values('app_id', 'title', 'header_image', 'action').all()
+                search_games_result = CallProcedures.call_procedure(field_choice, search_term)
+    print(search_games_result)
+    return render(request, 'Search_Page/Search_Page.html', {'games': search_games_result, 'form': SearchForm, 'LikeDislikeForm': Liked_Disliked_Form, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def info_page_view(request):
     global popular_games_records
     
-    return render(request, 'Info_Page/Info_Page.html', {'popular_games': popular_games_records, 'section1': 'Popular Games'})
+    return render(request, 'Info_Page/Info_Page.html', {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def home_page_view(request):
     template_name = 'Home_Page/Home_Page.html'
 
-    # Access liked_disliked_records globally
-    global liked_disliked_records
-
-    # Fill liked_disliked_records when home_page_view is called
-    fill_resulting_games(request)
-    fill_popular_games(request)
 
     # Access liked_disliked_records and resulting_games
-    return render(request, template_name, {'resulting_games': resulting_games_records, 'popular_games': popular_games_records, 'section1': 'Resulting Games', 'section2': 'Popular Games'})
+    return render(request, template_name, {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def quiz_page_view(request):
-    return render(request, 'Quiz_Page/Quiz_Page.html', {'popular_games': popular_games_records, 'section1': 'Popular Games'})
+    return render(request, 'Quiz_Page/Quiz_Page.html', {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def search_page_view(request):
-    return render(request, 'Search_Page/Search_Page.html', {'popular_games': popular_games_records, 'section1': 'Popular Games'})
+    return render(request, 'Search_Page/Search_Page.html', {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def base_temp_view(request):
-    return render(request, 'Base_Temp/Base.html', {'popular_games': popular_games_records, 'section1': 'Popular Games'})
+    return render(request, 'Base_Temp/Base.html', {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def error_page_view(request):
     return render(request, 'Extras/Error_Page.html')
 
+    
 
-def liked_disliked_popup_view(request):
-    ## Access the value from the URL parameter 'request'
-    disliked_value = request.GET.get('request', '')
 
-    ## For example, you might pass it to the template
-    context = {'disliked_value': disliked_value}
-    return render(request, 'LikedDisliked_popup.html', context)
 
-from django.shortcuts import get_object_or_404, render
-from django.http import JsonResponse
+# views.py
+
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.contrib.sessions.models import Session
+from .forms import LikeDislikeForm
 from .models import Game
+from django.http import JsonResponse
 
-def game_detail(request, game_id):
-    game = Game.objects.get(id=game_id)
-    likes = game.liked_disliked_set.filter(action='like').count()
-    dislikes = game.liked_disliked_set.filter(action='dislike').count()
-    return render(request, 'game_detail.html', {'game': game, 'likes': likes, 'dislikes': dislikes})
+from django.shortcuts import get_object_or_404
 
-def like_game(request, game_id):
-    game = get_object_or_404(Game, pk=game_id)
-    liked_disliked, created = Liked_Disliked.objects.get_or_create(title=game.title, action='like')
-    game.liked_disliked = liked_disliked
-    print(game.liked_disliked)
-    game.save()
-    return JsonResponse({'likes': game.liked_disliked_set.count()})
 
-def dislike_game(request, game_id):
-    game = get_object_or_404(Game, pk=game_id)
-    liked_disliked, created = Liked_Disliked.objects.get_or_create(title=game.title, action='dislike')
-    game.liked_disliked = liked_disliked
-    print(game.liked_disliked)
-    game.save()
-    return JsonResponse({'dislikes': game.liked_disliked_set.count()})
+import logging
 
-def liked_game_view(request):
+logger = logging.getLogger(__name__)
+
+cur = connection.cursor()
+
+def like_view(request):
+    global liked_games, search_games_result
+    current_path = request.get_full_path
+    print(f'current path: {current_path}')
     if request.method == 'POST':
-        game_title = request.POST.get('game_title')
-        # Rest of your logic...
-        return render(request, 'Extras/Liked_Games.html', {'game_title': game_title})
+        form = LikeDislikeForm(request.POST)
+        if form.is_valid():
+            game_id = form.cleaned_data['game_id']
+            action = form.cleaned_data['action']
+
+            cur.execute("SELECT AppID, Name, Price, Header_image FROM Game WHERE AppID = %s", [game_id])
+            game = cur.fetchone()
+
+            if game:
+                if game not in liked_games:
+                    liked_games.append(game)
+                    print('Adding game to liked_games')
+                    response_data = {
+                        'status': 'success',
+                        'game': {
+
+                            'Liked or Disliked': action,
+                            'app_id': game[0],
+                            'name': game[1],
+                            'price': game[2],
+                            'Header_image': game[3],
+                        }
+                    }
+                    print(f'response_data: {response_data}')
+
+                else:
+                    liked_games.remove(game)
+                    print('Removing game from liked_games')
+
+            try:
+                print("Liked Games: ")
+                for liked_game in liked_games:
+                    print(f"app_id: {liked_game[0]}, name: {liked_game[1]}, price: {liked_game[2]}, Header_Image: {liked_game[3]}")
+            except:
+                print("liked_games is empty")
+
+            return render(request, 'Search_Page/Search_Page.html', {'games': search_games_result, 'form': SearchForm, 'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
+
+        else:
+            return JsonResponse({'status': 'error', 'errors': form.errors})
     else:
-        # Handle GET requests or other cases...
-        return render(request, 'Extras/Liked_Games.html')
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+
+def dislike_view(request):
+    global disliked_games, search_games_result
+    current_path = request.get_full_path
+    print(f'current path: {current_path}')
+
+    if request.method == 'POST':
+        form = LikeDislikeForm(request.POST)
+        if form.is_valid():
+            game_id = form.cleaned_data['game_id']
+            action = form.cleaned_data['action']
+
+            cur.execute("SELECT AppID, Name, Price, Header_image FROM Game WHERE AppID = %s", [game_id])    
+            game = cur.fetchone()
+
+            if game:
+                if game not in disliked_games:
+                    disliked_games.append(game)
+                    print('Adding game to disliked_games')
+
+                    print('disliked_games:')
+                    for disliked_game in disliked_games:
+                        print(f"app_id: {disliked_game[0]}, name: {disliked_game[1]}, price: {disliked_game[2]}, Header_Image: {disliked_game[3]}")
+                else:
+                    disliked_games.remove(game)
+                    print('Removing game from disliked_games')
+
+
+            return render(request, 'Search_Page/Search_Page.html', {'games': search_games_result, 'form': SearchForm, 'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
+        else: 
+            return JsonResponse({'status': 'error', 'errors': form.errors})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'})

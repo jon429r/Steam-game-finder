@@ -4,7 +4,7 @@ from .models import Game
 class LikeDislikeForm(forms.Form):
     game_id = forms.IntegerField()
     action = forms.CharField()
-
+    
 class SearchForm(forms.Form):
     search_term = forms.CharField(required=False)
     field_choice = forms.CharField(required=True) 

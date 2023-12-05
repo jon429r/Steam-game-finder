@@ -12,13 +12,12 @@
 }
 </style>
 
-<form method="POST" " action="{% url 'update_like_dislike' %}">
+{# Dislike_Button.html #}
+<form method="POST" action="{% url 'like_game' %}">
     {% csrf_token %}
-    <input type="hidden" name="game_title" value="{{ game.Title }}">
-
-    {{ form.as_p }}
-    <button type="submit" onclick="openPopup()" class="dislike-button">
-        <i class="fa fa-thumbs-down" style="font-size:24px"></i> 
-        </button>
+    <input type="hidden" name="game_id" value="{{ game.AppID }}">
+    <input type="hidden" name="action" value="dislike">
+    <button type="submit" class="dislike-button">
+        <i class="fa fa-thumbs-down"></i>
+    </button>
 </form>
-
