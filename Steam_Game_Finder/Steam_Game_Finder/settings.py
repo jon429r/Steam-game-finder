@@ -51,7 +51,7 @@ ROOT_URLCONF = 'Steam_Game_Finder.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')], 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -64,6 +64,8 @@ TEMPLATES = [
     },
 ]
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
 WSGI_APPLICATION = 'Steam_Game_Finder.wsgi.application'
 
 # Database
@@ -73,11 +75,12 @@ WSGI_APPLICATION = 'Steam_Game_Finder.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE'  : 'django.db.backends.mysql', 
-        'NAME'    : 'DatabaseFinder',                 
+        'NAME'    : 'databasefinder',                 
         'USER'    : 'root',                     
         'PASSWORD': 'Database-final1234',              
         'HOST'    : 'localhost',               
         'PORT'    : '3306',
+        'OPTIONS' : {'charset': 'utf8mb4'},
     }
 }
 

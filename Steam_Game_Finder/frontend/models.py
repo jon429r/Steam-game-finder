@@ -43,6 +43,8 @@ class Game(models.Model):
     app_id = models.AutoField(primary_key=True, default=None)
     name = models.CharField(max_length=210, default=None, blank=True, null=True)
     release_date = models.CharField(max_length=200, default=None, blank=True, null=True)
+    developer = models.CharField(max_length=200, default=None, blank=True, null=True)
+    publisher = models.CharField(max_length=200, default=None, blank=True, null=True)
     required_age = models.IntegerField(default=0, null=True, blank=True)
     price = models.FloatField(default=0.0, null=True, blank=True)
     about_the_game = models.TextField(default=None, blank=True, null=True)

@@ -2,31 +2,26 @@
 
 {% block content %}
     <form method="get" action="{% url 'results' %}">
-        {{ form.search_term }}
         <input type="text" name="search_term" placeholder="Search..." />
-        {{ form.field_choice }}
         <select name="field_choice">
-            <option value="Game">Game</option>
-            <option value="Genre">Genre</option>
-            <option value="Developer">Developer</option>
-            <option value="Tag">Tag</option>
+            <option value="Name Search">Name Search</option>
+            <option value="Genre Search">Genre Search</option>
+            <option value="Tag Search">Tag Search</option>
+            <option value="Category Search">Publisher Search</option>
+            <option value="Developer Search">Developer Search</option>
+            <option value="Publisher Search">Publisher Search</option>
+            <option value="Reception Search">Reception Search</option>
+            <option value="Developer by Reception Search">Developer_by_Reception Search</option>
+            <option value="Language Search">Language Search</option>
+            <option value="Age Rating Search">Age Rating Search</option>
+            <option value="Recommendation Search">Recommendation Search</option>
+
         </select>
         <button type="submit">Search</button>
     </form>
-
-    {% if form.errors %}
-        <p>{{ form.errors }}</p>
-    {% endif %}
-
-    {% if games %}
-        <h2>Search Results:</h2>
-        <ul>
-            {% for game in games %}
-                <li>{{ game.app_ID }} - {{ game.title }}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No results found.</p>
-    {% endif %}
-
+    {% if form.is_bound %}
+        {% if form.errors %}
+            <p>{{ form.errors }}</p>
+        {% endif %}
+    {% endif%}
 {% endblock %}
