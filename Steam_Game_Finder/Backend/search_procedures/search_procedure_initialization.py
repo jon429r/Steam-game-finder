@@ -60,15 +60,15 @@ class LoadSearchProcedures:
         """creates a procedure for searching by game developer."""
         drop_procedure = """DROP PROCEDURE IF EXISTS games_by_developer_search;"""
         procedure_query = """
-            CREATE PROCEDURE games_by_developer_search(IN Devoloper varchar(30))
+            CREATE PROCEDURE games_by_developer_search(IN developer varchar(30))
             READS SQL DATA
             BEGIN
                 -- find games by given developer
-                SELECT Game.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
-                        GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price, Release_date
+                SELECT Game.AppID, Name, GROUP_CONCAT(DISTINCT d.developer SEPARATOR ", ") as Developer,
+                        GROUP_CONCAT(DISTINCT p.publisher SEPARATOR ", ") as Publisher, Price, Release_date
                 FROM Game INNER JOIN GameDeveloper d ON Game.AppID = d.AppID
             		JOIN Gamepublisher p on p.AppID = Game.AppID
-                WHERE d.developer LIKE CONCAT('%', Devoloper, '%')
+                WHERE d.Developer LIKE CONCAT('%', developer, '%')
                 GROUP BY AppID
                 ORDER BY Release_date DESC;
             END;
@@ -82,15 +82,15 @@ class LoadSearchProcedures:
         """creates a procedure for searching by game publisher."""
         drop_procedure = """DROP PROCEDURE IF EXISTS games_by_publisher_search;"""
         procedure_query = """
-            CREATE PROCEDURE games_by_publisher_search(IN Publisher varchar(30))
+            CREATE PROCEDURE games_by_publisher_search(IN publisher varchar(30))
             READS SQL DATA
             BEGIN
                 -- find games from given publisher
-                SELECT Game.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
-                        GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price, Release_date
+                SELECT Game.AppID, Name, GROUP_CONCAT(DISTINCT d.developer SEPARATOR ", ") as Developer,
+                        GROUP_CONCAT(DISTINCT p.publisher SEPARATOR ", ") as Publisher, Price, Release_date
                 FROM Game INNER JOIN GamePublisher p ON Game.AppID = p.AppID
                     JOIN Gamedeveloper d on d.AppID = Game.AppID
-                WHERE p.publisher LIKE CONCAT('%', Publisher, '%')
+                WHERE p.Publisher LIKE CONCAT('%', publisher, '%')
                 GROUP BY AppID
                 ORDER BY Release_date DESC;
             END;
