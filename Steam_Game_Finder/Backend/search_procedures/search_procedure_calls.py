@@ -20,7 +20,7 @@ def call_procedure(procedure_name, parameters):
         results = search_functions.reception_search(parameters)
     elif procedure_name == "Age Rating Search":
         results = search_functions.age_rating_search(parameters)
-    elif procedure_name == "Developers by Reception Search":
+    elif procedure_name == "Developer by Reception Search":
         results = search_functions.developers_by_reception_search(parameters)
     elif procedure_name == "Genre Search":
         results = search_functions.genre_search(parameters)
