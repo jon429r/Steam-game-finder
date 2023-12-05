@@ -12,7 +12,7 @@ liked_games = []
 disliked_games = []
 popular_games_records = []
 liked_disliked_records = []
-games = {}
+search_games_result = {}
 
 def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"
@@ -23,14 +23,14 @@ def dictfetchall(cursor):
     ]
 
 def results(request):
-    global games, liked_games
+    global search_games_result, liked_games
     current_path = request.get_full_path
     current_path = str(current_path)
     print("entering results function")
     search_form = SearchForm(request.GET)
     Liked_Disliked_Form = Liked_Disliked(request.GET)
 
-    games = {}
+    search_games_result = {}
 
     if search_form.is_valid() and request.method == "GET":
         search_term = search_form.cleaned_data.get('search_term')
@@ -40,9 +40,9 @@ def results(request):
         if search_term and field_choice:
             allowed_choices = ['Name Search', 'Genre Search', 'Developer Search', 'Publisher Search', 'Tag Search','Developer_by_Reception Search', 'Recommendation Search', 'Language Search', 'Age Rating Search', 'Category Search']
             if field_choice in allowed_choices:
-                games = CallProcedures.call_procedure(field_choice, search_term)
-    print(games)
-    return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': SearchForm, 'LikeDislikeForm': Liked_Disliked_Form, 'liked_games': liked_games, 'section1': 'Liked Games'})
+                search_games_result = CallProcedures.call_procedure(field_choice, search_term)
+    print(search_games_result)
+    return render(request, 'Search_Page/Search_Page.html', {'games': search_games_result, 'form': SearchForm, 'LikeDislikeForm': Liked_Disliked_Form, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def info_page_view(request):
     global popular_games_records
@@ -91,7 +91,7 @@ logger = logging.getLogger(__name__)
 cur = connection.cursor()
 
 def like_view(request):
-    global liked_games, games
+    global liked_games, search_games_result
     current_path = request.get_full_path
     print(f'current path: {current_path}')
     if request.method == 'POST':
@@ -131,7 +131,7 @@ def like_view(request):
             except:
                 print("liked_games is empty")
 
-            return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': SearchForm, 'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
+            return render(request, 'Search_Page/Search_Page.html', {'games': search_games_result, 'form': SearchForm, 'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
         else:
             return JsonResponse({'status': 'error', 'errors': form.errors})
@@ -140,7 +140,7 @@ def like_view(request):
 
 
 def dislike_view(request):
-    global disliked_games, games
+    global disliked_games, search_games_result
     current_path = request.get_full_path
     print(f'current path: {current_path}')
 
@@ -166,7 +166,7 @@ def dislike_view(request):
                     print('Removing game from disliked_games')
 
 
-            return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': SearchForm, 'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
+            return render(request, 'Search_Page/Search_Page.html', {'games': search_games_result, 'form': SearchForm, 'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
         else: 
             return JsonResponse({'status': 'error', 'errors': form.errors})
     else:
