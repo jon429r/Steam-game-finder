@@ -7,7 +7,7 @@ from Backend.search_procedures.search_procedure_initialization import LoadSearch
 def call_procedure(procedure_name, parameters):
     # create search procedure initialization object
     search_functions = LoadSearchProcedures()
-    
+
     if procedure_name == "Name Search":
         results = search_functions.game_title_search(parameters)
     elif procedure_name == "Language Search":
@@ -20,9 +20,8 @@ def call_procedure(procedure_name, parameters):
         results = search_functions.reception_search(parameters)
     elif procedure_name == "Age Rating Search":
         results = search_functions.age_rating_search(parameters)
-    elif procedure_name == "Developers by Reception Search":
-        print(1)
-        results = search_functions.developers_by_reception_search()
+    elif procedure_name == "Developer by Reception Search":
+        results = search_functions.developers_by_reception_search(parameters)
     elif procedure_name == "Genre Search":
         results = search_functions.genre_search(parameters)
     elif procedure_name == "Tag Search":

@@ -28,15 +28,15 @@ def results(request):
         search_term = search_form.cleaned_data.get('search_term')
         field_choice = search_form.cleaned_data.get('field_choice')
         print(f"Search Term: {search_term}, Field Choice: {field_choice}")
-            
-        if field_choice:
-            allowed_choices = ['Name Search', 'Genre Search', 'Developer    Search',
+
+        if search_term and field_choice:
+            allowed_choices = ['Name Search', 'Genre Search', 'Developer Search',
                                'Reception Search', 'Publisher Search', 'Tag Search',
-                               'Developers by Reception Search', 'Recommendation Search',
+                               'Developer by Reception Search', 'Recommendation Search',
                                'Language Search', 'Age Rating Search', 'Category Search']
             if field_choice in allowed_choices:
                 games = CallProcedures.call_procedure(field_choice, search_term)
-    
+    # print(games)
     return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': search_form})
 
 
