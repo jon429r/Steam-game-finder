@@ -12,6 +12,7 @@ liked_games = []
 disliked_games = []
 popular_games_records = []
 liked_disliked_records = []
+games = {}
 
 def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"
@@ -22,9 +23,11 @@ def dictfetchall(cursor):
     ]
 
 def results(request):
+    global games, liked_games
     print("entering results function")
     search_form = SearchForm(request.GET)
     Liked_Disliked_Form = Liked_Disliked(request.GET)
+
     games = {}
 
     if search_form.is_valid() and request.method == "GET":
@@ -37,8 +40,7 @@ def results(request):
             if field_choice in allowed_choices:
                 games = CallProcedures.call_procedure(field_choice, search_term)
     print(games)
-    return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': search_form, 'Liked_Disliked_Form': Liked_Disliked_Form, 'liked_games': liked_games, 'section1': 'Liked Games'})
-
+    return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': SearchForm, 'Liked_Disliked_Form': Liked_Disliked, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def info_page_view(request):
     global popular_games_records
@@ -87,6 +89,7 @@ logger = logging.getLogger(__name__)
 cur = connection.cursor()
 
 def like_view(request):
+    global liked_games, games
     if request.method == 'POST':
         form = LikeDislikeForm(request.POST)
         if form.is_valid():
@@ -124,7 +127,7 @@ def like_view(request):
             except:
                 print("liked_games is empty")
 
-            return redirect('results')
+            return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': SearchForm, 'Liked_Disliked_Form': Liked_Disliked, 'liked_games': liked_games, 'section1': 'Liked Games'})
         else:
             return JsonResponse({'status': 'error', 'errors': form.errors})
     else:
@@ -132,6 +135,7 @@ def like_view(request):
 
 
 def dislike_view(request):
+    global disliked_games, games
     if request.method == 'POST':
         form = LikeDislikeForm(request.POST)
         if form.is_valid():
@@ -154,7 +158,7 @@ def dislike_view(request):
                     print('Removing game from disliked_games')
 
 
-            return redirect('results')
+            return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': SearchForm, 'Liked_Disliked_Form': Liked_Disliked, 'liked_games': liked_games, 'section1': 'Liked Games'})
         else: 
             return JsonResponse({'status': 'error', 'errors': form.errors})
     else:
