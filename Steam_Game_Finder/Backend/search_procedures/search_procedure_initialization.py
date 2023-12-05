@@ -115,7 +115,8 @@ class LoadSearchProcedures:
                     JOIN Gamedeveloper d on d.AppID = G.AppID
                     JOIN Gamepublisher p on p.AppID = G.AppID
                 WHERE Reception > User_Rating and Reception < 1
-                GROUP BY AppID;
+                GROUP BY AppID
+                ORDER BY Reception;
             END;
             """
         LoadSearchProcedures.cursor.execute(drop_procedure)
@@ -207,8 +208,6 @@ class LoadSearchProcedures:
         desired = tuple([s for s in genres if not s.startswith('-')])
         if len(desired) == 1: desired = f"('{desired[0]}')"
         elif len(desired) == 0: desired = "('')"
-        print(desired)
-        print(undesired)
         query = f"""
             SELECT G.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
 			            GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price,
