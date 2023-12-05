@@ -21,8 +21,8 @@ def call_procedure(procedure_name, parameters):
     elif procedure_name == "Age Rating Search":
         results = search_functions.age_rating_search(parameters)
     elif procedure_name == "Developers by Reception Search":
-        results = search_functions.devolopers_by_reception_search(parameters)
-    elif procedure_name == "Genre":
+        results = search_functions.developers_by_reception_search(parameters)
+    elif procedure_name == "Genre Search":
         results = search_functions.genre_search(parameters)
     elif procedure_name == "Tag Search":
         results = search_functions.tag_search(parameters)
