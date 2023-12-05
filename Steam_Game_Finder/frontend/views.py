@@ -24,6 +24,8 @@ def dictfetchall(cursor):
 
 def results(request):
     global games, liked_games
+    current_path = request.get_full_path
+    current_path = str(current_path)
     print("entering results function")
     search_form = SearchForm(request.GET)
     Liked_Disliked_Form = Liked_Disliked(request.GET)
@@ -40,28 +42,28 @@ def results(request):
             if field_choice in allowed_choices:
                 games = CallProcedures.call_procedure(field_choice, search_term)
     print(games)
-    return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': SearchForm, 'Liked_Disliked_Form': Liked_Disliked, 'liked_games': liked_games, 'section1': 'Liked Games'})
+    return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': SearchForm, 'LikeDislikeForm': Liked_Disliked_Form, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def info_page_view(request):
     global popular_games_records
     
-    return render(request, 'Info_Page/Info_Page.html', {'liked_games': liked_games, 'section1': 'Liked Games'})
+    return render(request, 'Info_Page/Info_Page.html', {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def home_page_view(request):
     template_name = 'Home_Page/Home_Page.html'
 
 
     # Access liked_disliked_records and resulting_games
-    return render(request, template_name, { 'section1': 'Resulting Games', 'section2': 'Liked Games'})
+    return render(request, template_name, {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def quiz_page_view(request):
-    return render(request, 'Quiz_Page/Quiz_Page.html', {'section1': 'Resulting Games', 'section2': 'Liked Games'})
+    return render(request, 'Quiz_Page/Quiz_Page.html', {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def search_page_view(request):
-    return render(request, 'Search_Page/Search_Page.html', {'liked_games': liked_games, 'section1': 'Liked Games'})
+    return render(request, 'Search_Page/Search_Page.html', {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def base_temp_view(request):
-    return render(request, 'Base_Temp/Base.html', {'liked_games': liked_games, 'section1': 'Liked Games'})
+    return render(request, 'Base_Temp/Base.html', {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def error_page_view(request):
     return render(request, 'Extras/Error_Page.html')
@@ -90,6 +92,8 @@ cur = connection.cursor()
 
 def like_view(request):
     global liked_games, games
+    current_path = request.get_full_path
+    print(f'current path: {current_path}')
     if request.method == 'POST':
         form = LikeDislikeForm(request.POST)
         if form.is_valid():
@@ -127,7 +131,8 @@ def like_view(request):
             except:
                 print("liked_games is empty")
 
-            return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': SearchForm, 'Liked_Disliked_Form': Liked_Disliked, 'liked_games': liked_games, 'section1': 'Liked Games'})
+            return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': SearchForm, 'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
+
         else:
             return JsonResponse({'status': 'error', 'errors': form.errors})
     else:
@@ -136,6 +141,9 @@ def like_view(request):
 
 def dislike_view(request):
     global disliked_games, games
+    current_path = request.get_full_path
+    print(f'current path: {current_path}')
+
     if request.method == 'POST':
         form = LikeDislikeForm(request.POST)
         if form.is_valid():
@@ -158,7 +166,7 @@ def dislike_view(request):
                     print('Removing game from disliked_games')
 
 
-            return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': SearchForm, 'Liked_Disliked_Form': Liked_Disliked, 'liked_games': liked_games, 'section1': 'Liked Games'})
+            return render(request, 'Search_Page/Search_Page.html', {'games': games, 'form': SearchForm, 'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
         else: 
             return JsonResponse({'status': 'error', 'errors': form.errors})
     else:
