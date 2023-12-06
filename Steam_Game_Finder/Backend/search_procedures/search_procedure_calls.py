@@ -20,14 +20,19 @@ def call_procedure(procedure_name, parameters):
         results = search_functions.reception_search(parameters)
     elif procedure_name == "Age Rating Search":
         results = search_functions.age_rating_search(parameters)
-    elif procedure_name == "Developer by Reception Search":
-        results = search_functions.developers_by_reception_search(parameters)
+    elif procedure_name == "Developers by Reception Search":
+        results = search_functions.developers_by_reception_search()
     elif procedure_name == "Genre Search":
         results = search_functions.genre_search(parameters)
     elif procedure_name == "Tag Search":
         results = search_functions.tag_search(parameters)
     elif procedure_name == "Category Search":
         results = search_functions.category_search(parameters)
+    elif procedure_name == "Delete Game":
+        search_functions.delete_game(parameters)
+        return
+    elif procedure_name == "Recommendation Search":
+        results = search_functions.recommendation_search(parameters)
     else:
         results = "Invalid procedure name."
 

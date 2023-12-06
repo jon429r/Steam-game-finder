@@ -21,7 +21,7 @@ Including another URLconf
 from django.urls import path, include
 from django.contrib import admin
 from frontend.views import (
-    home_page_view, quiz_page_view, search_page_view, like_view, dislike_view,
+    home_page_view, quiz_page_view, search_page_view, like_dislike_view, 
     base_temp_view,  error_page_view, results, info_page_view
 )
 app_name = 'frontend'
@@ -44,8 +44,8 @@ urlpatterns = [
 
     path('Info_Page.html', info_page_view, name='info_page_view'),
 
-    path('like_game/', like_view, name='like_game'),
-    path('dislike_game/', dislike_view, name='dislike_game'),
+    path('like_game/', like_dislike_view, name='like_game'),
+    path('dislike_game/', like_dislike_view, name='dislike_game'),
 
     path('results', results, name='results'),
 ]

@@ -292,26 +292,21 @@ class LoadSearchProcedures:
         return dictfetchall(LoadSearchProcedures.cursor)
 
     @staticmethod
-    def recomendation_search(req_string):
+    def recommendation_search(req_string):
         """aggregate search across tag, genre, and category."""
         reqs = tuple(req_string.strip().split(" "))
+        print(reqs)
         query = f"""
-            SELECT G.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
-			            GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price,
-                        (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
-            FROM (SELECT GT.AppID, GT.tag
-                FROM GameTag GT
-                WHERE GT.tag IN   -- desired tags
-            ) AS GT JOIN (SELECT GG.AppID, GG.genre
-                FROM GameGenre GG
-                WHERE GG.genre IN {reqs}  -- desired genres
-            ) AS GG ON GG.AppID = GT.AppID JOIN (SELECT GC.AppID, GC.category
-                FROM GameCategory GC
-                WHERE GC.category IN {reqs}  -- desired categories
-            ) AS Gen ON Gen.AppID = GG.AppID
-            NATURAL JOIN Game as G
-            JOIN GameDeveloper as GD on G.AppID = GD.AppID
-            JOIN GamePublisher as GP on GD.AppID = GP.AppID
+           SELECT 
+            G.AppID, G.Name,GROUP_CONCAT(DISTINCT GD.Developer SEPARATOR ", ") AS Developer, GROUP_CONCAT(DISTINCT GP.Publisher SEPARATOR ", ") AS Publisher, 
+            G.Price, (G.Positive * 1.0) / NULLIF((G.Positive + G.Negative), 0) AS Reception
+            FROM 
+            databasefinder.Game AS G
+            JOIN databasefinder.GameDeveloper AS GD ON G.AppID = GD.AppID
+            JOIN databasefinder.GamePublisher AS GP ON GD.AppID = GP.AppID
+            LEFT JOIN databasefinder.GameTag AS GT ON G.AppID = GT.AppID AND GT.tag IN {reqs}
+            LEFT JOIN databasefinder.GameGenre AS GG ON G.AppID = GG.AppID AND GG.genre IN {reqs}
+            LEFT JOIN databasefinder.GameCategory AS GC ON G.AppID = GC.AppID AND GC.category IN {reqs}
             GROUP BY G.AppID
             HAVING COUNT(G.AppID) > 3
             ORDER BY COUNT(G.AppID) DESC, Reception DESC;"""
@@ -350,23 +345,23 @@ class LoadSearchProcedures:
 
     @staticmethod
     def developers_by_reception_search():
-        print(1000000)
         LoadSearchProcedures.cursor.callproc("developers_by_reception")
         return dictfetchall(LoadSearchProcedures.cursor)
 
     @staticmethod
     def delete_game(AppID):
         """deletes a game from the database"""
-        query = f"""
-            START TRANSACTION;
-            SET SQL_SAFE_UPDATES = 0;
-            delete from game where AppID = {AppID}; 
-            SET SQL_SAFE_UPDATES = 1;
-            COMMIT;
-        """
-        #TODO: confirm this rolls back when needed
+        LoadSearchProcedures.cursor.execute("START TRANSACTION;")
+        LoadSearchProcedures.cursor.execute("SET SQL_SAFE_UPDATES = 0;")
+
+        # Execute order 66
+        query = f"DELETE FROM game WHERE game.AppID = {AppID};"
         LoadSearchProcedures.cursor.execute(query)
 
+        LoadSearchProcedures.cursor.execute("SET SQL_SAFE_UPDATES = 1;")
+
+        LoadSearchProcedures.cursor.execute("COMMIT;")
+        LoadSearchProcedures.cursor.execute(query)
 
 def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"
