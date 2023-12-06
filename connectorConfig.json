@@ -1,9 +1,0 @@
-{
-    "MySQL": {
-        "database": "databasefinder",                 
-        "user"    : "root",                     
-        "password": "Database-final1234",              
-        "host"    : "localhost",               
-        "port"    : 3306
-    }
-}

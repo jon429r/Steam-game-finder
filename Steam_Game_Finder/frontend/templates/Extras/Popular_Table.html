@@ -1,33 +1,43 @@
-{% block title %}Popular Games{% endblock %}
+<style>
+.Popular_Table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  font-style: normal;
+  color: antiquewhite;
+
+}
+</style>
+
 
 {% block content %}
     <h2>{{ section1 }}</h2>
-    <p>Here is a table of the {{ section1|lower }}</p>
 
     <table class="Popular_Table" id="Popular_Table">
         <thead>
             <tr>
-                <th>id</th>
                 <th>Image</th>
                 <th>Game Title</th>
-                <th>Like</th>
-                <th>Dislike</th>
+                <th>UnLike</th>
             </tr>
         </thead>
         <tbody>
             {% for game in liked_games %}
                 <tr>
-                    <td>{{ game.0 }}</td>
-                    <td>
+                    <td class="'game-icon-container">
                         <img class="game-icon" src="{{ game.3 }}" alt="Game Icon">
                     </td> 
                     <td>{{ game.1 }}</td>
                     <td> {% include 'Extras/Like_Button.html' with game_id=game.0 %} </td>
-                    <td> {% include 'Extras/Dislike_Button.html' with game_id=game.0 %} </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 
-    
+    {% if form.is_bound %}
+    {% if form.errors %}
+        <p>{{ form.errors }}</p>
+    {% endif %}
+{% endif%}
+
 {% endblock %}

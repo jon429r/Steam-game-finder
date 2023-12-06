@@ -9,8 +9,8 @@
     <title>{% block title %}My Website{% endblock %}</title>
     <!-- Include common stylesheets -->
     {% block styles %}
+    <link rel="stylesheet" href="{% static 'CSS/reset.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Main_Style.css' %}">
-    <link rel="stylesheet" href="{% static 'CSS/Home_Style.css' %}">
     {% endblock %}
 
     <!-- Include common scripts -->
@@ -20,58 +20,50 @@
 </head>
 
 <body>
-    {% block header %}
-    <header>
-        <ul class="Header_List">
-            <div id="header">
-                <li>
-                    <h1 align="center">Steam Game Finder</h1>
-                </li>
-            </div>
-        </ul>
-    </header>
-    {% endblock %}
+    {% block header_and_navigation %}
+    <div id="header_and_navigation">
+        <header>
+            <h1>Steam Game Finder</h1>
+        </header>
 
-    {% block navigation %}
-    <nav>
-        <div id="Navigation">
-            <h2 id="Links" align="center">
-                <ul class="Header_List">
-                    <li><a href="{% url 'Home_Page.html' %}" style="color: antiquewhite;">Home</a></li>
-                    <li><a href="{% url 'Quiz_Page.html' %}" style="color: antiquewhite;">Quiz</a></li>
-                    <li><a href="{% url 'Search_Page.html' %}" style="color: antiquewhite;">Search</a></li>
-                    <li><a href="{% url 'info_page_view' %}" style="color: antiquewhite;">Info</a></li>
-
-                </ul>
-            </h2>
-        </div>
-    </nav>
-    {% endblock %}
-
-    {% block left_column %}
-    <aside class="left_column">
-        <div class="dropdown">
-            <button class="dropbtn">Dropdown</button>
-            <div class="dropdown-content">
-                <a href="{% url 'Home_Page.html' %}">Home Page</a>
-                <a href="{% url 'Quiz_Page.html' %}">Quiz Page</a>
-                <a href="{% url 'Search_Page.html' %}">Search Page</a>
-                <li><a href="{% url 'info_page_view' %}">Info Page</a></li>
-            </div>
-        </div>
-    </aside>
-    {% endblock %}
-
-    {% block right_column %}
-    <div class="right_column">
-        {% include 'Extras/Popular_Table.html' with liked_games=liked_games section2=section2 %}
-            {% endblock %}
-    </div>
-    {% block main %}
-    <div id="Body">
-        {# Content of the main block goes here #}
+        <nav id="Navigation">
+            <ul class="Header_List">
+                <li><a href="{% url 'Home_Page.html' %}" style="color: antiquewhite;">Home</a></li>
+                <!--<li><a href="{% url 'Quiz_Page.html' %}" style="color: antiquewhite;">Quiz</a></li> -->
+                <li><a href="{% url 'Search_Page.html' %}" style="color: antiquewhite;">Search</a></li>
+                <li><a href="{% url 'info_page_view' %}" style="color: antiquewhite;">Info</a></li>
+            </ul>
+        </nav>
     </div>
     {% endblock %}
+
+    <div class="main-content">
+        {% block left_column %}
+        <aside class="left_column">
+            <div class="dropdown" align="center">
+                <button class="dropbtn" >Dropdown</button>
+                <div class="dropdown-content">
+                    <a href="{% url 'Home_Page.html' %}">Home Page</a>
+                    <!--<a href="{% url 'Quiz_Page.html' %}">Quiz Page</a> -->
+                    <a href="{% url 'Search_Page.html' %}">Search Page</a>
+                    <li><a href="{% url 'info_page_view' %}">Info Page</a></li>
+                </div>
+            </div>
+        </aside>
+        {% endblock %}
+
+        {% block main %}
+        <div id="Body">
+            {# Content of the main block goes here #}
+        </div>
+        {% endblock %}
+
+        {% block right_column %}
+        <div class="right_column">
+            {% include 'Extras/Popular_Table.html' with liked_games=liked_games section2=section2 %}
+        </div>
+        {% endblock %}
+    </div>
 
     {% block footer %}
     <footer id="Footer">

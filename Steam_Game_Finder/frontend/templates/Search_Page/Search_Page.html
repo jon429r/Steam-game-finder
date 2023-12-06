@@ -6,11 +6,38 @@
 
 {% block main %}
 <div id="Body">
+
+    <h2 align="center">Search for any game on steam</h1>
+
     {% include 'Extras/Search_Bar.html' with form=form %}
-   <!-- Display search results if available -->
-    {% if games %}
+    <!-- Display search results if available -->
+    
+    {# For Developers by Reception Search (specefic columns for this search) #}
+    {% if games and "Num_Games" in games.0 %}
+    <h2>Search Results</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Developer</th>
+                <th>Developer Reception</th>
+                <th>Number of Games</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game in games %}
+                <tr>
+                    <td>{{ game.Developer }}</td>
+                    <td>{{ game.Dev_Reception }}</td> 
+                    <td>{{ game.Num_Games }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %} 
+    
+    {% if games and not "Num_Games" in games.0 %}
         <h2>Search Results</h2>
-        <table>
+        <table id="Search_Results">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -22,6 +49,7 @@
                 </tr>
             </thead>
             <tbody>
+                <!-- slice cuts down size of array to spec. index preserve order-->
                 {% for game in games %}
                     <tr>
                         <td><a href = "https://store.steampowered.com/app/{{ game.AppID }}" target="_blank">{{ game.Name }}</a></td>

@@ -38,13 +38,11 @@ body {
 
 .right_column {
     background-color: var(--secondary-color);
-    align-self: right;
     display: flex;
     flex-direction: column; /* Use flex-direction: column to stack child elements vertically */
     width: 25%;
     height: 750px;
     border-left: 1px solid black;
-    align-items: flex-start;
 }
 
 #Body {
@@ -250,8 +248,6 @@ h2 {
 
 #Result_Table {
     display: none;
-    margin-left: auto;
-    margin-right: 0;
 }
 
 table,
@@ -264,7 +260,7 @@ td {
 .Result_Table {
 
     border-collapse: collapse;
-    width: 90%;
+    width: 75%;
     margin-top: 3%;
     margin-left: 30%;
 }

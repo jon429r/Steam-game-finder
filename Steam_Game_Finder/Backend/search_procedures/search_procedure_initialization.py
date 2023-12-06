@@ -60,7 +60,7 @@ class LoadSearchProcedures:
         """creates a procedure for searching by game developer."""
         drop_procedure = """DROP PROCEDURE IF EXISTS games_by_developer_search;"""
         procedure_query = """
-            CREATE PROCEDURE games_by_developer_search(IN Devoloper varchar(30))
+            CREATE PROCEDURE games_by_developer_search(IN indeveloper varchar(30))
             READS SQL DATA
             BEGIN
                 -- find games by given developer
@@ -68,7 +68,7 @@ class LoadSearchProcedures:
                         GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price, Release_date
                 FROM Game INNER JOIN GameDeveloper d ON Game.AppID = d.AppID
             		JOIN Gamepublisher p on p.AppID = Game.AppID
-                WHERE d.developer LIKE CONCAT('%', Devoloper, '%')
+                WHERE Developer LIKE CONCAT('%', indeveloper, '%')
                 GROUP BY AppID
                 ORDER BY Release_date DESC;
             END;
@@ -82,7 +82,7 @@ class LoadSearchProcedures:
         """creates a procedure for searching by game publisher."""
         drop_procedure = """DROP PROCEDURE IF EXISTS games_by_publisher_search;"""
         procedure_query = """
-            CREATE PROCEDURE games_by_publisher_search(IN Publisher varchar(30))
+            CREATE PROCEDURE games_by_publisher_search(IN inpublisher varchar(30))
             READS SQL DATA
             BEGIN
                 -- find games from given publisher
@@ -90,7 +90,7 @@ class LoadSearchProcedures:
                         GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price, Release_date
                 FROM Game INNER JOIN GamePublisher p ON Game.AppID = p.AppID
                     JOIN Gamedeveloper d on d.AppID = Game.AppID
-                WHERE p.publisher LIKE CONCAT('%', Publisher, '%')
+                WHERE Publisher LIKE CONCAT('%', inpublisher, '%')
                 GROUP BY AppID
                 ORDER BY Release_date DESC;
             END;
@@ -115,7 +115,8 @@ class LoadSearchProcedures:
                     JOIN Gamedeveloper d on d.AppID = G.AppID
                     JOIN Gamepublisher p on p.AppID = G.AppID
                 WHERE Reception > User_Rating and Reception < 1
-                GROUP BY AppID;
+                GROUP BY AppID
+                ORDER BY Reception;
             END;
             """
         LoadSearchProcedures.cursor.execute(drop_procedure)
@@ -207,10 +208,10 @@ class LoadSearchProcedures:
         desired = tuple([s for s in genres if not s.startswith('-')])
         if len(desired) == 1: desired = f"('{desired[0]}')"
         elif len(desired) == 0: desired = "('')"
-        print(desired)
-        print(undesired)
         query = f"""
-            SELECT G.AppID, G.Name, GD.developer, GP.publisher, G.Price, (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
+            SELECT G.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
+			            GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price,
+                        (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
             FROM (SELECT AppID
                 FROM GameGenre
                 WHERE genre IN {desired}  -- desired genres
@@ -221,7 +222,7 @@ class LoadSearchProcedures:
                 ) Gen INNER JOIN Game as G on Gen.AppID = g.AppID
             JOIN GameDeveloper as GD on G.AppID = GD.AppID
             JOIN GamePublisher as GP on GD.AppID = GP.AppID 
-            GROUP BY G.AppID, GD.developer, GP.publisher
+            GROUP BY G.AppID
             HAVING count(G.AppID) > {int(len(genres) * .2)}
             ORDER BY count(G.AppID) DESC, Reception DESC"""
         print(query)
@@ -240,7 +241,9 @@ class LoadSearchProcedures:
         if len(desired) == 1: desired = f"('{desired[0]}')"
         elif len(desired) == 0: desired = "('')"
         query = f"""
-            SELECT G.AppID, G.Name, GD.developer, GP.publisher, G.Price, (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
+            SELECT G.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
+			            GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price,
+                        (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
             FROM (SELECT AppID
                 FROM Gametag
                 WHERE tag IN {desired}  -- desired tags
@@ -248,10 +251,10 @@ class LoadSearchProcedures:
                 SELECT AppID
                 FROM Gametag
                 WHERE tag IN {undesired})   -- excluded tags
-                ) Gen INNER JOIN Game g on Gen.AppID = g.AppID
+                ) Gen INNER JOIN Game G on Gen.AppID = g.AppID
                 INNER JOIN gamepublisher p on g.AppID = p.AppID
-                INNER JOIN Gamedeveloper d on p.AppID = .AppID
-            GROUP BY g.AppID
+                INNER JOIN Gamedeveloper d on p.AppID = d.AppID
+            GROUP BY G.AppID
             HAVING count(g.AppID) > {int(len(tags) * .2)}  -- limit to more relevant titles
             ORDER BY count(g.AppID) DESC, Reception DESC"""
         LoadSearchProcedures.cursor.execute(query)
@@ -269,7 +272,9 @@ class LoadSearchProcedures:
         if len(desired) == 1: desired = f"('{desired[0]}')"
         elif len(desired) == 0: desired = "('')"
         query = f"""
-            SELECT G.AppID, G.Name, GD.developer, GP.publisher, G.Price, (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
+            SELECT G.AppID, Name, GROUP_CONCAT(DISTINCT Developer SEPARATOR ", ") as Developer,
+			            GROUP_CONCAT(DISTINCT Publisher SEPARATOR ", ") as Publisher, Price,
+                        (G.Positive * 1.0)/(G.Positive + G.Negative) as Reception
             FROM (SELECT AppID
                 FROM Gamecategory
                 WHERE category IN {desired}  -- desired categorys
@@ -287,23 +292,21 @@ class LoadSearchProcedures:
         return dictfetchall(LoadSearchProcedures.cursor)
 
     @staticmethod
-    def recomendation_search(req_string):
+    def recommendation_search(req_string):
         """aggregate search across tag, genre, and category."""
         reqs = tuple(req_string.strip().split(" "))
-        query = f"""SELECT G.AppID, G.Name, GD.developer, GP.publisher, G.Price, (G.Positive - G.Negative) as Reception
-            FROM (SELECT GT.AppID, GT.tag
-                FROM GameTag GT
-                WHERE GT.tag IN   -- desired tags
-            ) AS GT JOIN (SELECT GG.AppID, GG.genre
-                FROM GameGenre GG
-                WHERE GG.genre IN {reqs}  -- desired genres
-            ) AS GG ON GG.AppID = GT.AppID JOIN (SELECT GC.AppID, GC.category
-                FROM GameCategory GC
-                WHERE GC.category IN {reqs}  -- desired categories
-            ) AS Gen ON Gen.AppID = GG.AppID
-            NATURAL JOIN Game as G
-            JOIN GameDeveloper as GD on G.AppID = GD.AppID
-            JOIN GamePublisher as GP on GD.AppID = GP.AppID
+        print(reqs)
+        query = f"""
+           SELECT 
+            G.AppID, G.Name,GROUP_CONCAT(DISTINCT GD.Developer SEPARATOR ", ") AS Developer, GROUP_CONCAT(DISTINCT GP.Publisher SEPARATOR ", ") AS Publisher, 
+            G.Price, (G.Positive * 1.0) / NULLIF((G.Positive + G.Negative), 0) AS Reception
+            FROM 
+            databasefinder.Game AS G
+            JOIN databasefinder.GameDeveloper AS GD ON G.AppID = GD.AppID
+            JOIN databasefinder.GamePublisher AS GP ON GD.AppID = GP.AppID
+            LEFT JOIN databasefinder.GameTag AS GT ON G.AppID = GT.AppID AND GT.tag IN {reqs}
+            LEFT JOIN databasefinder.GameGenre AS GG ON G.AppID = GG.AppID AND GG.genre IN {reqs}
+            LEFT JOIN databasefinder.GameCategory AS GC ON G.AppID = GC.AppID AND GC.category IN {reqs}
             GROUP BY G.AppID
             HAVING COUNT(G.AppID) > 3
             ORDER BY COUNT(G.AppID) DESC, Reception DESC;"""
@@ -341,23 +344,24 @@ class LoadSearchProcedures:
         return dictfetchall(LoadSearchProcedures.cursor)
 
     @staticmethod
-    def developers_by_reception_search(search_parameter):
+    def developers_by_reception_search():
         LoadSearchProcedures.cursor.callproc("developers_by_reception")
         return dictfetchall(LoadSearchProcedures.cursor)
 
     @staticmethod
     def delete_game(AppID):
         """deletes a game from the database"""
-        query = f"""
-            START TRANSACTION;
-            SET SQL_SAFE_UPDATES = 0;
-            delete from game where AppID = {AppID}; 
-            SET SQL_SAFE_UPDATES = 1;
-            COMMIT;
-        """
-        #TODO: confirm this rolls back when needed
+        LoadSearchProcedures.cursor.execute("START TRANSACTION;")
+        LoadSearchProcedures.cursor.execute("SET SQL_SAFE_UPDATES = 0;")
+
+        # Execute order 66
+        query = f"DELETE FROM game WHERE game.AppID = {AppID};"
         LoadSearchProcedures.cursor.execute(query)
 
+        LoadSearchProcedures.cursor.execute("SET SQL_SAFE_UPDATES = 1;")
+
+        LoadSearchProcedures.cursor.execute("COMMIT;")
+        LoadSearchProcedures.cursor.execute(query)
 
 def dictfetchall(cursor):
     "Returns all rows from a cursor as a dict"

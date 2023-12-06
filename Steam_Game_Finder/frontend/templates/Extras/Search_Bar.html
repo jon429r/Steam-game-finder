@@ -1,84 +1,77 @@
 <style>
-.search-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 20px;
-}
-
-.search-form {
-    display: flex;
-    align-items: center;
-}
-
-.search-input-container {
-    display: flex;
-    align-items: center;
-}
-
-.search-input {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 0; 
-}
-
-.search-select {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 10px;
-}
-
-.search-button {
-    padding: 10px;
-    font-size: 16px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 50%; 
-    cursor: pointer;
-}
-
-.search-button:hover {
-    background-color: #45a049;
-}
-
-.error-message {
-    color: red;
-}
-
+    #cover {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 4em;
+    }
+  
+    form {
+      display: flex;
+      align-items: center;
+    }
+  
+    .search-bar {
+      display: flex;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+  
+    .search-input {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      width: 70%;
+    }
+  
+    .dropdown {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+  
+    .search-button {
+      padding: 10px;
+      font-size: 16px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  
+    .search-button:hover {
+      background-color: #45a049;
+    }
 </style>
-{% block title %} Search Bar {% endblock %}
 
 {% block content %}
-    <div class="search-container">
-        <form method="get" action="{% url 'results' %}" class="search-form">
-            <div class="search-input-container">
-                <input type="text" name="search_term" placeholder="Search..." class="search-input" />
-                <button type="submit" class="search-button">&#128269;</button>
-            </div>
-            <select name="field_choice" class="search-select">
+
+  
+  <div id="cover">
+    <form method="get" action="{% url 'results' %}" >
+      <div class="search-bar">
+        <div class="dropdown">
+          <select name="field_choice">
                 <option value="Name Search">Name Search</option>
                 <option value="Genre Search">Genre Search</option>
                 <option value="Tag Search">Tag Search</option>
-                <option value="Category Search">Publisher Search</option>
+                <option value="Category Search">Category Search</option>
                 <option value="Developer Search">Developer Search</option>
                 <option value="Publisher Search">Publisher Search</option>
                 <option value="Reception Search">Reception Search</option>
-                <option value="Developer by Reception Search">Developer_by_Reception Search</option>
+                <option value="Developers by Reception Search">Developers by Reception Search</option>
                 <option value="Language Search">Language Search</option>
                 <option value="Age Rating Search">Age Rating Search</option>
-                <option value="Recommendation Search">Recommendation Search</option>
-            </select>
-        </form>
-
-        {% if form.is_bound %}
-            {% if form.errors %}
-                <p class="error-message">{{ form.errors }}</p>
-            {% endif %}
-        {% endif %}
-    </div>
+                <option value="Recommendation Search">Recommendation Search</option>          </select>
+        </div>
+  
+        <input type="text" name="search_term" placeholder="Search..." class="search-input" required>
+  
+        <button type="submit" class="search-button">&#128269;</button>
+      </div>
+    </form>
+  </div>
+  
 {% endblock %}
