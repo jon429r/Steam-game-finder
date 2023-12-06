@@ -85,6 +85,10 @@ def main():
 
 
 def create_tables(*descriptors):
+    for table in ["Game", "GameGenre", "GameTag", "GameCategory", "GameDeveloper",
+                  "GamePublisher", "GameLanguages", "GamePlatform"]:
+        cur.execute(f"DROP TABLE IF EXISTS {table}")
+        
     for table in descriptors:
         cur.execute(table)
 
@@ -119,7 +123,6 @@ def insert_table(file_path):
         dic_tuples_langs,
         dic_tuples_platform,
     )
-
 
     cur.executemany(f"INSERT INTO Game VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     tqdm(dic_tuples_game.values(), "Inserting Games"))

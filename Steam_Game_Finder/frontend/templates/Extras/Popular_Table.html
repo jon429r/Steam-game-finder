@@ -18,8 +18,7 @@
             <tr>
                 <th>Image</th>
                 <th>Game Title</th>
-                <th>Like</th>
-                <th>Dislike</th>
+                <th>UnLike</th>
             </tr>
         </thead>
         <tbody>
@@ -30,7 +29,6 @@
                     </td> 
                     <td>{{ game.1 }}</td>
                     <td> {% include 'Extras/Like_Button.html' with game_id=game.0 %} </td>
-                    <td> {% include 'Extras/Dislike_Button.html' with game_id=game.0 %} </td>
                 </tr>
             {% endfor %}
         </tbody>
