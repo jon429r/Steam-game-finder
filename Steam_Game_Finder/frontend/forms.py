@@ -2,8 +2,8 @@ from django import forms
 from .models import Game
 
 class LikeDislikeForm(forms.Form):
-    game_id = forms.IntegerField()
-    action = forms.CharField()
+    game_id = forms.IntegerField(required=True)
+    action = forms.CharField(required=True)
     
 class SearchForm(forms.Form):
     search_term = forms.CharField(required=True)

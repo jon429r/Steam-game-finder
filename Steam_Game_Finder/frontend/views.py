@@ -92,13 +92,14 @@ cur = connection.cursor()
 
 def like_view(request):
     global liked_games, search_games_result
-    current_path = request.get_full_path
-    print(f'current path: {current_path}')
     if request.method == 'POST':
         form = LikeDislikeForm(request.POST)
+
+
         if form.is_valid():
             game_id = form.cleaned_data['game_id']
             action = form.cleaned_data['action']
+            print(f"game_id: {game_id}, action: {action}")
 
             cur.execute("SELECT AppID, Name, Price, Header_image FROM Game WHERE AppID = %s", [game_id])
             game = cur.fetchone()
@@ -141,8 +142,6 @@ def like_view(request):
 
 def dislike_view(request):
     global disliked_games, search_games_result
-    current_path = request.get_full_path
-    print(f'current path: {current_path}')
 
     if request.method == 'POST':
         form = LikeDislikeForm(request.POST)
@@ -160,10 +159,12 @@ def dislike_view(request):
 
                     print('disliked_games:')
                     for disliked_game in disliked_games:
-                        print(f"app_id: {disliked_game[0]}, name: {disliked_game[1]}, price: {disliked_game[2]}, Header_Image: {disliked_game[3]}")
+                        print(f"game_id: {disliked_game[0]}, name: {disliked_game[1]}, price: {disliked_game[2]}, Header_Image: {disliked_game[3]}")
+                    # here
                 else:
                     disliked_games.remove(game)
                     print('Removing game from disliked_games')
+                    # here
 
 
             return render(request, 'Search_Page/Search_Page.html', {'games': search_games_result, 'form': SearchForm, 'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})

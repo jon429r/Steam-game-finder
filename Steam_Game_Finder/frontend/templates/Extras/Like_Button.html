@@ -16,7 +16,7 @@
 {# Like_Button.html #}
 <form method="POST" action="{% url 'like_game' %}">
     {% csrf_token %}
-    <input type="hidden" name="game_id" value="{{ game.AppID }}">
+    <input type="hidden" name="game_id" value="{{ game_id }}">
     <input type="hidden" name="action" value="like">
     <button type="submit" class="like-button">
         <i class="fa fa-thumbs-up"></i>
