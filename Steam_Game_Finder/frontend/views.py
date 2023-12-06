@@ -91,7 +91,7 @@ logger = logging.getLogger(__name__)
 cur = connection.cursor()
 
 def like_view(request):
-    global liked_games, search_games_result
+    global liked_games, search_games_result, disliked_games
     if request.method == 'POST':
         form = LikeDislikeForm(request.POST)
 
@@ -124,6 +124,10 @@ def like_view(request):
                 else:
                     liked_games.remove(game)
                     print('Removing game from liked_games')
+                    
+                if game in disliked_games:
+                    disliked_games.remove(game)
+                    print('Removing game from disliked_games')
 
             try:
                 print("Liked Games: ")
@@ -166,6 +170,9 @@ def dislike_view(request):
                     print('Removing game from disliked_games')
                     # here
 
+                if game in liked_games:
+                    liked_games.remove(game)
+                    print('Removing game from liked_games')
 
             return render(request, 'Search_Page/Search_Page.html', {'games': search_games_result, 'form': SearchForm, 'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
         else: 

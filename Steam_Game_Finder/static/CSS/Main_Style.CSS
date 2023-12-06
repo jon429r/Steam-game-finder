@@ -7,124 +7,80 @@ body {
     margin: 0;  /* Add this to remove default body margin */
 }
 
-.flex-container {
-    display: flex;
-}
-
-.flex-item {
-    flex: 1;
-}
-
 #foo {
     color: var(--main-color);
     background-color: var(--secondary-color);
 }
 
-.main-content {
-    display: flex;
-    background-color: var(--secondary-color);
-}
-
 .left_column {
-    display: flex;
-    flex-direction: column; /* Use flex-direction: column to stack child elements vertically */
     background-color: var(--secondary-color);
-    width: 10%;
+    float: left;
+    width: 15%;
     height: 750px;
     border-right: 1px solid black;
 }
 
-.right_column {
-    background-color: var(--secondary-color);
-    display: flex;
-    flex-direction: column; /* Use flex-direction: column to stack child elements vertically */
-    width: 20%;
-    height: 750px;
-    border-left: 1px solid black;
-}
-
 #Body {
     background-color: var(--main-color);
-    display: flex;
-    flex-direction: column; /* Use flex-direction: column to stack child elements vertically */
-    width: 70%;
+    width: 100px;
     margin-bottom: 0px;
     margin-left: auto;
     margin-right: auto;
 }
 
-header {
+.Header_List {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
     background-color: var(--secondary-color);
-}
-
-#Navigation {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;    
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: bottom;
-    background-color: var(--secondary-color);
-    margin-left: 0;
-    margin-right: 0;
-    color: antiquewhite;
-    text-align: center;
     border-bottom: 1px solid black;
 }
 
-ul {
-    list-style-type: none;
-    overflow: hidden;
-}
-
-ul li {
-    display: inline;
-}
-
+/* Add this to style the links inside the Header_List */
 .Header_List a {
     color: antiquewhite;
     text-decoration: none;
     padding: 14px 16px;
+    display: block;
+    float: left;
 }
 
+/* Add this to change the link color on hover */
 .Header_List a:hover {
     background-color: var(--main-color);
     color: black;
 }
 
-h1 {
-    font-size: 24px;
-    padding-top: 1em;
-    padding-bottom: 1em;
+.right_column {
+    background-color: var(--secondary-color);
+    float: right;
+    width: 25%;
+    height: 750px;
+    border-left: 1px solid black;
+}
+
+#header {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    margin-left: 0;
+    margin-right: 0;
+    float: left;
     width: 100%;
-    text-align: center;
     color: antiquewhite;
 }
 
-p {
-    font-size: 12px;
+#Navigation {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    margin-left: 0;
+    margin-right: 0;
+    float: left;
+    width: 100%;
     color: antiquewhite;
-    text-align: center;
 }
-
-h2 {
-    font-size: 18px;
-    color: antiquewhite;
-    text-align: center;
-}
-
-#Body h2 {
-    font-size: 18px;
-    color: black;
-    text-align: center; 
-}
-
-#Body p {
-    color: black;
-}
-
-
 
 .spacedList li:not(:last-child) {
     margin-right: 50px;
@@ -136,6 +92,8 @@ h2 {
 }
 
 /* The rest of your code remains unchanged */
+
+
 
 /* Style The Dropdown Button */
 .dropbtn {
@@ -188,8 +146,8 @@ h2 {
 #Footer {
     background-color: var(--secondary-color);
     width: auto;
-    padding-top: 3em;
-    margin-top: 0px; 
+    margin-top: 600px; 
     margin-left: auto;
     margin-right: 0;
+    padding-top: 45px;
 }
