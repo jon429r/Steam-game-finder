@@ -13,7 +13,7 @@
 </style>
 
 {# Dislike_Button.html #}
-<form method="POST" action="{% url 'like_game' %}">
+<form method="POST" action="{% url 'dislike_game' %}">
     {% csrf_token %}
     <input type="hidden" name="game_id" value="{{ game_id }}">
     <input type="hidden" name="action" value="dislike">

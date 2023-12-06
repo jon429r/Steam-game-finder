@@ -1,12 +1,21 @@
+<style>
+.Popular_Table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  font-style: normal;
+  color: antiquewhite;
+
+}
+</style>
+
 
 {% block content %}
     <h2>{{ section1 }}</h2>
-    <p>Here is a table of the {{ section1|lower }}</p>
 
-    <table class="Popular_Table" id="Popular_Table">
+    <table class="Popular_Table" id="Popular_Table" align="center">
         <thead>
             <tr>
-                <th>id</th>
                 <th>Image</th>
                 <th>Game Title</th>
                 <th>Like</th>
@@ -16,8 +25,7 @@
         <tbody>
             {% for game in liked_games %}
                 <tr>
-                    <td>{{ game.0 }}</td>
-                    <td>
+                    <td class="'game-icon-container">
                         <img class="game-icon" src="{{ game.3 }}" alt="Game Icon">
                     </td> 
                     <td>{{ game.1 }}</td>

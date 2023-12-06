@@ -27,6 +27,8 @@ body {
 
 .left_column {
     display: flex;
+    align-items: center;
+    text-align: center;
     flex-direction: column; /* Use flex-direction: column to stack child elements vertically */
     background-color: var(--secondary-color);
     width: 10%;
@@ -38,7 +40,7 @@ body {
     background-color: var(--secondary-color);
     display: flex;
     flex-direction: column; /* Use flex-direction: column to stack child elements vertically */
-    width: 20%;
+    width: 25%;
     height: 750px;
     border-left: 1px solid black;
 }
@@ -47,7 +49,7 @@ body {
     background-color: var(--main-color);
     display: flex;
     flex-direction: column; /* Use flex-direction: column to stack child elements vertically */
-    width: 70%;
+    width: 65%;
     margin-bottom: 0px;
     margin-left: auto;
     margin-right: auto;
@@ -86,6 +88,8 @@ ul li {
     color: antiquewhite;
     text-decoration: none;
     padding: 14px 16px;
+    padding-bottom: .5em;
+    font-size: 28px;
 }
 
 .Header_List a:hover {
@@ -94,9 +98,9 @@ ul li {
 }
 
 h1 {
-    font-size: 24px;
-    padding-top: 1em;
-    padding-bottom: 1em;
+    font-size: 48px;
+    padding-top: .5em;
+    padding-bottom: .5em;
     width: 100%;
     text-align: center;
     color: antiquewhite;
@@ -109,19 +113,30 @@ p {
 }
 
 h2 {
-    font-size: 18px;
+    font-size: 28px;
     color: antiquewhite;
     text-align: center;
 }
 
+#Body h1 {
+    font-size: 48px;
+    color: black;
+    text-align: center;
+    }
+
 #Body h2 {
-    font-size: 18px;
+    font-size: 28px;
     color: black;
     text-align: center; 
+    padding-top: .5em;
+    padding-bottom: .5em;
 }
 
 #Body p {
     color: black;
+    font-size: 12px;
+    text-align: center;
+
 }
 
 
@@ -192,4 +207,97 @@ h2 {
     margin-top: 0px; 
     margin-left: auto;
     margin-right: 0;
+}
+
+
+
+#Game_Search {
+    width: 25%;
+    padding: 12px 20px;
+    margin-left: 25%;
+    margin-right: 0;
+    box-sizing: border-box;
+    border-radius: 12px;
+}
+
+#Search_Section {
+    margin-top: 10px;
+    margin-left: 0;
+    margin-right: 33%;
+    width: auto;
+    display: block;
+}
+
+#SearchButton {
+    background-color: var(--secondary-color);
+    margin-left: 0;
+    border: none;
+    color: black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 25%;
+}
+
+#Popular_Table th, #Popular_Table td {
+    border-color: antiquewhite;
+}
+
+#Result_Table {
+    display: none;
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.Result_Table {
+
+    border-collapse: collapse;
+    width: 75%;
+    margin-top: 3%;
+    margin-left: 30%;
+}
+
+.Result_Table th,
+.Result_Table td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.Result_Table tr:hover {
+    background-color: #ddd;
+}
+
+/* Style for the game icon */
+.game-icon {
+    max-width: 75px; 
+    max-height: 75px; 
+}
+
+#Search_Results{
+    max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: fit-content;
+    min-height: fit-content;
+    max-width: fit-content;
+    max-height: fit-content;
+
+}
+
+#Body {
+    padding-top: 1em;
+
+}
+
+.text {
+    max-width: 65%;
+    margin-left: 10%;
 }
