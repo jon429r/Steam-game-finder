@@ -1,0 +1,11 @@
+asgiref==3.7.2
+cffi==1.15.1
+colorama==0.4.6
+cryptography==41.0.7
+Django==3.2.23
+pycparser==2.21
+PyMySQL==1.1.0
+pytz==2023.3.post1
+sqlparse==0.4.4
+tqdm==4.66.1
+typing_extensions==4.7.1
