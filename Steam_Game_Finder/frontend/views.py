@@ -1,7 +1,6 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, JsonResponse
-from .models import Game, Resulting_Games, Liked_Disliked, Popular_Games
+from django.shortcuts import render
+from django.http import JsonResponse
+from .models import Liked_Disliked
 from .forms import SearchForm, LikeDislikeForm
 from django.db import connection
 import Backend.search_procedures.search_procedure_calls as CallProcedures
@@ -16,10 +15,9 @@ cur = connection.cursor()
 
 liked_disliked_games = []
 # For use with the recommendation algorithm
+# holds disliked and liked game
 liked_games = []
 disliked_games = []
-popular_games_records = []
-liked_disliked_records = []
 search_games_result = {}
 
 def dictfetchall(cursor):
@@ -123,11 +121,28 @@ def results(request):
         return render(request, 'Search_Page/Search_Page.html', {'games': search_games_result, 'form': SearchForm, 'LikeDislikeForm': Liked_Disliked_Form, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def info_page_view(request):
+    """Handles rendering of the info page
+
+    Args:
+        request:
+
+    Returns:
+    the return statement renders the info_page/info.html and passes in the liked disliked form, liked games array and liked games as the section name
+    """
     global popular_games_records
     
     return render(request, 'Info_Page/Info_Page.html', {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def home_page_view(request):
+    """handles rendering the home page
+
+    Args:
+        request:
+
+    Returns:
+    the return statement renders the homePage/Home_Page.html and passes in the liked disliked form, liked games array and liked games as the section name
+
+    """
     template_name = 'Home_Page/Home_Page.html'
 
 
@@ -135,31 +150,80 @@ def home_page_view(request):
     return render(request, template_name, {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def quiz_page_view(request):
+    """handles rendering the quiz page
+
+    Args:
+        request:
+
+    Returns:
+    the return statement renders the quiz_page/quiz_page.html and passes in the liked disliked form, liked games array and liked games as the section name
+
+    """
     return render(request, 'Quiz_Page/Quiz_Page.html', {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def search_page_view(request):
+    """handles rendering the search page
+
+    Args:
+        request:
+
+    Returns:
+    the return statement renders the Search_Page/Search_Page.html and passes in the liked disliked form, liked games array and liked games as the section name
+
+    """
     return render(request, 'Search_Page/Search_Page.html', {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def base_temp_view(request):
+    """handles rendering the base temp page
+
+    Args:
+        request:
+
+    Returns:
+    the return statement renders the Base_Temp/Base.html and passes in the liked disliked form, liked games array and liked games as the section name
+
+    """
     return render(request, 'Base_Temp/Base.html', {'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
 def error_page_view(request):
+    """Handles the rendering for an error page
+
+    Args:
+        request:
+
+    Returns:
+    the return statement renders the Base_Temp/Base.html file
+    """
     return render(request, 'Extras/Error_Page.html')
 
 def like_dislike_view(request):
+    """Handles the like and dislike functionality for the like and dislike buttons
+
+    Args:
+        request:
+
+    Returns:
+        the return statement renders the Search_Page/Search_Page.html it passes in the search results, search form,
+         like dislike form, liked games array, and the section name
+
+    """
+    # grabing local variables
     global liked_games, search_games_result
     if request.method == 'POST':
+        # getting the form
         form = LikeDislikeForm(request.POST)
 
-
+        #checking if form is valid and starts to execute
         if form.is_valid():
             game_id = form.cleaned_data['game_id']
             action = form.cleaned_data['action']
             print(f"game_id: {game_id}, action: {action}")
 
+            # sql command to get the game from the database by searching with the game id
             cur.execute("SELECT AppID, Name, Price, Header_image FROM Game WHERE AppID = %s", [game_id])
             game = cur.fetchone()
 
+            # checks the action (like or dislike) then adds or removes from the coresponing array
             if game and action == "like":
                 if game not in liked_games:
                     liked_games.append(game)
@@ -189,7 +253,7 @@ def like_dislike_view(request):
                     CallProcedures.call_procedure("Delete Game", game_id)
                     delete_game_from_results(game[0], search_games_result)
                     
-
+            # renders
             return render(request, 'Search_Page/Search_Page.html', {'games': search_games_result, 'form': SearchForm, 'Liked_Disliked_Form': LikeDislikeForm, 'liked_games': liked_games, 'section1': 'Liked Games'})
 
         else:
