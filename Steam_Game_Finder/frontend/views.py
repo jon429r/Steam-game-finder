@@ -106,19 +106,16 @@ def results(request):
         if search_term and field_choice and field_choice != 'Developers by Reception Search' and field_choice != 'Recommendation Search':
             if field_choice in allowed_choices:
                 search_games_result = CallProcedures.call_procedure(field_choice, search_term)
-                search_term_required = True
 
         # Devolopers by Reception search no search_term
         elif field_choice == 'Developers by Reception Search': 
             if field_choice in allowed_choices:
                 search_games_result = CallProcedures.call_procedure(field_choice, search_term)
-                search_term_required = False
 
         elif field_choice == 'Recommendation Search':
             if field_choice in allowed_choices and len(liked_games) > 1:
                 search_term = prepare_recommendation()
                 search_games_result = CallProcedures.call_procedure(field_choice, search_term)
-                search_term_required = False
         
         # Reduce results size to 100
         if search_games_result:
