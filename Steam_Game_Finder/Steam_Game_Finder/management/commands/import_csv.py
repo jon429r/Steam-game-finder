@@ -16,7 +16,7 @@ class Command(BaseCommand):
 cur = connection.cursor()
 
 games_table_description = """CREATE TABLE IF NOT EXISTS Game(
-        AppID INTEGER PRIMARY KEY,
+        AppID INTEGER,
         Name TEXT,
         Release_date TEXT,
         Required_age INTEGER,
@@ -25,44 +25,59 @@ games_table_description = """CREATE TABLE IF NOT EXISTS Game(
         Metacritic_score INTEGER,
         Positive INTEGER,
         Negative INTEGER,
-        Header_image TEXT
+        Header_image TEXT,
+        PRIMARY KEY (AppID)
     );"""
 
 genre_table_description = """CREATE TABLE IF NOT EXISTS GameGenre(
         AppID INTEGER,
-        genre TEXT
+        genre VARCHAR(128),
+        PRIMARY KEY (AppID, genre),
+        FOREIGN KEY (AppID) REFERENCES Game(AppID)
     );"""
 
 tag_table_description = """CREATE TABLE IF NOT EXISTS GameTag(
         AppID INTEGER,
-        tag TEXT
+        tag VARCHAR(128),
+        PRIMARY KEY (AppID, tag),
+        FOREIGN KEY (AppID) REFERENCES Game(AppID)
     );"""
 
 cat_table_description = """CREATE TABLE IF NOT EXISTS GameCategory(
         AppID INTEGER,
-        category TEXT
+        category VARCHAR(128),
+        PRIMARY KEY (AppID, category),
+        FOREIGN KEY (AppID) REFERENCES Game(AppID)
     );"""
 
 dev_table_description = """CREATE TABLE IF NOT EXISTS GameDeveloper(
         AppID INTEGER,
-        developer TEXT
+        developer VARCHAR(256),
+        PRIMARY KEY (AppID, developer),
+        FOREIGN KEY (AppID) REFERENCES Game(AppID)
     );"""
 
 pub_table_description = """CREATE TABLE IF NOT EXISTS GamePublisher(
         AppID INTEGER,
-        Publisher TEXT
+        publisher VARCHAR(256),
+        PRIMARY KEY (AppID, publisher),
+        FOREIGN KEY (AppID) REFERENCES Game(AppID)
     );"""
 
 lang_table_description = """CREATE TABLE IF NOT EXISTS GameLanguages(
         AppID INTEGER,
-        language TEXT
+        language VARCHAR(256),
+        PRIMARY KEY (AppID, language),
+        FOREIGN KEY (AppID) REFERENCES Game(AppID)
     );"""
 
 plat_table_description = """CREATE TABLE IF NOT EXISTS GamePlatform(
         AppID INTEGER,
         Windows INTEGER,
         MAC INTEGER,
-        Linux INTEGER
+        Linux INTEGER,
+        PRIMARY KEY (AppID),
+        FOREIGN KEY (AppID) REFERENCES Game(AppID)
     );"""
 
 table_descriptors = [
@@ -85,10 +100,10 @@ def main():
 
 
 def create_tables(*descriptors):
-    for table in ["Game", "GameGenre", "GameTag", "GameCategory", "GameDeveloper",
-                  "GamePublisher", "GameLanguages", "GamePlatform"]:
+    for table in ["GameGenre", "GameTag", "GameCategory", "GameDeveloper",
+                  "GamePublisher", "GameLanguages", "GamePlatform", "Game"]:
         cur.execute(f"DROP TABLE IF EXISTS {table}")
-        
+      
     for table in descriptors:
         cur.execute(table)
 
@@ -124,34 +139,34 @@ def insert_table(file_path):
         dic_tuples_platform,
     )
 
-    cur.executemany(f"INSERT INTO Game VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+    cur.executemany(f"REPLACE INTO Game VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     tqdm(dic_tuples_game.values(), "Inserting Games"))
 
-    cur.executemany(f"INSERT INTO GameGenre VALUES (%s, %s)",
+    cur.executemany(f"REPLACE INTO GameGenre VALUES (%s, %s)",
                     tqdm([entry for sublist in dic_tuples_genres.values() for entry in sublist],
                          "Inserting Genres"))
 
-    cur.executemany(f"INSERT INTO GameTag VALUES (%s, %s)",
+    cur.executemany(f"REPLACE INTO GameTag VALUES (%s, %s)",
                     tqdm([entry for sublist in dic_tuples_tags.values() for entry in sublist],
                          "Inserting Tags"))
 
-    cur.executemany(f"INSERT INTO GameCategory VALUES (%s, %s)",
+    cur.executemany(f"REPLACE INTO GameCategory VALUES (%s, %s)",
                     tqdm([entry for sublist in dic_tuples_cats.values() for entry in sublist],
                          "Inserting Categories"))
 
-    cur.executemany(f"INSERT INTO GameDeveloper VALUES (%s, %s)",
+    cur.executemany(f"REPLACE INTO GameDeveloper VALUES (%s, %s)",
                     tqdm([entry for sublist in dic_tuples_devs.values() for entry in sublist],
                          "Inserting Developers"))
 
-    cur.executemany(f"INSERT INTO GamePublisher VALUES (%s, %s)",
+    cur.executemany(f"REPLACE INTO GamePublisher VALUES (%s, %s)",
                     tqdm([entry for sublist in dic_tuples_pubs.values() for entry in sublist],
                          "Inserting Publishers"))
 
-    cur.executemany(f"INSERT INTO GameLanguages VALUES (%s, %s)",
+    cur.executemany(f"REPLACE INTO GameLanguages VALUES (%s, %s)",
                     tqdm([entry for sublist in dic_tuples_langs.values() for entry in sublist],
                          "Inserting Languages"))
 
-    cur.executemany(f"INSERT INTO GamePlatform VALUES (%s, %s, %s, %s)",
+    cur.executemany(f"REPLACE INTO GamePlatform VALUES (%s, %s, %s, %s)",
                     tqdm(dic_tuples_platform.values(),
                          "Inserting Platforms"))
 
