@@ -7,13 +7,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}My Website{% endblock %}</title>
-    <!-- Include common stylesheets -->
+    <!-- stylesheets Files -->
     {% block styles %}
     <link rel="stylesheet" href="{% static 'CSS/reset.css' %}">
     <link rel="stylesheet" href="{% static 'CSS/Main_Style.css' %}">
     {% endblock %}
 
-    <!-- Include common scripts -->
+    <!-- scripts File -->
     {% block scripts %}
     <script src="{% static 'JS/Home_JS.js' %}" defer></script>
     {% endblock %}
@@ -25,7 +25,7 @@
         <header>
             <h1>Steam Game Finder</h1>
         </header>
-
+    <!-- This div contains the Navigation bar of links to different pages -->
         <nav id="Navigation">
             <ul class="Header_List">
                 <li><a href="{% url 'Home_Page.html' %}" style="color: antiquewhite;">Home</a></li>
@@ -36,10 +36,11 @@
         </nav>
     </div>
     {% endblock %}
-
+        <!-- Holds the different columns -->
     <div class="main-content">
         {% block left_column %}
         <aside class="left_column">
+            <!-- Left column holds the dropdown menu version of the links list -->
             <div class="dropdown" align="center">
                 <button class="dropbtn" >Dropdown</button>
                 <div class="dropdown-content">
@@ -53,13 +54,17 @@
         {% endblock %}
 
         {% block main %}
+            <!-- holds the middle column is inserted by other html files  -->
         <div id="Body">
             {# Content of the main block goes here #}
         </div>
         {% endblock %}
 
         {% block right_column %}
+            <!-- contains the HTML for the right column
+             This is the liked games column which holds the games the user has liked-->
         <div class="right_column">
+            <!-- calls the results table held in another html file -->
             {% include 'Extras/Popular_Table.html' with liked_games=liked_games section2=section2 %}
         </div>
         {% endblock %}
@@ -67,7 +72,6 @@
 
     {% block footer %}
     <footer id="Footer">
-        <!-- Your common footer content goes here -->
         <p>&copy; 2023 My Website</p>
     </footer>
     {% endblock %}

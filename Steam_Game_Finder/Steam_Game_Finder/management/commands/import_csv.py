@@ -1,3 +1,7 @@
+"""A script to import a CSV of games to the database.
+
+This script is callable via manage.py. games.csv is expected in the current working direcory
+"""
 import csv
 from datetime import datetime
 
@@ -7,8 +11,10 @@ from tqdm import tqdm
 
 
 class Command(BaseCommand):
+    """for claling from managy.py"""
+    
     def handle(self, *args, **options):
-        help = ""
+        help = "Import csv to database"
         self.stdout.write(self.style.SUCCESS('Importing CSV...'))
         main()
         self.stdout.write(self.style.SUCCESS('CSV imported.'))
@@ -109,6 +115,7 @@ def create_tables(*descriptors):
 
 
 def insert_table(file_path):
+    """Insert tuples from csv into database"""
     dic_tuples_game = {}
     dic_tuples_genres = {}
     dic_tuples_tags = {}
@@ -182,6 +189,7 @@ def read_csv(
     dic_tuples_langs,
     dic_tuples_platform,
 ):
+    """Read CSV into tuples for insertion"""
     with open(file_path, "r", encoding="utf-8") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=",", quotechar='"')
         next(csv_reader)
@@ -242,6 +250,7 @@ def read_csv(
 
 
 def process_realse_date(release_date) -> str:
+    """Converts 'month day, year' to ISO-8601 format"""
     try:
         return datetime.strptime(release_date, "%b %d, %Y").strftime("%Y-%m-%d")
     except ValueError:
@@ -253,6 +262,7 @@ def process_string_list(genre_string):
 
 
 def process_langs(genre_string):
+    """Strips surrounding punctuation from language list in CSV before splitting"""
     return genre_string[2:-2].split("', '")
 
 
