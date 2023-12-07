@@ -16,8 +16,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         help = "Import csv to database"
         self.stdout.write(self.style.SUCCESS('Importing CSV...'))
-        main()
-        self.stdout.write(self.style.SUCCESS('CSV imported.'))
+        try:
+            main()
+            self.stdout.write(self.style.SUCCESS('CSV imported.'))
+        except FileNotFoundError:
+            self.stdout.write(self.style.ERROR('CSV file not found'))
 
 cur = connection.cursor()
 
