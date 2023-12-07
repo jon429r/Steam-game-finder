@@ -46,6 +46,9 @@ def prepare_recommendation():
     """
     liked_games_copy = liked_games
     
+    if len(liked_games) < 1:
+        return
+    
     # Shuffle array for random tags/cat/genre chosen
     np.random.shuffle(liked_games_copy)
     i = len(liked_games_copy)-1
@@ -87,6 +90,7 @@ def results(request):
     Liked_Disliked_Form = Liked_Disliked(request.GET)
 
     search_games_result = {}
+    search_term_required = False
 
     if search_form.is_valid() and request.method == "GET":
         search_term = search_form.cleaned_data.get('search_term')
@@ -102,23 +106,33 @@ def results(request):
         if search_term and field_choice and field_choice != 'Developers by Reception Search' and field_choice != 'Recommendation Search':
             if field_choice in allowed_choices:
                 search_games_result = CallProcedures.call_procedure(field_choice, search_term)
+                search_term_required = True
 
         # Devolopers by Reception search no search_term
         elif field_choice == 'Developers by Reception Search': 
             if field_choice in allowed_choices:
                 search_games_result = CallProcedures.call_procedure(field_choice, search_term)
+                search_term_required = False
 
         elif field_choice == 'Recommendation Search':
-            if field_choice in allowed_choices:
+            if field_choice in allowed_choices and len(liked_games) > 1:
                 search_term = prepare_recommendation()
-                print(search_term)
                 search_games_result = CallProcedures.call_procedure(field_choice, search_term)
+                search_term_required = False
         
         # Reduce results size to 100
         if search_games_result:
             search_games_result = search_games_result[:100]
- 
-        return render(request, 'Search_Page/Search_Page.html', {'games': search_games_result, 'form': SearchForm, 'LikeDislikeForm': Liked_Disliked_Form, 'liked_games': liked_games, 'section1': 'Liked Games'})
+
+        print(search_term_required) 
+        return render(request, 'Search_Page/Search_Page.html', {
+        'games': search_games_result,
+        'form': SearchForm,
+        'LikeDislikeForm': Liked_Disliked_Form,
+        'liked_games': liked_games,
+        'section1': 'Liked Games',
+        'search_term_required': search_term_required,
+    })
 
 def info_page_view(request):
     """Handles rendering of the info page
@@ -197,17 +211,14 @@ def error_page_view(request):
     return render(request, 'Extras/Error_Page.html')
 
 def like_dislike_view(request):
-    """Handles the like and dislike functionality for the like and dislike buttons
+    """Handle liking and disliking a game. Move game data to corresponding lists.
 
     Args:
-        request:
+        request (Django Html Data): Dynamic html info gathered
 
     Returns:
-        the return statement renders the Search_Page/Search_Page.html it passes in the search results, search form,
-         like dislike form, liked games array, and the section name
-
+        View: Returns a django view to update the data in the table. 
     """
-    # grabing local variables
     global liked_games, search_games_result
     if request.method == 'POST':
         # getting the form
@@ -262,6 +273,15 @@ def like_dislike_view(request):
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
     
 def delete_game_from_results(game_id, results):
+    """Remove a game from the results table if disliked
+
+    Args:
+        game_id (game info): AppID of particular game to be deleted
+        results (Dictionary): Update the results dictionary by removing specefied entry
+
+    Returns:
+        _type_: _description_
+    """
     for game in results:
         if game['AppID'] == game_id:
             results.remove(game)

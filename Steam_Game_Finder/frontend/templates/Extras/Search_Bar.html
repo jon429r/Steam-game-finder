@@ -48,7 +48,7 @@
 
 {% block content %}
 
-  
+  <!-- Drop down menu corresponding to availble searches -->
   <div id="cover">
     <form method="get" action="{% url 'results' %}" >
       <div class="search-bar">
@@ -66,8 +66,10 @@
                 <option value="Age Rating Search">Age Rating Search</option>
                 <option value="Recommendation Search">Recommendation Search</option>          </select>
         </div>
-  
-        <input type="text" name="search_term" placeholder="Search..." class="search-input" required>
+        <!-- Search term not requred on dev by recep and recep --> 
+        <input type="text" name="search_term" placeholder="Search..." class="search-input" {% if search_term_required %}required{% endif %}>
+
+
   
         <button type="submit" class="search-button">&#128269;</button>
       </div>
