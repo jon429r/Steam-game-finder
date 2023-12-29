@@ -31,3 +31,10 @@ Start our Django server by running:
 
 Then visit http://127.0.0.1:8000/ in your browser to access our frontend.
 
+## Screen Shots
+
+<img width="1310" alt="Screenshot 2023-12-29 at 3 57 52 PM" src="https://github.com/jon429r/Steam-game-finder/assets/103213920/3b130935-7b89-43b9-b658-233ebcd94b09">
+
+
+
+<img width="1301" alt="Screenshot 2023-12-29 at 3 59 03 PM" src="https://github.com/jon429r/Steam-game-finder/assets/103213920/ef24cff4-1e2b-4286-9154-efa9e1cc31ee">
